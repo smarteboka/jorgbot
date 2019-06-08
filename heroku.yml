@@ -2,4 +2,5 @@ build:
   docker:
     worker: Dockerfile
 run:
-  worker: rundocker.sh
+  worker:
+    command: rundocker.sh
