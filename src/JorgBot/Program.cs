@@ -27,10 +27,11 @@ namespace JorgBot
                     services.AddSingleton<Smartinger>();
                     services.AddSingleton<Timing>();
                     services.AddSingleton<SlackChannels>();
-                    //services.AddSingleton<IPublisher, SlackPublisher>();
+                    services.AddSingleton<IPublisher, SlackPublisher>();
                     services.AddSingleton<IPublisher, ConsolePublisher>();
                     services.AddHostedService<JorgingHostedService>();
                     services.AddHostedService<BirthdayCheckerHostedService>();
+                    services.AddHostedService<HeartBeatHostedService>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>

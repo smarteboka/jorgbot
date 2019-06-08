@@ -13,6 +13,7 @@ namespace JorgBot.Publishers.Slack
                 BursdagerChannel = TestChannelId;
                 SmartebokaChannel = TestChannelId;
                 JorgChannel = TestChannelId;
+                TestChannel = TestChannelId;
             }
             else
             {
@@ -20,6 +21,7 @@ namespace JorgBot.Publishers.Slack
                 BursdagerChannel = BursdagerChannelId;
                 SmartebokaChannel = SmartebokaChannelId;
                 JorgChannel = JorgChannelId;
+                TestChannel = TestChannelId;
             }
         }
 
@@ -47,6 +49,12 @@ namespace JorgBot.Publishers.Slack
         {
             get;
             private set;
+        }
+
+        public string TestChannel
+        {
+            get;
+            set;
         }
     }
 }

@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace JorgBot.HostedServices
 {
-    public class JorgingHostedService : CronHostedService
+    public class HeartBeatHostedService : CronHostedService
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
 
-        public JorgingHostedService(IEnumerable<IPublisher> publishers, SlackChannels channels, ILogger<JorgingHostedService> logger)
+        public HeartBeatHostedService(IEnumerable<IPublisher> publishers, SlackChannels channels, ILogger<HeartBeatHostedService> logger)
             : base(logger)
         {
             _publishers = publishers;
@@ -20,7 +20,7 @@ namespace JorgBot.HostedServices
 
         protected override string Cron()
         {
-            return "0 55 7 * * *"; // https://crontab.guru/every-day-8am
+            return "*/30 * * * * *"; 
         }
 
         protected override async Task Process()
@@ -29,10 +29,10 @@ namespace JorgBot.HostedServices
             {
                 var notification = new Notification
                 {
-                    Msg = $"jorg", 
-                    BotName = "jorgbot", 
-                    IconEmoji = ":coffee:", 
-                    Channel = _channels.JorgChannel
+                    Msg = $":heart:", 
+                    BotName = "heartbot", 
+                    IconEmoji = ":heart:", 
+                    Channel = _channels.TestChannel
                 };
                 await publisher.Publish(notification);
             }
