@@ -2,5 +2,4 @@ build:
   docker:
     worker: Dockerfile
 run:
-  docker:
-    worker: Dockerfile
+  worker: Dockerfile
