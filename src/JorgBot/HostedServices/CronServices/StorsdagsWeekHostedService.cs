@@ -11,7 +11,7 @@ namespace JorgBot.HostedServices.CronServices
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
 
-        public StorsdagsWeekHostedService(IEnumerable<IPublisher> publishers, SlackChannels channels, ILogger<JorgingHostedService> logger)
+        public StorsdagsWeekHostedService(IEnumerable<IPublisher> publishers, SlackChannels channels, ILogger<StorsdagsWeekHostedService> logger)
             : base(logger)
         {
             _publishers = publishers;
