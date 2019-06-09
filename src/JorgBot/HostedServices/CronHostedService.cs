@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cronos;
@@ -27,7 +28,11 @@ namespace JorgBot.HostedServices
                 if (next == null)
                 {
                     next = Timing.GetNextOccurenceInOsloTime(cron);
-                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}");
+
+                    var upcoming = Timing.GetNextOccurencesInOsloTime(cron);
+                    var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.ToLongTimeString()}").Take(10);
+                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}\n" +
+                                           $"Upcoming:\n{uText.Aggregate((x,y) => x + "\n" + y)}");
                 }
 
                 if (now > next)

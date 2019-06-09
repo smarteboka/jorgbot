@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cronos;
 
 namespace JorgBot
@@ -36,6 +38,15 @@ namespace JorgBot
             var next = expression.GetNextOccurrence(NowInOsloTime(), TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo));
             var nextLocalTime = next?.DateTime;
             return nextLocalTime;
+        }
+        
+        public static IEnumerable<DateTime> GetNextOccurencesInOsloTime(string cron)
+        {
+            var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
+            var fromUtc = DateTime.UtcNow;
+            var toUtc = fromUtc.AddMonths(6);
+            var nexts = expression.GetOccurrences(fromUtc,toUtc);
+            return nexts;
         }
     }
 }
