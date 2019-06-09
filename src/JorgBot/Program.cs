@@ -33,6 +33,7 @@ namespace JorgBot
                     services.AddHostedService<JorgingHostedService>();
                     services.AddHostedService<BirthdayCheckerHostedService>();
                     services.AddHostedService<HeartBeatHostedService>();
+                    services.AddHostedService<StorsdagsWeekHostedService>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>

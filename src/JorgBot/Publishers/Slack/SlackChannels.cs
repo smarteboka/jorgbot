@@ -14,6 +14,7 @@ namespace JorgBot.Publishers.Slack
                 SmartebokaChannel = TestChannelId;
                 JorgChannel = TestChannelId;
                 TestChannel = TestChannelId;
+                StorsdagChannel = TestChannelId;
             }
             else
             {
@@ -22,6 +23,8 @@ namespace JorgBot.Publishers.Slack
                 SmartebokaChannel = SmartebokaChannelId;
                 JorgChannel = JorgChannelId;
                 TestChannel = TestChannelId;
+                StorsdagChannel = StorsdagChannelId;
+
             }
         }
 
@@ -32,29 +35,31 @@ namespace JorgBot.Publishers.Slack
         public const string BursdagerChannelId = "CK1TE2NN6";
         public const string SmartebokaChannelId = "C0EC3DG5N";
         public const string JorgChannelId = "CKDDD3MLM";
+        public const string StorsdagChannelId = "CK2A5K12N";
 
         public string BursdagerChannel
         {
             get;
-            private set;
         }
         
         public string SmartebokaChannel
         {
             get;
-            private set;
         }
         
         public string JorgChannel
         {
             get;
-            private set;
         }
 
         public string TestChannel
         {
             get;
-            set;
+        }
+        
+        public string StorsdagChannel
+        {
+            get;
         }
     }
 }
