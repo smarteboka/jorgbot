@@ -4,7 +4,7 @@ using JorgBot.Publishers;
 using JorgBot.Publishers.Slack;
 using Microsoft.Extensions.Logging;
 
-namespace JorgBot.HostedServices
+namespace JorgBot.HostedServices.CronServices
 {
     public class BirthdayCheckerHostedService : CronHostedService
     {

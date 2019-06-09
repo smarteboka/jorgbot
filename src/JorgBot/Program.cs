@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JorgBot.HostedServices;
+using JorgBot.HostedServices.CronServices;
 using JorgBot.Publishers;
 using JorgBot.Publishers.Slack;
 using Microsoft.Extensions.Configuration;

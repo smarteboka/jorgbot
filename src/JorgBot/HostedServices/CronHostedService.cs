@@ -6,10 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace JorgBot.HostedServices
 {
-    public abstract class CronHostedService : HostedService 
+    public abstract class CronHostedService : HostedService
     {
         private readonly ILogger<CronHostedService> _logger;
-        private DateTime? _next;
 
         protected CronHostedService(ILogger<CronHostedService> logger)
         {
@@ -18,35 +17,36 @@ namespace JorgBot.HostedServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var cron = Cron();
+            DateTime? next = null;
+
             do
             {
-                var now = Timing.NowUtc();
-                var expression = CronExpression.Parse(Cron(), CronFormat.IncludeSeconds);
-                
-                if (_next == null)
+                var now = Timing.NowInOsloTime();
+
+                if (next == null)
                 {
-                    _next = expression.GetNextOccurrence(now).Value;
-                    _logger.LogInformation($"Startup at {_next.Value.ToLongDateString()} {_next.Value.ToLongTimeString()}");
+                    next = Timing.GetNextOccurenceInOsloTime(cron);
+                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}");
                 }
 
-                if (now > _next)
+                if (now > next)
                 {
                     await Process();
-                    _next = expression.GetNextOccurrence(now).Value;
-                    _logger.LogInformation($"Next check will be executed at {_next.Value.ToLongDateString()} {_next.Value.ToLongTimeString()}");
-
+                    next = Timing.GetNextOccurenceInOsloTime(cron);
+                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}");
                 }
                 else
                 {
                     // needed for graceful shutdown for some reason.
                     // 100ms chosen so it doesn't affect calculating the next
                     // cron occurence (lowest possible: every second)
-                    await Task.Delay(100, stoppingToken); 
+                    await Task.Delay(100, stoppingToken);
                 }
-                
+
             } while (!stoppingToken.IsCancellationRequested);
         }
-        
+
         protected abstract string Cron();
 
         protected abstract Task Process();

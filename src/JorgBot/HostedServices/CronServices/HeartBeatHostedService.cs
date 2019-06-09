@@ -4,7 +4,7 @@ using JorgBot.Publishers;
 using JorgBot.Publishers.Slack;
 using Microsoft.Extensions.Logging;
 
-namespace JorgBot.HostedServices
+namespace JorgBot.HostedServices.CronServices
 {
     public class HeartBeatHostedService : CronHostedService
     {
@@ -20,7 +20,7 @@ namespace JorgBot.HostedServices
 
         protected override string Cron()
         {
-            return "0 0 6 * * *"; 
+            return "0 0 8 * * *"; 
         }
 
         protected override async Task Process()

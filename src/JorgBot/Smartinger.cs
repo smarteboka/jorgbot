@@ -21,7 +21,7 @@ namespace JorgBot
             new Smarting("@kristmel", 1982, 9, 13),
             new Smarting("@jmrandby", 1982, 10, 17),
             new Smarting("@jarlelin", 1982, 10, 19),
-            new Smarting("@john", 1982, 10, 21),
+            new Smarting("@john", 1982, 6, 9),
             new Smarting("@mariustu", 1982, 12, 3),
             new Smarting("@fsivertsen", 1981, 3, 21)
         };

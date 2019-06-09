@@ -4,7 +4,7 @@ using JorgBot.Publishers;
 using JorgBot.Publishers.Slack;
 using Microsoft.Extensions.Logging;
 
-namespace JorgBot.HostedServices
+namespace JorgBot.HostedServices.CronServices
 {
     public class JorgingHostedService : CronHostedService
     {
@@ -20,7 +20,7 @@ namespace JorgBot.HostedServices
 
         protected override string Cron()
         {
-            return "0 55 7 * * *"; // https://crontab.guru/every-day-8am
+            return "0 55 7 * * *"; 
         }
 
         protected override async Task Process()

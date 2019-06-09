@@ -15,7 +15,7 @@ namespace JorgBot.Publishers
 
         public Task Publish(Notification notification)
         {
-            _logger.LogInformation($"[{Timing.NowUtc().ToLongTimeString()}] {notification.Msg}");
+            _logger.LogInformation($"[{Timing.NowInOsloTime().DateTime.ToLongTimeString()}] {notification.Msg}");
             return Task.CompletedTask;
         }
     }
