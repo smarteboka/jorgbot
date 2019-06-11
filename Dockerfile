@@ -9,8 +9,7 @@ RUN dotnet restore source/JorgBot.sln
 
 # Copy everything else and build
 COPY . ./
-RUN ls src
-RUN dotnet publish source/src/JorgBot/JorgBot.csproj -c Release -o out
+RUN dotnet publish source/src/JorgBot/JorgBot.csproj -c Release -o /app/out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
