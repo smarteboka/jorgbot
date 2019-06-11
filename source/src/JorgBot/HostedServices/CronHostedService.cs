@@ -19,7 +19,7 @@ namespace JorgBot.HostedServices
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var cron = Cron();
-            DateTime? next = null;
+            DateTimeOffset? next = null;
 
             do
             {
@@ -29,9 +29,9 @@ namespace JorgBot.HostedServices
                 {
                     next = Timing.GetNextOccurenceInOsloTime(cron);
 
-                    var upcoming = Timing.GetNextOccurencesInOsloTime(cron);
-                    var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.ToLongTimeString()}").Take(10);
-                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}\n" +
+                    var upcoming = Timing.GetNextOccurences(cron);
+                    var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}").Take(10);
+                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
                                            $"Upcoming:\n{uText.Aggregate((x,y) => x + "\n" + y)}");
                 }
 
@@ -39,7 +39,7 @@ namespace JorgBot.HostedServices
                 {
                     await Process();
                     next = Timing.GetNextOccurenceInOsloTime(cron);
-                    _logger.LogInformation($"Next at {next.Value.ToLongDateString()} {next.Value.ToLongTimeString()}");
+                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
                 else
                 {

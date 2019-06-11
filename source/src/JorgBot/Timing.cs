@@ -9,10 +9,10 @@ namespace JorgBot
     {
         private const string EuropeOslo = "Europe/Oslo";
         
-        public static DateTimeOffset NowInOsloTime()
+        public static DateTimeOffset NowInOsloTime(DateTimeOffset? nowutc = null)
         {
             var oslo = TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo); 
-            return TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, oslo);
+            return TimeZoneInfo.ConvertTime(nowutc ?? DateTimeOffset.UtcNow, oslo);
         }
 
         public bool IsToday(DateTime date)
@@ -32,15 +32,13 @@ namespace JorgBot
             return age;
         }
 
-        public static DateTime? GetNextOccurenceInOsloTime(string cron)
+        public static DateTimeOffset? GetNextOccurenceInOsloTime(string cron)
         {
             var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
-            var next = expression.GetNextOccurrence(NowInOsloTime(), TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo));
-            var nextLocalTime = next?.DateTime;
-            return nextLocalTime;
+            return expression.GetNextOccurrence(DateTimeOffset.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo));
         }
         
-        public static IEnumerable<DateTime> GetNextOccurencesInOsloTime(string cron)
+        public static IEnumerable<DateTime> GetNextOccurences(string cron)
         {
             var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
             var fromUtc = DateTime.UtcNow;
