@@ -20,7 +20,7 @@ namespace JorgBot.HostedServices.CronServices
 
         protected override string Cron()
         {
-            return "0 0 * * * *"; 
+            return "0 0/1 * * * *"; 
         }
 
         protected override async Task Process()
