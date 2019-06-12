@@ -20,7 +20,7 @@ namespace JorgBot.HostedServices.CronServices
 
         protected override string Cron()
         {
-            return "0 5 21 * * *"; 
+            return "0 0 8 * * *";
         }
 
         protected override async Task Process()
@@ -29,9 +29,9 @@ namespace JorgBot.HostedServices.CronServices
             {
                 var notification = new Notification
                 {
-                    Msg = $":heart:", 
-                    BotName = "heartbot", 
-                    IconEmoji = ":heart:", 
+                    Msg = $":heart:",
+                    BotName = "heartbot",
+                    IconEmoji = ":heart:",
                     Channel = _channels.TestChannel
                 };
                 await publisher.Publish(notification);
