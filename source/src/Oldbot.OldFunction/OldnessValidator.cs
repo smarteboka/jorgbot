@@ -109,8 +109,8 @@ namespace Oldbot.OldFunction
                         return Respond($"OLD", context);
                     }
                     return Respond($"ALREADY-OLDED", context);
-
                 }
+                return Respond($"NEW", context);
             }
 
             return Respond($"NO-URL-IN-MSG", context);
