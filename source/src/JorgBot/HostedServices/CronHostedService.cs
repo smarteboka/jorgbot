@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cronos;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace JorgBot.HostedServices
 {
-    public abstract class CronHostedService : HostedService
+    public abstract class CronHostedService : BackgroundService
     {
         private readonly ILogger<CronHostedService> _logger;
 
