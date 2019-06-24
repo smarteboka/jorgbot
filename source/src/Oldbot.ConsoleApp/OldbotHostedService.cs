@@ -1,28 +1,38 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Noobot.Core;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using SlackConnector;
+using SlackConnector.Models;
 
 namespace Oldbot.ConsoleApp
 {
-    internal class OldbotHostedService : IHostedService
+    internal class OldbotHostedService : BackgroundService
     {
-        private readonly INoobotCore _noobotCore;
+        private readonly ISlackConnector _noobotCore;
+        private readonly OldnessValidator _validator;
+        private readonly ILogger<OldbotHostedService> _logger;
+        private readonly OldbotConfig _config;
 
-        public OldbotHostedService(INoobotCore noobotCore)
+        public OldbotHostedService(ISlackConnector noobotCore, IOptions<OldbotConfig> options, OldnessValidator validator, ILogger<OldbotHostedService> logger)
         {
             _noobotCore = noobotCore;
+            _validator = validator;
+            _logger = logger;
+            _config = options.Value;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _noobotCore.Connect();
+            var connection = await _noobotCore.Connect(_config.SlackApiKeyBotUser);
+            connection.OnMessageReceived += ConnectionOnOnMessageReceived;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        private Task ConnectionOnOnMessageReceived(SlackMessage message)
         {
-            _noobotCore.Disconnect();
-            return Task.CompletedTask;
+            return _validator.Validate(message);
         }
     }
 }

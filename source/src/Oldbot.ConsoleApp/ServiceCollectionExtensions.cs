@@ -1,8 +1,8 @@
-using Common.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Noobot.Core;
-using Noobot.Core.Configuration;
-using Noobot.Core.DependencyResolution;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Oldbot.Utilities.SlackAPI.Extensions;
+using SlackConnector;
 
 namespace Oldbot.ConsoleApp
 {
@@ -10,18 +10,14 @@ namespace Oldbot.ConsoleApp
     {
         public static IServiceCollection AddOldbot(this IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
-            services.AddSingleton<IConfiguration,OldbotConfiguration>();
             services.Configure<OldbotConfig>(configuration);
-            services.AddSingleton<IConfigReader,NoobotConfig>();
-            services.AddSingleton<ILog,DotNetCoreLogger>();
-            services.AddSingleton<ContainerFactory>();
-            services.AddSingleton(s =>
+            services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
+            services.AddSingleton<ISlackClient, SlackTaskClientExtensions>(provider =>
             {
-                var containerFactory = s.GetService<ContainerFactory>();
-                var container = containerFactory.CreateContainer();
-                return container.GetNoobotCore();
+                var config = provider.GetService<IOptions<OldbotConfig>>().Value;
+                return new SlackTaskClientExtensions(config.SlackApiKeySlackApp, config.SlackApiKeyBotUser);
             });
-            
+            services.AddSingleton<OldnessValidator>();
             services.AddHostedService<OldbotHostedService>();
 
             return services;
