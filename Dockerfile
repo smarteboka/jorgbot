@@ -2,10 +2,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY source/JorgBot.sln ./source/JorgBot.sln
+COPY source/Smartbot.sln ./source/Smartbot.sln
 COPY source/src/JorgBot/JorgBot.csproj ./source/src/JorgBot/JorgBot.csproj
 COPY source/test/JorgBot.Tests/JorgBot.Tests.csproj ./source/test/JorgBot.Tests/JorgBot.Tests.csproj
-RUN dotnet restore source/JorgBot.sln
+RUN dotnet restore source/Smartbot.sln
 
 # Copy everything else and build
 COPY . ./
