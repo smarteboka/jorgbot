@@ -1,4 +1,4 @@
-namespace Oldbot.OldFunction
+namespace Oldbot.Utilities.EventAPIModels
 {
     public class Event
     {

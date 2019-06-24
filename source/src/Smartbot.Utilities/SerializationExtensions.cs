@@ -5,11 +5,6 @@ namespace Oldbot.Utilities
 {
     public static class SerializationExtensions
     {
-        public static T As<T>(this string body) where T:new()
-        {
-            return !string.IsNullOrEmpty(body) ? JsonConvert.DeserializeObject<T>(body, JsonSettings.SlackSettings) : new T();
-        }
-        
         public static string ToSerialized<T>(this T theObj)
         {
             return JsonConvert.SerializeObject(theObj, JsonSettings.SlackSettings);

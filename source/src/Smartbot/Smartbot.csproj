@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Oldbot.Utilities\Oldbot.Utilities.csproj" />
+    <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

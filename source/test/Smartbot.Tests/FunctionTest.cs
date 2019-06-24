@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 using Newtonsoft.Json;
 using Oldbot.Utilities;
+using Oldbot.Utilities.EventAPIModels;
 using Oldbot.Utilities.SlackAPI.Extensions;
 using Oldbot.Utilities.SlackAPIFork;
 using SlackConnector.Models;
@@ -20,10 +21,7 @@ namespace Oldbot.OldFunction.Tests
             var request = new SlackMessage
             {
                 Text = null,
-                User = new SlackUser
-                {
-                    
-                }
+                User = new SlackUser()
             };
 
             var validateOldness = new OldnessValidator(new MockClient(), new NoopLogger());
@@ -51,21 +49,9 @@ namespace Oldbot.OldFunction.Tests
         [Fact]
         public async Task SkipsBotMessages()
         {
-            var payload = new SlackEventAPIPayload
-            {
-                Event = new Event
-                {
-                    Channel = "CGWGZ90KV",  // private channel #bottestsmore
-                    Bot_Id = "123",
-                    Text = "OLD! https://www.aftenposten.no/norge/i/L08awV/Haper-pa-mer-enn-ti-tusen-barn-og-unge-i-norske-klimastreiker?utm_source=my-unit-test"
-                }
-            };
-
-            var body = JsonConvert.SerializeObject(payload, JsonSettings.SlackSettings);
-        
             var request = new SlackMessage
             {
-                Text = body,
+                Text = "OLD! https://www.aftenposten.no/norge/i/L08awV/Haper-pa-mer-enn-ti-tusen-barn-og-unge-i-norske-klimastreiker?utm_source=my-unit-test",
                 User = new SlackUser
                 {
                     IsBot = true
@@ -77,8 +63,6 @@ namespace Oldbot.OldFunction.Tests
             var response = await validateOldness.Validate(request);
             Assert.Equal("BOT", response);
         }
-
-    
 
         [Fact]
         public async Task DoesNotOldIfIsSameAuthor()
@@ -141,7 +125,6 @@ namespace Oldbot.OldFunction.Tests
 
         private static async Task TestIt(string expected, string slackMessage, string historicMessage)
         {
-
             var mock = new MockClient();
             mock.SetSearchResponse( new Event {
                 Channel = "CGWGZ90KV", // private channel #bottestsmore
