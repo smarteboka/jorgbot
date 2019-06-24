@@ -31,7 +31,7 @@ namespace Oldbot.OldFunction.Tests
             Assert.Equal(200, response.StatusCode);
             Assert.Equal("IGNORED", response.Body);
         }
-
+        
         [Fact]
         public async Task SlackChallengeWorks()
         {
@@ -45,21 +45,21 @@ namespace Oldbot.OldFunction.Tests
             Assert.Equal(200, response.StatusCode);
             Assert.Equal("someChallenge", response.Body);
         }
-
+        
         [Fact]
         public async Task FindingUrlsWorks()
         {
-            await TestIt("OLD", "la oss se litt på https://www.juggel.no");
-            await TestIt("OLD", "<https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore/>");
-            await TestIt("OLD", "https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
-            await TestIt("OLD", "GI meg gi meg lox <https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore/>");
+            await TestIt("OLD", "la oss se litt på https://www.juggel.no", "det var noe https://www.juggel.no greier da");
+            await TestIt("OLD", "<https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore/>", "keen på https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
+            await TestIt("OLD", "https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore", "alle vil ha laks https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
+            await TestIt("OLD", "GI meg gi meg lox <https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore/>", "https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
         }
-
+        
         [Fact]
         public async Task NoText()
         {
-            await TestIt("IGNORED", null);
-            await TestIt("IGNORED", "");
+            await TestIt("IGNORED", null, "");
+            await TestIt("IGNORED", "", "");
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Oldbot.OldFunction.Tests
             };
 
             var body = JsonConvert.SerializeObject(payload, JsonSettings.SlackSettings);
-
+        
             var request = new APIGatewayProxyRequest
             {
                 Body = body
@@ -93,9 +93,9 @@ namespace Oldbot.OldFunction.Tests
         /// * user posts a message
         /// * slack search indexes the message
         /// * the event about the message post is sent to the lambda
-        /// * => the message is marked as old, since the search returns a search hit
+        /// * => the message is marked as old, since the search returns a search hit 
         [Fact]
-        public async Task DoesNotOldIfSearchReturnsEventMessage()
+        public async Task DoesNotOldIfSearchReturnsEventMessage() 
         {
             var newMessage = new Event
             {
@@ -107,9 +107,9 @@ namespace Oldbot.OldFunction.Tests
             {
                 Event = newMessage
             };
-
+            
             var body = JsonConvert.SerializeObject(payload, JsonSettings.SlackSettings);
-
+        
             var request = new APIGatewayProxyRequest
             {
                 Body = body
@@ -117,7 +117,7 @@ namespace Oldbot.OldFunction.Tests
 
             var mockClient = new MockClient();
             mockClient.SetSearchResponse(newMessage);
-
+            
             var validateOldness = new OldnessValidator(mockClient);
 
             var response = await validateOldness.Validate(request, new TestLambdaContext());
@@ -129,7 +129,7 @@ namespace Oldbot.OldFunction.Tests
         public async Task DoesNotOldIfIsSameAuthor()
         {
             var mockClient = new MockClient();
-
+            
             var existingMessage = new Event
             {
                 Text = "A historic tale. I told you about http://db.no some time ago",
@@ -137,7 +137,7 @@ namespace Oldbot.OldFunction.Tests
                 Ts = "1550000000.000000" //
             };
             mockClient.SetSearchResponse(existingMessage);
-
+            
             var newMessage = new SlackEventAPIPayload
             {
                 Event = new Event
@@ -147,23 +147,23 @@ namespace Oldbot.OldFunction.Tests
                     Ts = "1660000000.000000"
                 }
             };
-
+            
             var body = JsonConvert.SerializeObject(newMessage, JsonSettings.SlackSettings);
-
+        
             var request = new APIGatewayProxyRequest
             {
                 Body = body
             };
-
+            
             var validateOldness = new OldnessValidator(mockClient);
 
             var response = await validateOldness.Validate(request, new TestLambdaContext());
             Assert.Equal(200, response.StatusCode);
-            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.Body);
+            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.Body);            
         }
 
         [Fact]
-        public async Task Reacts()
+        public async Task Reacts() 
         {
             var newMessage = new Event
             {
@@ -175,9 +175,9 @@ namespace Oldbot.OldFunction.Tests
             {
                 Event = newMessage
             };
-
+            
             var body = JsonConvert.SerializeObject(payload, JsonSettings.SlackSettings);
-
+        
             var request = new APIGatewayProxyRequest
             {
                 Body = body
@@ -187,7 +187,7 @@ namespace Oldbot.OldFunction.Tests
             var botToken = Environment.GetEnvironmentVariable("OldBot_SlackApiKey_BotUser");
 
             var mockClient = new SlackTaskClientExtensions(appToken,botToken);
-
+            
             var validateOldness = new OldnessValidator(mockClient);
 
             var response = await validateOldness.Validate(request, new TestLambdaContext());
@@ -208,6 +208,7 @@ namespace Oldbot.OldFunction.Tests
             var message = "https://itunes.apple.com/no/podcast/272-build-tech-anett-andreassen-digitalisering-i-byggebransjen/id1434899825?i=1000431627999&amp;l=nb&amp;mt=2";
             AssertUrlRegex(expedtedUrl, message);
             AssertUrlRegex("https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html", "<https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html>");
+            AssertUrlRegex("https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288", "https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288");
         }
 
         private static void AssertChannelRegex(string expected, string input)
@@ -220,7 +221,7 @@ namespace Oldbot.OldFunction.Tests
             Assert.Equal(expected, RegexHelper.FindStringURl(input));
         }
 
-        private static async Task TestIt(string expected, string slackMessage)
+        private static async Task TestIt(string expected, string slackMessage, string historicMessage)
         {
             var payload = new SlackEventAPIPayload
             {
@@ -228,7 +229,8 @@ namespace Oldbot.OldFunction.Tests
                 {
                     Channel = "CGWGZ90KV", // private channel #bottestsmore
                     Text = slackMessage,
-                    Ts = "1552671375.000200"
+                    Ts = "1552671375.000200",
+                    User = "some-smarting"
                 }
             };
 
@@ -239,22 +241,29 @@ namespace Oldbot.OldFunction.Tests
                 Body = body
             };
 
-            var validateOldness = new OldnessValidator();
+            var mock = new MockClient();
+            mock.SetSearchResponse( new Event {
+                Channel = "CGWGZ90KV", // private channel #bottestsmore
+                Text = historicMessage,
+                Ts = "1552671370.000200", //older
+                User = "another-smarting"
+            });
+            var validateOldness = new OldnessValidator(mock);
 
             var response = await validateOldness.Validate(request, new TestLambdaContext());
             Assert.Equal(200, response.StatusCode);
             Assert.Equal(expected, response.Body);
         }
     }
-
+    
 
         public class MockClient : ISlackClient
         {
             public MockClient()
             {
-
+                
             }
-
+            
             public Task<SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
             {
                 return Task.FromResult(SearchResponse);
@@ -274,11 +283,11 @@ namespace Oldbot.OldFunction.Tests
             public Task<HttpResponseMessage[]> AddReactions(string channelId, string thread_ts)
             {
                 var httpResponseMessage = new []
-                {
+                { 
                     new HttpResponseMessage
                     {
                         Content = new StringContent("{}"),
-
+                        
                     }
                 };
                 return Task.FromResult(httpResponseMessage);
