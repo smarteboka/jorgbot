@@ -11,7 +11,7 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-      <PackageReference Include="Noobot.Core" Version="3.2.76" />
+      <PackageReference Include="SlackConnector" Version="4.2.74" />
   </ItemGroup>
   
   <ItemGroup>
