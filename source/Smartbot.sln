@@ -6,7 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{53AD07F7-25C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED8E20FC-B173-40FF-B447-D74B58FC27C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oldbot.Utilities", "src\Oldbot.Utilities\Oldbot.Utilities.csproj", "{15440814-6488-47C9-A3A0-C3C2EEE92E9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Utilities", "src\Smartbot.Utilities\Smartbot.Utilities.csproj", "{15440814-6488-47C9-A3A0-C3C2EEE92E9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Tests", "test\Smartbot.Tests\Smartbot.Tests.csproj", "{44E65F6B-A3FA-4601-AC2D-D4E090897839}"
 EndProject
