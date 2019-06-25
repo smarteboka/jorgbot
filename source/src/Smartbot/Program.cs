@@ -23,7 +23,7 @@ namespace Smartbot
                 .ConfigureServices((context, services) =>
                 {
                     services.AddCronBots(context.Configuration);
-                    services.AddOldbot(context.Configuration);
+                    services.AddSmartbot(context.Configuration);
 
                 })
                 .ConfigureLogging((context, configLogging) =>

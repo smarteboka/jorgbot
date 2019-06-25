@@ -5,6 +5,7 @@ using Oldbot.Utilities.SlackAPI.Extensions;
 using SlackConnector;
 using Smartbot.HostedServices;
 using Smartbot.HostedServices.CronServices;
+using Smartbot.HostedServices.Strategies;
 using Smartbot.Publishers;
 using Smartbot.Publishers.Slack;
 
@@ -28,7 +29,7 @@ namespace Smartbot
             return services;
         }
         
-        public static IServiceCollection AddOldbot(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSmartbot(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SlackOptions>(configuration);
             services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
@@ -38,7 +39,9 @@ namespace Smartbot
                 return new SlackTaskClientExtensions(config.SmartBot_SlackApiKey_SlackApp, config.SmartBot_SlackApiKey_BotUser);
             });
             services.AddSingleton<OldnessValidator>();
-            services.AddHostedService<OldbotHostedService>();
+            services.AddSingleton<StrategySelector>();
+            services.AddSingleton<IReplyStrategy, NesteStorsdagStrategy>();
+            services.AddHostedService<RealTimeBotHostedService>();
 
             return services;
         }
