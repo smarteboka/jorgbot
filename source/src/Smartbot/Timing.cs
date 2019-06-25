@@ -37,11 +37,11 @@ namespace Smartbot
             return expression.GetNextOccurrence(DateTimeOffset.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo));
         }
         
-        public static IEnumerable<DateTime> GetNextOccurences(string cron)
+        public static IEnumerable<DateTime> GetNextOccurences(string cron, int noOfMonths = 0)
         {
             var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
             var fromUtc = DateTime.UtcNow;
-            var toUtc = fromUtc.AddMonths(6);
+            var toUtc = fromUtc.AddMonths(noOfMonths != 0 ? noOfMonths : 6);
             var nexts = expression.GetOccurrences(fromUtc,toUtc);
             return nexts;
         }

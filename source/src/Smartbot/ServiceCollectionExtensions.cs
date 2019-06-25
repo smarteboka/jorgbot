@@ -41,6 +41,7 @@ namespace Smartbot
             services.AddSingleton<OldnessValidator>();
             services.AddSingleton<StrategySelector>();
             services.AddSingleton<IReplyStrategy, NesteStorsdagStrategy>();
+            services.AddSingleton<IReplyStrategy, AllUpcomingStorsdagerStrategy>();
             services.AddHostedService<RealTimeBotHostedService>();
 
             return services;
