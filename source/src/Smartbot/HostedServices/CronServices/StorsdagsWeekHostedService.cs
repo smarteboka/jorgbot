@@ -8,6 +8,7 @@ namespace Smartbot.HostedServices.CronServices
 {
     public class StorsdagsWeekHostedService : CronHostedService
     {
+        public const string LastThursdayOfMonthCron = "0 0 8 * * THUL";
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
 
@@ -20,7 +21,7 @@ namespace Smartbot.HostedServices.CronServices
 
         protected override string Cron()
         {
-            return "0 0 8 * * THUL"; 
+            return LastThursdayOfMonthCron; 
         }
 
         protected override async Task Process()
