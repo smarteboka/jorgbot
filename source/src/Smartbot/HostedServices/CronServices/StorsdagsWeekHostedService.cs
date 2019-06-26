@@ -31,9 +31,8 @@ namespace Smartbot.HostedServices.CronServices
                 var notification = new Notification
                 {
                     Msg = $"Storsdags inc! Med? :+1: / :-1: ?", 
-                    BotName = "storsdagsbot", 
                     IconEmoji = ":beer:", 
-                    Channel = _channels.StorsdagChannel
+                    Channel = _channels.SmartebokaChannel
                 };
                 await publisher.Publish(notification);
             }

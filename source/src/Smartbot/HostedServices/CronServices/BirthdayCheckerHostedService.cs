@@ -36,9 +36,8 @@ namespace Smartbot.HostedServices.CronServices
                     var notification = new Notification
                     {
                         Msg = $"Idag jazzulerer vi {smarting.Name} med {_timing.CalculateAge(smarting.BirthDate)}-årsdagen!", 
-                        BotName = "bursdagbot", 
                         IconEmoji = ":birthday:", 
-                        Channel = _channels.BursdagerChannel
+                        Channel = _channels.SmartebokaChannel
                     };
                     await p.Publish(notification);
                 }
