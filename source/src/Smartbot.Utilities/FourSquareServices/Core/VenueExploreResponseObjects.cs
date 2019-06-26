@@ -1,0 +1,49 @@
+using System.Collections.Generic;
+using FourSquare.SharpSquare.Entities;
+
+namespace FourSquare.SharpSquare.Core
+{
+    public class VenueExploreResponseContainer
+    {
+        public VenueExploreResponse response;
+    }
+
+    public class VenueExploreResponse
+    {
+        public int suggestedRadius
+        {
+            get;
+            set;
+        }
+
+        public string headerLocation
+        {
+            get;
+            set;
+        }
+
+        public string headerFullLocation
+        {
+            get;
+            set;
+        }
+
+        public string headerLocationGranularity
+        {
+            get;
+            set;
+        }
+
+        public int totalResults
+        {
+            get;
+            set;
+        }
+
+        public List<FourSquareEntityItems<VenueExplore>> groups
+        {
+            get;
+            set;
+        }
+    }
+}
