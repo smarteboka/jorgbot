@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Oldbot.Utilities.FourSquareServices;
 using Oldbot.Utilities.SlackAPI.Extensions;
 using SlackConnector;
 using Smartbot.HostedServices;
@@ -39,9 +40,12 @@ namespace Smartbot
                 return new SlackTaskClientExtensions(config.SmartBot_SlackApiKey_SlackApp, config.SmartBot_SlackApiKey_BotUser);
             });
             services.AddSingleton<OldnessValidator>();
+            services.AddSingleton<FourSquareService>();
+            services.Configure<FourSquareOptions>(configuration);
             services.AddSingleton<StrategySelector>();
             services.AddSingleton<IReplyStrategy, NesteStorsdagStrategy>();
             services.AddSingleton<IReplyStrategy, AllUpcomingStorsdagerStrategy>();
+            services.AddSingleton<IReplyStrategy, FoursquareStrategy>();
             services.AddHostedService<RealTimeBotHostedService>();
 
             return services;
