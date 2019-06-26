@@ -45,9 +45,9 @@ namespace Smartbot.HostedServices.Strategies
             }
             else
             {
-                var messageText = message.Text.Replace("<@UGWC87WRZ> 4sq", "");
+                var messageText = message.Text.Replace("<@UGWC87WRZ> 4sq ", "");
                 _logger.LogInformation($"Searching by query {messageText}");
-                var osloVenuesByQuery = _foursquare.GetOsloVenuesByQuery(message.Text);
+                var osloVenuesByQuery = _foursquare.GetOsloVenuesByQuery(messageText);
                 venueExplores = new List<VenueExplore>(osloVenuesByQuery);
             }
 

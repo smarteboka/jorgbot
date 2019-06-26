@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -470,9 +471,9 @@ namespace FourSquare.SharpSquare.Core
             }
 
             var oauthToken = string.Format("client_id={0}&client_secret={1}", clientId, clientSecret);
-           
 
-            string json = Request(string.Format("{0}{1}?{2}{3}&v={4}", apiUrl, endpoint, oauthToken, serializedParameters, apiVersion), HttpMethod.GET);
+            string url = string.Format("{0}{1}?{2}{3}&v={4}", apiUrl, endpoint, oauthToken, serializedParameters, apiVersion);
+            string json = Request(url, HttpMethod.GET);
             var fourSquareResponse = JsonConvert.DeserializeObject<VenueExploreResponseContainer>(json);
             var s = fourSquareResponse.response.groups.SelectMany(g => g.items);
             return s;
