@@ -15,7 +15,7 @@ namespace Oldbot.Utilities.FourSquareServices
         {
             _sharpSquare = new SharpSquare(options.Value.Smartbot_Foursquare_ClientId, options.Value.Smartbot_Foursquare_ClientSecret);
         }
-        
+
         public FourSquareService(string clientId, string clientSecret)
         {
             _sharpSquare = new SharpSquare(clientId, clientSecret);
@@ -25,7 +25,7 @@ namespace Oldbot.Utilities.FourSquareServices
         {
             return GetOsloVenues("query", query);
         }
-        
+
         public IEnumerable<VenueExplore> GetOsloVenuesByCategory(string section)
         {
             return GetOsloVenues("section", section);
@@ -37,11 +37,11 @@ namespace Oldbot.Utilities.FourSquareServices
             {
                 { "ll","59.914491,10.74933" },
                 { "limit", "20" },
-                { "price", "2,3,4,5"},
+                { "price", "2,3,4"},
                 { "radius", "5000"},
                 { key, value}
             };
-         
+
             return _sharpSquare.ExploreVenues(parameters);
         }
     }
