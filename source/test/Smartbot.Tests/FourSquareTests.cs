@@ -8,7 +8,7 @@ namespace Oldbot.OldFunction.Tests
 {
     public class FourSquareTests
     {
-        [Fact]
+        [Fact (Skip = "exploratory test")]        
         public void Test()
         {
             var fs = CreateFourSquareService();

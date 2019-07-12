@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using Newtonsoft.Json;
 using Oldbot.Utilities;
 using Oldbot.Utilities.EventAPIModels;
 using Oldbot.Utilities.SlackAPI.Extensions;
@@ -111,6 +110,7 @@ namespace Oldbot.OldFunction.Tests
             AssertUrlRegex(expedtedUrl, message);
             AssertUrlRegex("https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html", "<https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html>");
             AssertUrlRegex("https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288", "https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288");
+            AssertUrlRegex("https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65", "https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65");
         }
 
         private static void AssertChannelRegex(string expected, string input)
