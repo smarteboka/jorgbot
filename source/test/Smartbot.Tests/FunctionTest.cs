@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ using Oldbot.Utilities.EventAPIModels;
 using Oldbot.Utilities.SlackAPI.Extensions;
 using Oldbot.Utilities.SlackAPIFork;
 using SlackConnector.Models;
-using Smartbot;
+using Smartbot.HostedServices.Strategies;
 
 namespace Oldbot.OldFunction.Tests
 {
@@ -23,9 +24,9 @@ namespace Oldbot.OldFunction.Tests
                 User = new SlackUser()
             };
 
-            var validateOldness = new OldnessValidator(new MockClient(), new NoopLogger());
-            var response = await validateOldness.Validate(request);
-            Assert.Equal("IGNORED", response);
+            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),new MockClient());
+            var response = await validateOldness.Handle(request);
+            Assert.Equal("IGNORED", response.HandledMessage);
         }
      
         
@@ -46,7 +47,7 @@ namespace Oldbot.OldFunction.Tests
         }
 
         [Fact]
-        public async Task SkipsBotMessages()
+        public void SkipsBotMessages()
         {
             var request = new SlackMessage
             {
@@ -57,10 +58,9 @@ namespace Oldbot.OldFunction.Tests
                 }
             };
 
-            var validateOldness = new OldnessValidator(new MockClient(), new NoopLogger());
+            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),new MockClient());
 
-            var response = await validateOldness.Validate(request);
-            Assert.Equal("BOT", response);
+            Assert.False(validateOldness.ShouldExecute(request));
         }
 
         [Fact]
@@ -90,10 +90,10 @@ namespace Oldbot.OldFunction.Tests
                 }
             };
             
-            var validateOldness = new OldnessValidator(mockClient, new NoopLogger());
+            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),mockClient);
 
-            var response = await validateOldness.Validate(request);
-            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response);            
+            var response = await validateOldness.Handle(request);
+            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.HandledMessage);            
         }
 
         [Fact]
@@ -105,9 +105,9 @@ namespace Oldbot.OldFunction.Tests
         [Fact]
         public void TestUrlFinder()
         {
-            var expedtedUrl = "https://itunes.apple.com/no/podcast/272-build-tech-anett-andreassen-digitalisering-i-byggebransjen/id1434899825?i=1000431627999&amp;l=nb&amp;mt=2";
-            var message = "https://itunes.apple.com/no/podcast/272-build-tech-anett-andreassen-digitalisering-i-byggebransjen/id1434899825?i=1000431627999&amp;l=nb&amp;mt=2";
-            AssertUrlRegex(expedtedUrl, message);
+            var expected = "https://itunes.apple.com/no/podcast/272-build-tech-anett-andreassen-digitalisering-i-byggebransjen/id1434899825?i=1000431627999&amp;l=nb&amp;mt=2";
+            var message =  "https://itunes.apple.com/no/podcast/272-build-tech-anett-andreassen-digitalisering-i-byggebransjen/id1434899825?i=1000431627999&amp;l=nb&amp;mt=2";
+            AssertUrlRegex(expected, message);
             AssertUrlRegex("https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html", "<https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html>");
             AssertUrlRegex("https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288", "https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288");
             AssertUrlRegex("https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65", "https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65");
@@ -120,7 +120,10 @@ namespace Oldbot.OldFunction.Tests
 
         private static void AssertUrlRegex(string expected, string input)
         {
-            Assert.Equal(expected, RegexHelper.FindStringURl(input));
+            var matches = RegexHelper.FindUrls(input);
+            var match = matches.Any() ? matches.First() : null;
+            
+            Assert.Equal(expected, match);
         }
 
         private static async Task TestIt(string expected, string slackMessage, string historicMessage)
@@ -132,9 +135,9 @@ namespace Oldbot.OldFunction.Tests
                 Ts = "1552671370.000200", //older
                 User = "another-smarting"
             });
-            var validateOldness = new OldnessValidator(mock, new NoopLogger());
+            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),mock);
 
-            var response = await validateOldness.Validate(new SlackMessage
+            var response = await validateOldness.Handle(new SlackMessage
             {
                 Text = slackMessage,
                 User = new SlackUser
@@ -146,11 +149,11 @@ namespace Oldbot.OldFunction.Tests
                     Id = "123"
                 }
             });
-            Assert.Equal(expected, response);
+            Assert.Equal(expected, response.HandledMessage);
         }
     }
 
-    public class NoopLogger : ILogger<OldnessValidator>
+    public class NoopLogger : ILogger<OldnessValidatorStrategy>
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
@@ -203,6 +206,11 @@ namespace Oldbot.OldFunction.Tests
                     }
                 };
                 return Task.FromResult(httpResponseMessage);
+            }
+
+            public Task<string> GetPermalink(string channel, string timestamp)
+            {
+                return Task.FromResult(string.Empty);
             }
 
             public void SetSearchResponse(Event newMessage)

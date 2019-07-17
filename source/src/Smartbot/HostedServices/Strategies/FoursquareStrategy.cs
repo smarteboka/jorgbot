@@ -33,7 +33,7 @@ namespace Smartbot.HostedServices.Strategies
             _logger = logger;
         }
 
-        public async Task Handle(SlackMessage message)
+        public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var matchingCategory = Categories.FirstOrDefault(c => message.Text.Contains(c, StringComparison.InvariantCultureIgnoreCase));
             var venueExplores = new List<VenueExplore>();
@@ -70,6 +70,7 @@ namespace Smartbot.HostedServices.Strategies
                 };
                 await publisher.Publish(notification);
             }
+            return new HandleResponse("OK");
         }
 
         public bool ShouldExecute(SlackMessage message)

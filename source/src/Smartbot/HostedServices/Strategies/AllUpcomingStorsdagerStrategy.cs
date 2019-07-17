@@ -18,7 +18,7 @@ namespace Smartbot.HostedServices.Strategies
             _publishers = publishers;
         }
         
-        public async Task Handle(SlackMessage message)
+        public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var upcomingEvents = Timing.GetNextOccurences(StorsdagsWeekHostedService.LastThursdayOfMonthCron);
             var culture = new CultureInfo("nb-NO");
@@ -33,6 +33,7 @@ namespace Smartbot.HostedServices.Strategies
                 };
                 await publisher.Publish(notification);
             }
+            return new HandleResponse("OK");
         }
 
         public bool ShouldExecute(SlackMessage message)

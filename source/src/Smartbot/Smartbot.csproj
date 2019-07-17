@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Smartbot.Storage\Smartbot.Storage.csproj" />
     <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
   </ItemGroup>
 

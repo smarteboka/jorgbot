@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Oldbot.Utilities.SlackAPIFork;
 using SlackAPI;
-using SearchResponseMessages = Oldbot.Utilities.SlackAPIFork.SearchResponseMessages;
-using SearchSort = Oldbot.Utilities.SlackAPIFork.SearchSort;
-using SearchSortDirection = Oldbot.Utilities.SlackAPIFork.SearchSortDirection;
 using SlackTaskClient = Oldbot.Utilities.SlackAPIFork.SlackTaskClient;
 
 namespace Oldbot.Utilities.SlackAPI.Extensions
@@ -66,6 +66,28 @@ namespace Oldbot.Utilities.SlackAPI.Extensions
             return res;
         }
 
+        public async Task<string> GetPermalink(string channel, string timestamp)
+        {
+            var httpClient = new HttpClient();
+            
+            // chat.Permalink does not currently support json
+            var formUrlEncodedContent = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("message_ts", timestamp)  
+            });
+            var stuff = await formUrlEncodedContent.ReadAsStringAsync();
+            var httpContent = new StringContent(stuff, Encoding.UTF8, "application/x-www-form-urlencoded");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.getPermalink");
+            request.Headers.Add("Authorization", $"Bearer {BotToken}");
+            request.Content = httpContent;
+            var response =  await httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+
+            var permalink = JsonConvert.DeserializeObject<PermalinkResponse>(content);
+            return permalink.Permalink;
+        }
+
         private async Task<HttpResponseMessage> React(string channelId, string thread_ts, string olderMan)
         {
             var httpClient = new HttpClient();
@@ -81,41 +103,6 @@ namespace Oldbot.Utilities.SlackAPI.Extensions
             request.Headers.Add("Authorization", $"Bearer {BotToken}");
             request.Content = httpContent;
             return await httpClient.SendAsync(request);
-        }
-    }
-
-    public class NoopClient : ISlackClient
-    {
-        public Task<SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
-        {
-            return Task.FromResult(new SearchResponseMessages()
-            {
-                messages = new SlackAPIFork.SearchResponseMessagesContainer
-                {
-                    matches = new SlackAPIFork.ContextMessage[0]
-                }
-            });
-        }
-        
-        public Task<HttpResponseMessage> SendMessage(string channel, string message, string eventTs, string permalink)
-        {
-            var httpResponseMessage = new HttpResponseMessage
-            {
-                Content = new StringContent("{}")
-            };
-            return Task.FromResult(httpResponseMessage);
-        }
-
-        public Task<HttpResponseMessage[]> AddReactions(string channelId, string thread_ts)
-        {
-            var httpResponseMessage = new []
-            { 
-                new HttpResponseMessage
-                {
-                    Content = new StringContent("{}")
-                }
-            };
-            return Task.FromResult(httpResponseMessage);
         }
     }
 }

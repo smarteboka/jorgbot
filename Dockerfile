@@ -5,6 +5,7 @@ WORKDIR /app
 COPY source/Smartbot.sln ./source/Smartbot.sln
 COPY source/src/Smartbot/Smartbot.csproj ./source/src/Smartbot/Smartbot.csproj
 COPY source/src/Smartbot.Utilities/Smartbot.Utilities.csproj ./source/src/Smartbot.Utilities/Smartbot.Utilities.csproj
+COPY source/src/Smartbot.Storage/Smartbot.Storage.csproj ./source/src/Smartbot.Storage/Smartbot.Storage.csproj
 
 COPY source/test/Smartbot.Tests/Smartbot.Tests.csproj ./source/test/Smartbot.Tests/Smartbot.Tests.csproj
 

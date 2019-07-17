@@ -5,7 +5,21 @@ namespace Smartbot.HostedServices.Strategies
 {
     public interface IReplyStrategy
     {
-        Task Handle(SlackMessage message);
+        Task<HandleResponse> Handle(SlackMessage message);
         bool ShouldExecute(SlackMessage message);
+    }
+
+    public class HandleResponse
+    {
+        public HandleResponse(string message)
+        {
+            HandledMessage = message;
+        }
+        
+        public string HandledMessage
+        {
+            get;
+            set;
+        }
     }
 }
