@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -12,10 +14,9 @@ namespace Oldbot.Utilities
             return UrlsRegex.Matches(messageText);
         }
         
-        public static string FindStringURl(string messageText)
+        public static IEnumerable<string> FindUrls(string messageText)
         {
-            var matches = UrlsRegex.Matches(messageText);
-            return matches.Any() ? matches.First().Value : null;
+            return UrlsRegex.Matches(messageText).Select(m => m.Value);
         }
         
         public static readonly Regex ChannelsRegex = new Regex("<#\\w+\\|(\\w+)>", RegexOptions.Compiled);

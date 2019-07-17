@@ -9,6 +9,7 @@ using Smartbot.HostedServices.CronServices;
 using Smartbot.HostedServices.Strategies;
 using Smartbot.Publishers;
 using Smartbot.Publishers.Slack;
+using Smartbot.Storage;
 
 namespace Smartbot
 {
@@ -33,19 +34,22 @@ namespace Smartbot
         public static IServiceCollection AddSmartbot(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SlackOptions>(configuration);
+            services.Configure<SmartStorageOptions>(configuration);
+            services.AddSingleton<SlackMessagesStorage>();
             services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
             services.AddSingleton<ISlackClient, SlackTaskClientExtensions>(provider =>
             {
                 var config = provider.GetService<IOptions<SlackOptions>>().Value;
                 return new SlackTaskClientExtensions(config.SmartBot_SlackApiKey_SlackApp, config.SmartBot_SlackApiKey_BotUser);
             });
-            services.AddSingleton<OldnessValidator>();
             services.AddSingleton<FourSquareService>();
             services.Configure<FourSquareOptions>(configuration);
             services.AddSingleton<StrategySelector>();
             services.AddSingleton<IReplyStrategy, NesteStorsdagStrategy>();
             services.AddSingleton<IReplyStrategy, AllUpcomingStorsdagerStrategy>();
             services.AddSingleton<IReplyStrategy, FoursquareStrategy>();
+            services.AddSingleton<IReplyStrategy, OldnessValidatorStrategy>();
+            services.AddSingleton<IReplyStrategy, UrlsSaverStrategy>();
             services.AddHostedService<RealTimeBotHostedService>();
 
             return services;

@@ -5,9 +5,9 @@ namespace Smartbot.HostedServices.Strategies
 {
     public class DoNothingStrategy : IReplyStrategy
     {
-        public Task Handle(SlackMessage message)
+        public Task<HandleResponse> Handle(SlackMessage message)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(new HandleResponse("OK"));
         }
 
         public bool ShouldExecute(SlackMessage message)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -13,17 +14,15 @@ namespace Smartbot.HostedServices
     internal class RealTimeBotHostedService : BackgroundService
     {
         private readonly ISlackConnector _noobotCore;
-        private readonly OldnessValidator _validator;
         private readonly ILogger<RealTimeBotHostedService> _logger;
         private readonly StrategySelector _strategySelector;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
 
-        public RealTimeBotHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, OldnessValidator validator, ILogger<RealTimeBotHostedService> logger, StrategySelector strategySelector)
+        public RealTimeBotHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<RealTimeBotHostedService> logger, StrategySelector strategySelector)
         {
             _noobotCore = noobotCore;
-            _validator = validator;
             _logger = logger;
             _strategySelector = strategySelector;
             _config = options.Value;
@@ -35,8 +34,7 @@ namespace Smartbot.HostedServices
             {
                 _logger.LogInformation("Connecting");
                 _connection = await _noobotCore.Connect(_config.SmartBot_SlackApiKey_BotUser);
-                _connection.OnMessageReceived += ValidateOldness;
-                _connection.OnMessageReceived += ReplyToCommands;
+                _connection.OnMessageReceived += HandleIncomingMessage;
                 
                 _connection.OnDisconnect += () =>
                 {
@@ -51,12 +49,19 @@ namespace Smartbot.HostedServices
             }
         }
 
-        private async Task ReplyToCommands(SlackMessage message)
+        private async Task HandleIncomingMessage(SlackMessage message)
         {
             var strategies = _strategySelector.DirectToStrategy(message);
             foreach (var strategy in strategies)
             {
-                await strategy.Handle(message);
+                try
+                {
+                    await strategy.Handle(message);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, e.Message);
+                }
             }
         }
 
@@ -66,11 +71,6 @@ namespace Smartbot.HostedServices
              _connection.Close().GetAwaiter().GetResult();
             _logger.LogInformation("Closed");
             return base.StopAsync(token);
-        }
-
-        private Task ValidateOldness(SlackMessage message)
-        {
-            return _validator.Validate(message);
         }
     }
 }
