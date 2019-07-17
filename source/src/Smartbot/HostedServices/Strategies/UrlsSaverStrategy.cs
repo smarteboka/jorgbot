@@ -28,7 +28,7 @@ namespace Smartbot.HostedServices.Strategies
             {
                 var cleansedUrl = UrlCleaner.CleanForTrackingQueryParams(url);
                 cleansedUrl = cleansedUrl.TrimEnd('/');
-                var slackMessageEntity = new SlackMessageEntity(Guid.NewGuid())
+                var slackMessageEntity = new SlackUrlEntity(Guid.NewGuid())
                 {
                     Text = message.Text,
                     User = message.User.Name,

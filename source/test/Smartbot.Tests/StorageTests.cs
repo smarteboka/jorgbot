@@ -23,9 +23,9 @@ namespace Oldbot.OldFunction.Tests
             Assert.True(ok);
         }
 
-        private async Task<SlackMessageEntity> Save(string user)
+        private async Task<SlackUrlEntity> Save(string user)
         {
-            var slackMessageEntity = new SlackMessageEntity(Guid.NewGuid())
+            var slackMessageEntity = new SlackUrlEntity(Guid.NewGuid())
             {
                 User = user, 
                 Raw = "{ \"usr\" : \"@bolle\" }", 

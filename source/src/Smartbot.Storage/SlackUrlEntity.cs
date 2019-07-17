@@ -3,16 +3,16 @@ using Microsoft.Azure.Cosmos.Table;
 
 namespace Smartbot.Storage
 {
-    public class SlackMessageEntity : TableEntity
+    public class SlackUrlEntity : TableEntity
     {
-        public const string EntityPartitionKey = "SlackMessage";
+        public const string EntityPartitionKey = "SlackUrl";
 
-        public SlackMessageEntity()
+        public SlackUrlEntity()
         {
             
         }
         
-        public SlackMessageEntity(Guid id)
+        public SlackUrlEntity(Guid id)
         {
             PartitionKey = EntityPartitionKey;
             RowKey = id.ToString();

@@ -23,33 +23,33 @@ namespace Smartbot.Storage
             _table = client.GetTableReference("SlackUrls");
         }
 
-        public async Task<SlackMessageEntity> Save(SlackMessageEntity entity)
+        public async Task<SlackUrlEntity> Save(SlackUrlEntity entity)
         {
-            SlackMessageEntity insertedMessage;
+            SlackUrlEntity insertedUrl;
             try
             {
                 var insert = TableOperation.Insert(entity);
                 var result = await _table.ExecuteAsync(insert);
-                insertedMessage = result.Result as SlackMessageEntity;
+                insertedUrl = result.Result as SlackUrlEntity;
             }
             catch (StorageException e)
             {
                 throw new SmartStorageException(e.Message);
             }
-            return insertedMessage; 
+            return insertedUrl; 
         }
 
-        public async Task<List<SlackMessageEntity>> GetAllByUser(string user)
+        public async Task<List<SlackUrlEntity>> GetAllByUser(string user)
         {
-            TableQuerySegment<SlackMessageEntity> result;
+            TableQuerySegment<SlackUrlEntity> result;
             try
             {
-                var query = new TableQuery<SlackMessageEntity>()
+                var query = new TableQuery<SlackUrlEntity>()
                     .Where(
                         TableQuery.CombineFilters(
-                            TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SlackMessageEntity.EntityPartitionKey),
+                            TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SlackUrlEntity.EntityPartitionKey),
                             TableOperators.And,
-                            TableQuery.GenerateFilterCondition(nameof(SlackMessageEntity.User), QueryComparisons.Equal, user)
+                            TableQuery.GenerateFilterCondition(nameof(SlackUrlEntity.User), QueryComparisons.Equal, user)
                         ));
 
                 result = await _table.ExecuteQuerySegmentedAsync(query, null);
