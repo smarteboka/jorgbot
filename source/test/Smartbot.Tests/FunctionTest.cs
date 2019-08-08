@@ -9,7 +9,7 @@ using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using Slackbot.Net.Utilities.SlackAPIFork;
 using Xunit;
 using SlackConnector.Models;
-using Smartbot.Utilities.Strategies;
+using Smartbot.Utilities.Handlers;
 
 namespace Oldbot.OldFunction.Tests
 {
@@ -28,8 +28,8 @@ namespace Oldbot.OldFunction.Tests
             var response = await validateOldness.Handle(request);
             Assert.Equal("IGNORED", response.HandledMessage);
         }
-     
-        
+
+
         [Fact]
         public async Task FindingUrlsWorks()
         {
@@ -38,7 +38,7 @@ namespace Oldbot.OldFunction.Tests
             await TestIt("OLD", "https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore", "alle vil ha laks https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
             await TestIt("OLD", "GI meg gi meg lox <https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore/>", "https://ilaks.no/na-kan-du-kjope-norsk-laks-pa-automater-i-singapore");
         }
-        
+
         [Fact]
         public async Task NoText()
         {
@@ -67,7 +67,7 @@ namespace Oldbot.OldFunction.Tests
         public async Task DoesNotOldIfIsSameAuthor()
         {
             var mockClient = new MockClient();
-            
+
             var existingMessage = new Event
             {
                 Text = "A historic tale. I told you about http://db.no some time ago",
@@ -75,7 +75,7 @@ namespace Oldbot.OldFunction.Tests
                 Ts = "1550000000.000000" //
             };
             mockClient.SetSearchResponse(existingMessage);
-        
+
             var request = new SlackMessage
             {
                 Text = "Woot, me, U0F3P72QM, is repeating the url http://db.no some time later",
@@ -89,11 +89,11 @@ namespace Oldbot.OldFunction.Tests
                     Id = "123"
                 }
             };
-            
+
             var validateOldness = new OldHandler(new NoopLogger(),mockClient);
 
             var response = await validateOldness.Handle(request);
-            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.HandledMessage);            
+            Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.HandledMessage);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace Oldbot.OldFunction.Tests
         {
             var matches = RegexHelper.FindUrls(input);
             var match = matches.Any() ? matches.First() : null;
-            
+
             Assert.Equal(expected, match);
         }
 
@@ -142,7 +142,7 @@ namespace Oldbot.OldFunction.Tests
                 Text = slackMessage,
                 User = new SlackUser
                 {
-                    
+
                 },
                 ChatHub = new SlackChatHub
                 {
@@ -157,8 +157,8 @@ namespace Oldbot.OldFunction.Tests
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            
-        } 
+
+        }
 
         public bool IsEnabled(LogLevel logLevel)
         {
@@ -176,9 +176,9 @@ namespace Oldbot.OldFunction.Tests
         {
             public MockClient()
             {
-                
+
             }
-            
+
             public Task<SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
             {
                 return Task.FromResult(SearchResponse);
@@ -198,11 +198,11 @@ namespace Oldbot.OldFunction.Tests
             public Task<HttpResponseMessage[]> AddReactions(string channelId, string thread_ts)
             {
                 var httpResponseMessage = new []
-                { 
+                {
                     new HttpResponseMessage
                     {
                         Content = new StringContent("{}"),
-                        
+
                     }
                 };
                 return Task.FromResult(httpResponseMessage);

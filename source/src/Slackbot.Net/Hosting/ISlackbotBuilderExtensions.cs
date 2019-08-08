@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static ISlackbotBuilder AddSlackbot(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<SlackOptions>(configuration);
+            services.ConfigureAndValidate<SlackOptions>(configuration);
             var builder = new SlackbotBuilder(services);
             builder.AddDependencies();
             return builder;
@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static ISlackbotBuilder AddSlackbot(this IServiceCollection services, Action<SlackOptions> action)
         {
-            services.Configure(action);
+            services.ConfigureAndValidate(action);
             var builder = new SlackbotBuilder(services);
             builder.AddDependencies();
             return builder;
@@ -65,5 +65,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
         }
+
+
     }
 }

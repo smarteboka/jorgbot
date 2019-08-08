@@ -8,18 +8,18 @@ using Slackbot.Net.Hosting;
 using Slackbot.Net.Publishers;
 using Slackbot.Net.Publishers.Slack;
 
-namespace Smartbot.Utilities.HostedServices
+namespace Smartbot.Utilities.RecurringActions
 {
-    public class HeartBeater : RecurringAction
+    public class Storsdag : RecurringAction
     {
+        public const string LastThursdayOfMonthCron = "0 0 8 * * THUL";
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
-        private string _cron;
 
-        public HeartBeater(IEnumerable<IPublisher> publishers,
+        public Storsdag(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
-            ILogger<HeartBeater> logger, IOptionsSnapshot<CronOptions> options)
-            : base(options, logger)
+            ILogger<Storsdag> logger, IOptionsSnapshot<CronOptions> options)
+            : base(options,logger)
         {
             _publishers = publishers;
             _channels = channels;
@@ -31,10 +31,9 @@ namespace Smartbot.Utilities.HostedServices
             {
                 var notification = new Notification
                 {
-                    Msg = $":heart:",
-                    BotName = "heartbot",
-                    IconEmoji = ":heart:",
-                    Channel = _channels.TestChannel
+                    Msg = $"Storsdags inc! Med? :+1: / :-1: ?",
+                    IconEmoji = ":beer:",
+                    Channel = _channels.SmartebokaChannel
                 };
                 await publisher.Publish(notification);
             }

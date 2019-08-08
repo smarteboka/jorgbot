@@ -7,7 +7,7 @@ using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using SlackConnector.Models;
 using Smartbot.Utilities.Storage;
 
-namespace Smartbot.Utilities.Strategies
+namespace Smartbot.Utilities.Handlers
 {
     public class UrlsSaveHandler : IHandleMessages
     {

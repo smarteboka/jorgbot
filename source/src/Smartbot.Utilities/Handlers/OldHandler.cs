@@ -9,7 +9,7 @@ using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using Slackbot.Net.Utilities.SlackAPIFork;
 using SlackConnector.Models;
 
-namespace Smartbot.Utilities.Strategies
+namespace Smartbot.Utilities.Handlers
 {
     public class OldHandler : IHandleMessages
     {

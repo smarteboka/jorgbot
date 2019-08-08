@@ -10,7 +10,7 @@ using SlackConnector.Models;
 using Smartbot.Utilities.FourSquareServices;
 using Smartbot.Utilities.FourSquareServices.Entities;
 
-namespace Smartbot.Utilities.Strategies
+namespace Smartbot.Utilities.Handlers
 {
     public class FourSquareHandler : IHandleMessages
     {

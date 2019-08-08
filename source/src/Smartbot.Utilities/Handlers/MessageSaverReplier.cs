@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Slackbot.Net.Strategies;
 using SlackConnector.Models;
 
-namespace Smartbot.Utilities.Strategies
+namespace Smartbot.Utilities.Handlers
 {
     public class MessageSaverReplier : IHandleMessages
     {

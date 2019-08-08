@@ -7,7 +7,7 @@ using Slackbot.Net.Hosting;
 using Slackbot.Net.Publishers;
 using Slackbot.Net.Publishers.Slack;
 
-namespace Smartbot.Utilities.HostedServices
+namespace Smartbot.Utilities.RecurringActions
 {
     public class Jorger : RecurringAction
     {
