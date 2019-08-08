@@ -15,16 +15,16 @@ namespace Slackbot.Net
     {
         private readonly ISlackConnector _noobotCore;
         private readonly ILogger<SlackConnectorHostedService> _logger;
-        private readonly HandlerSelector _strategySelector;
+        private readonly HandlerSelector _handlerSelector;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
 
-        public SlackConnectorHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<SlackConnectorHostedService> logger, HandlerSelector strategySelector)
+        public SlackConnectorHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<SlackConnectorHostedService> logger, HandlerSelector handlerSelector)
         {
             _noobotCore = noobotCore;
             _logger = logger;
-            _strategySelector = strategySelector;
+            _handlerSelector = handlerSelector;
             _config = options.Value;
         }
 
@@ -51,12 +51,12 @@ namespace Slackbot.Net
 
         private async Task HandleIncomingMessage(SlackMessage message)
         {
-            var strategies = _strategySelector.SelectHandler(message);
-            foreach (var strategy in strategies)
+            var handlers = _handlerSelector.SelectHandler(message);
+            foreach (var handler in handlers)
             {
                 try
                 {
-                    await strategy.Handle(message);
+                    await handler.Handle(message);
                 }
                 catch (Exception e)
                 {
