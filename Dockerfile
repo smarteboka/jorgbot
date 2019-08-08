@@ -8,7 +8,6 @@ COPY source/src/Smartbot/Smartbot.csproj ./source/src/Smartbot/Smartbot.csproj
 COPY source/src/Smartbot.Utilities/Smartbot.Utilities.csproj ./source/src/Smartbot.Utilities/Smartbot.Utilities.csproj
 
 COPY source/src/Slackbot.Net/Slackbot.Net.csproj ./source/src/Slackbot.Net/Slackbot.Net.csproj
-COPY source/src/Slackbot.Net.Utilities/Slackbot.Net.Utilities.csproj ./source/src/Slackbot.Net.Utilities/Slackbot.Net.Utilities.csproj
 
 COPY source/test/Smartbot.Tests/Smartbot.Tests.csproj ./source/test/Smartbot.Tests/Smartbot.Tests.csproj
 
