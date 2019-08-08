@@ -26,11 +26,7 @@ namespace Smartbot
                     services.AddSmartbot(context.Configuration);
 
 
-                    services.AddSlackbot(o =>
-                        {
-                            o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("SmartBot_SlackApiKey_BotUser");
-                            o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("SmartBot_SlackApiKey_SlackApp");
-                        })
+                    services.AddSlackbot(context.Configuration)
 
                         .AddPublisher<SlackPublisher>()
                         .AddPublisher<LoggerPublisher>()
