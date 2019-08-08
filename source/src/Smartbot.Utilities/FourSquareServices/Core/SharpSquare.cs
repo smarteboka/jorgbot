@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FourSquare.SharpSquare.Entities;
+using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Smartbot.Utilities.FourSquareServices.Entities;
 
-namespace FourSquare.SharpSquare.Core
+namespace Smartbot.Utilities.FourSquareServices.Core
 {
     public class SharpSquare
     {

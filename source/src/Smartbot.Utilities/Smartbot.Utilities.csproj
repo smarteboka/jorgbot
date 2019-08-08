@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
-        <RootNamespace>Oldbot.Utilities</RootNamespace>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RootNamespace>Smartbot.Utilities</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SlackAPI" Version="1.0.7" />
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net\Slackbot.Net.csproj" />
     </ItemGroup>
 
 </Project>

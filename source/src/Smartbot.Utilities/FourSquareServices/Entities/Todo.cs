@@ -1,4 +1,4 @@
-﻿namespace FourSquare.SharpSquare.Entities
+﻿namespace Smartbot.Utilities.FourSquareServices.Entities
 {
     public class Todo : FourSquareEntity
     {

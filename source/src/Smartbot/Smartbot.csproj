@@ -11,14 +11,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-    <PackageReference Include="SlackAPI" Version="1.1.1" />
-    <PackageReference Include="Cronos" Version="0.7.0" />
-    <PackageReference Include="SlackConnector" Version="4.2.74" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
 
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Smartbot.Storage\Smartbot.Storage.csproj" />
+    <ProjectReference Include="..\Slackbot.Net.Utilities\Slackbot.Net.Utilities.csproj" />
+    <ProjectReference Include="..\Slackbot.Net\Slackbot.Net.csproj" />
     <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
   </ItemGroup>
 

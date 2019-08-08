@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FourSquare.SharpSquare.Entities
+namespace Smartbot.Utilities.FourSquareServices.Entities
 {
     public class FourSquareEntityUsers : FourSquareEntity
     {

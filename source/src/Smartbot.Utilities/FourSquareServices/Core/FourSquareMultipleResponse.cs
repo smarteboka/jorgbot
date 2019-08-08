@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using FourSquare.SharpSquare.Entities;
+using Smartbot.Utilities.FourSquareServices.Entities;
 
-namespace FourSquare.SharpSquare.Core
+namespace Smartbot.Utilities.FourSquareServices.Core
 {
     public class FourSquareMultipleResponse<T> : FourSquareResponse where T : FourSquareEntity
     {

@@ -3,9 +3,12 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY source/Smartbot.sln ./source/Smartbot.sln
+
 COPY source/src/Smartbot/Smartbot.csproj ./source/src/Smartbot/Smartbot.csproj
 COPY source/src/Smartbot.Utilities/Smartbot.Utilities.csproj ./source/src/Smartbot.Utilities/Smartbot.Utilities.csproj
-COPY source/src/Smartbot.Storage/Smartbot.Storage.csproj ./source/src/Smartbot.Storage/Smartbot.Storage.csproj
+
+COPY source/src/Slackbot.Net/Slackbot.Net.csproj ./source/src/Slackbot.Net/Slackbot.Net.csproj
+COPY source/src/Slackbot.Net.Utilities/Slackbot.Net.Utilities.csproj ./source/src/Slackbot.Net.Utilities/Slackbot.Net.Utilities.csproj
 
 COPY source/test/Smartbot.Tests/Smartbot.Tests.csproj ./source/test/Smartbot.Tests/Smartbot.Tests.csproj
 

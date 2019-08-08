@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FourSquare.SharpSquare.Entities
+namespace Smartbot.Utilities.FourSquareServices.Entities
 {
     public class TimeFrame : FourSquareEntity
     {

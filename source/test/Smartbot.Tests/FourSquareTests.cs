@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Oldbot.Utilities.FourSquareServices;
+using Smartbot.Utilities.FourSquareServices;
 using Xunit;
 
 namespace Oldbot.OldFunction.Tests

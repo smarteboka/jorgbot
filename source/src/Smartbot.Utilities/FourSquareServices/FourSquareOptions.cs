@@ -1,4 +1,4 @@
-namespace Oldbot.Utilities.FourSquareServices
+namespace Smartbot.Utilities.FourSquareServices
 {
     public class FourSquareOptions
     {

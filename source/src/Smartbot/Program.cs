@@ -4,9 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Smartbot.HostedServices.CronServices;
-using Smartbot.Publishers;
-using Smartbot.Publishers.Slack;
+using Smartbot.Utilities;
+using Smartbot.Utilities.FourSquareServices;
+using Smartbot.Utilities.HostedServices;
+using Smartbot.Utilities.Storage;
+using Smartbot.Utilities.Strategies;
 
 namespace Smartbot
 {
@@ -22,8 +24,23 @@ namespace Smartbot
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddCronBots(context.Configuration);
-                    services.AddSmartbot(context.Configuration);
+                    services.AddSingleton<Smartinger>();
+                    services.Configure<SmartStorageOptions>(context.Configuration);
+                    services.AddSingleton<SlackMessagesStorage>();
+
+                    services.AddSingleton<FourSquareService>();
+                    services.Configure<FourSquareOptions>(context.Configuration);
+
+                    services.AddSlackbot(context.Configuration)
+                        .AddCron<JorgingHostedService>()
+                        .AddCron<BirthdayCheckerHostedService>()
+                        .AddCron<HeartBeatHostedService>()
+                        .AddCron<StorsdagsWeekHostedService>()
+                        .AddReplyStrategy<NesteStorsdagStrategy>()
+                        .AddReplyStrategy<AllUpcomingStorsdagerStrategy>()
+                        .AddReplyStrategy<FoursquareStrategy>()
+                        .AddReplyStrategy<OldnessValidatorStrategy>()
+                        .AddReplyStrategy<UrlsSaverStrategy>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>

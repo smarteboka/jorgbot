@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using FourSquare.SharpSquare.Core;
-using FourSquare.SharpSquare.Entities;
 using Microsoft.Extensions.Options;
+using Smartbot.Utilities.FourSquareServices.Core;
+using Smartbot.Utilities.FourSquareServices.Entities;
 
-namespace Oldbot.Utilities.FourSquareServices
+namespace Smartbot.Utilities.FourSquareServices
 {
     public class FourSquareService : IFoursquareService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FourSquare.SharpSquare.Core
+namespace Smartbot.Utilities.FourSquareServices.Core
 {
     public class VenueResponse<T>
     {

@@ -3,13 +3,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Utilities;
+using Slackbot.Net.Utilities.EventAPIModels;
+using Slackbot.Net.Utilities.SlackAPI.Extensions;
+using Slackbot.Net.Utilities.SlackAPIFork;
 using Xunit;
-using Oldbot.Utilities;
-using Oldbot.Utilities.EventAPIModels;
-using Oldbot.Utilities.SlackAPI.Extensions;
-using Oldbot.Utilities.SlackAPIFork;
 using SlackConnector.Models;
-using Smartbot.HostedServices.Strategies;
+using Smartbot.Utilities.Strategies;
 
 namespace Oldbot.OldFunction.Tests
 {

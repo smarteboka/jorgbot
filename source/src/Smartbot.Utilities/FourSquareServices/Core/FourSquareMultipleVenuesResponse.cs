@@ -1,6 +1,6 @@
-﻿using FourSquare.SharpSquare.Entities;
+﻿using Smartbot.Utilities.FourSquareServices.Entities;
 
-namespace FourSquare.SharpSquare.Core
+namespace Smartbot.Utilities.FourSquareServices.Core
 {
     public class FourSquareMultipleVenuesResponse<T> : FourSquareResponse where T : FourSquareEntity
     {
