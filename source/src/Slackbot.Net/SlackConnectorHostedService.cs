@@ -11,16 +11,16 @@ using SlackConnector.Models;
 
 namespace Slackbot.Net
 {
-    internal class RealTimeBotHostedService : BackgroundService
+    internal class SlackConnectorHostedService : BackgroundService
     {
         private readonly ISlackConnector _noobotCore;
-        private readonly ILogger<RealTimeBotHostedService> _logger;
+        private readonly ILogger<SlackConnectorHostedService> _logger;
         private readonly HandlerSelector _strategySelector;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
 
-        public RealTimeBotHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<RealTimeBotHostedService> logger, HandlerSelector strategySelector)
+        public SlackConnectorHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<SlackConnectorHostedService> logger, HandlerSelector strategySelector)
         {
             _noobotCore = noobotCore;
             _logger = logger;

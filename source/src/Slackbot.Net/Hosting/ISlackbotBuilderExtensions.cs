@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             builder.Services.AddSingleton<HandlerSelector>();
-            builder.Services.AddHostedService<RealTimeBotHostedService>();
+            builder.Services.AddHostedService<SlackConnectorHostedService>();
         }
     }
 }

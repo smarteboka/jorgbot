@@ -16,9 +16,5 @@
       <PackageReference Include="SlackAPI" Version="1.1.1" />
       <PackageReference Include="Cronos" Version="0.7.0" />
       <PackageReference Include="SlackConnector" Version="4.2.74" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Slackbot.Net.Utilities\Slackbot.Net.Utilities.csproj" />
-    </ItemGroup> 
+    </ItemGroup>   
 </Project>
