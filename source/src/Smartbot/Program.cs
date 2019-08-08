@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Publishers;
+using Slackbot.Net.Publishers.Slack;
 using Smartbot.Utilities.HostedServices;
 using Smartbot.Utilities.Strategies;
 
@@ -31,13 +32,13 @@ namespace Smartbot
                             o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("SmartBot_SlackApiKey_SlackApp");
                         })
 
-                        .AddSlackPublisher()
+                        .AddPublisher<SlackPublisher>()
                         .AddPublisher<LoggerPublisher>()
 
-                        .AddRecurring<JorgingHostedService>(c => c.Cron = "0 55 7 * * *")
-                        .AddRecurring<BirthdayCheckerHostedService>(c => c.Cron = "0 0 8 * * *")
-                        .AddRecurring<HeartBeatHostedService>(c => c.Cron = "0 55 7 * * *")
-                        .AddRecurring<StorsdagsWeekHostedService>(c => c.Cron = "0 0 8 * * THUL")
+                        .AddRecurring<Jorger>(c => c.Cron = "0 55 7 * * *")
+                        .AddRecurring<HappyBirthday>(c => c.Cron = "0 0 8 * * *")
+                        .AddRecurring<HeartBeater>(c => c.Cron = "0 55 7 * * *")
+                        .AddRecurring<Storsdag>(c => c.Cron = "0 0 8 * * THUL")
 
                         .AddHandler<NesteStorsdagHandler>()
                         .AddHandler<StorsdagerHandler>()

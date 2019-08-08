@@ -10,18 +10,18 @@ using Slackbot.Net.Publishers.Slack;
 
 namespace Smartbot.Utilities.HostedServices
 {
-    public class BirthdayCheckerHostedService : RecurringAction
+    public class HappyBirthday : RecurringAction
     {
         private readonly Smartinger _smartinger;
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly Timing _timing;
         private readonly SlackChannels _channels;
 
-        public BirthdayCheckerHostedService(Smartinger smartinger,
+        public HappyBirthday(Smartinger smartinger,
             IEnumerable<IPublisher> publishers,
             Timing timing,
             SlackChannels channels,
-            ILogger<BirthdayCheckerHostedService> logger,
+            ILogger<HappyBirthday> logger,
             IOptionsSnapshot<CronOptions> options)
             : base(options,logger)
         {

@@ -10,15 +10,15 @@ using Slackbot.Net.Publishers.Slack;
 
 namespace Smartbot.Utilities.HostedServices
 {
-    public class StorsdagsWeekHostedService : RecurringAction
+    public class Storsdag : RecurringAction
     {
         public const string LastThursdayOfMonthCron = "0 0 8 * * THUL";
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
 
-        public StorsdagsWeekHostedService(IEnumerable<IPublisher> publishers,
+        public Storsdag(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
-            ILogger<StorsdagsWeekHostedService> logger, IOptionsSnapshot<CronOptions> options)
+            ILogger<Storsdag> logger, IOptionsSnapshot<CronOptions> options)
             : base(options,logger)
         {
             _publishers = publishers;

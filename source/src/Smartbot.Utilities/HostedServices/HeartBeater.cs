@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slackbot.Net;
@@ -9,16 +10,16 @@ using Slackbot.Net.Publishers.Slack;
 
 namespace Smartbot.Utilities.HostedServices
 {
-    public class JorgingHostedService : RecurringAction
+    public class HeartBeater : RecurringAction
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
+        private string _cron;
 
-        public JorgingHostedService(IEnumerable<IPublisher> publishers,
+        public HeartBeater(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
-            ILogger<JorgingHostedService> logger,
-            IOptionsSnapshot<CronOptions> options)
-            : base(options,logger)
+            ILogger<HeartBeater> logger, IOptionsSnapshot<CronOptions> options)
+            : base(options, logger)
         {
             _publishers = publishers;
             _channels = channels;
@@ -30,10 +31,10 @@ namespace Smartbot.Utilities.HostedServices
             {
                 var notification = new Notification
                 {
-                    Msg = $"jorg",
-                    BotName = "jorgbot",
-                    IconEmoji = ":coffee:",
-                    Channel = _channels.JorgChannel
+                    Msg = $":heart:",
+                    BotName = "heartbot",
+                    IconEmoji = ":heart:",
+                    Channel = _channels.TestChannel
                 };
                 await publisher.Publish(notification);
             }

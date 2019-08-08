@@ -22,7 +22,7 @@ namespace Smartbot.Utilities.Strategies
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var upcomingEvents = Timing.GetNextOccurences(StorsdagsWeekHostedService.LastThursdayOfMonthCron);
+            var upcomingEvents = Timing.GetNextOccurences(Storsdag.LastThursdayOfMonthCron);
             var nextStorsdag = upcomingEvents.FirstOrDefault();
             var culture = new CultureInfo("nb-NO");
             foreach (var publisher in _publishers)

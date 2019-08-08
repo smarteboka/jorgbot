@@ -42,13 +42,6 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddSingleton<IHandleMessages, T>();
             return builder;
         }
-
-        public static ISlackbotBuilder AddSlackPublisher(this ISlackbotBuilder builder)
-        {
-            builder.Services.AddSingleton<IPublisher, SlackPublisher>();
-            return builder;
-        }
-
         public static ISlackbotBuilder AddPublisher<T>(this ISlackbotBuilder builder) where T: class, IPublisher
         {
             builder.Services.AddSingleton<IPublisher, T>();
