@@ -9,22 +9,22 @@ using Smartbot.Utilities.Storage;
 
 namespace Smartbot.Utilities.Strategies
 {
-    public class UrlsSaverStrategy : IReplyStrategy
+    public class UrlsSaveHandler : IHandleMessages
     {
         private readonly SlackMessagesStorage _storage;
         private readonly ISlackClient _client;
 
-        public UrlsSaverStrategy(SlackMessagesStorage storage, ISlackClient client)
+        public UrlsSaveHandler(SlackMessagesStorage storage, ISlackClient client)
         {
             _storage = storage;
             _client = client;
         }
-        
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var urls = RegexHelper.FindUrls(message.Text);
             var permalink = await _client.GetPermalink(message.ChatHub.Id, message.Timestamp.ToString("N6"));
-  
+
             foreach (var url in urls)
             {
                 var cleansedUrl = UrlCleaner.CleanForTrackingQueryParams(url);
@@ -44,7 +44,7 @@ namespace Smartbot.Utilities.Strategies
             return new HandleResponse("OK");
         }
 
-        public bool ShouldExecute(SlackMessage message)
+        public bool ShouldHandle(SlackMessage message)
         {
             return RegexHelper.FindUrls(message.Text).Any();
         }

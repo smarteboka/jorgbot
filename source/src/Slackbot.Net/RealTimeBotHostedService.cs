@@ -15,12 +15,12 @@ namespace Slackbot.Net
     {
         private readonly ISlackConnector _noobotCore;
         private readonly ILogger<RealTimeBotHostedService> _logger;
-        private readonly StrategySelector _strategySelector;
+        private readonly HandlerSelector _strategySelector;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
 
-        public RealTimeBotHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<RealTimeBotHostedService> logger, StrategySelector strategySelector)
+        public RealTimeBotHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<RealTimeBotHostedService> logger, HandlerSelector strategySelector)
         {
             _noobotCore = noobotCore;
             _logger = logger;
@@ -51,7 +51,7 @@ namespace Slackbot.Net
 
         private async Task HandleIncomingMessage(SlackMessage message)
         {
-            var strategies = _strategySelector.DirectToStrategy(message);
+            var strategies = _strategySelector.SelectHandler(message);
             foreach (var strategy in strategies)
             {
                 try

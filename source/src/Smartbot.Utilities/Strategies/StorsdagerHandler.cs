@@ -11,11 +11,11 @@ using Smartbot.Utilities.HostedServices;
 
 namespace Smartbot.Utilities.Strategies
 {
-    public class NesteStorsdagStrategy : IReplyStrategy
+    public class StorsdagerHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
 
-        public NesteStorsdagStrategy(IEnumerable<IPublisher> publishers)
+        public StorsdagerHandler(IEnumerable<IPublisher> publishers)
         {
             _publishers = publishers;
         }
@@ -23,13 +23,14 @@ namespace Smartbot.Utilities.Strategies
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var upcomingEvents = Timing.GetNextOccurences(StorsdagsWeekHostedService.LastThursdayOfMonthCron);
-            var nextStorsdag = upcomingEvents.FirstOrDefault();
             var culture = new CultureInfo("nb-NO");
+            var uText = upcomingEvents.Select(u => $"{u.Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture)}");
+            var aggr = $"{uText.Aggregate((x, y) => x + "\n" + y)}";
             foreach (var publisher in _publishers)
             {
                 var notification = new Notification
                 {
-                    Msg = $"Neste storsdag er {nextStorsdag.Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture)}",
+                    Msg = aggr,
                     Channel = message.ChatHub.Id
                 };
                 await publisher.Publish(notification);
@@ -37,11 +38,10 @@ namespace Smartbot.Utilities.Strategies
             return new HandleResponse("OK");
         }
 
-        public bool ShouldExecute(SlackMessage message)
+        public bool ShouldHandle(SlackMessage message)
         {
-            var containsNeste = message.Text.Contains("neste", StringComparison.InvariantCultureIgnoreCase);
-            var containsStorsdag = message.Text.Contains("storsdag", StringComparison.InvariantCultureIgnoreCase);
-            return message.MentionsBot && containsNeste && containsStorsdag;
+            var containsStorsdager = message.Text.Contains("storsdager", StringComparison.InvariantCultureIgnoreCase);
+            return message.MentionsBot && containsStorsdager;
         }
     }
 }

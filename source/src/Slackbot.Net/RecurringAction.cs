@@ -4,21 +4,29 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Slackbot.Net.Hosting;
 
 namespace Slackbot.Net
 {
-    public abstract class CronHostedService : BackgroundService
+    public abstract class RecurringAction : BackgroundService
     {
-        private readonly ILogger<CronHostedService> _logger;
+        private readonly ILogger<RecurringAction> _logger;
 
-        protected CronHostedService(ILogger<CronHostedService> logger)
+        protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)
         {
             _logger = logger;
+            Cron = options.Get(GetType().ToString()).Cron;
+            _logger.LogDebug($"Using {Cron}");
         }
+
+        protected string Cron;
+
+        public abstract Task Process();
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var cron = Cron();
+            var cron = Cron;
             DateTimeOffset? next = null;
 
             do
@@ -52,8 +60,5 @@ namespace Slackbot.Net
             } while (!stoppingToken.IsCancellationRequested);
         }
 
-        public abstract string Cron();
-
-        public abstract Task Process();
     }
 }

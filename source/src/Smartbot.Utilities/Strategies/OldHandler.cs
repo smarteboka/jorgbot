@@ -11,17 +11,17 @@ using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Strategies
 {
-    public class OldnessValidatorStrategy : IReplyStrategy
+    public class OldHandler : IHandleMessages
     {
-        private readonly ILogger<OldnessValidatorStrategy> _logger;
+        private readonly ILogger<OldHandler> _logger;
         private readonly ISlackClient _slackClient;
 
-        public OldnessValidatorStrategy(ILogger<OldnessValidatorStrategy> logger, ISlackClient slackClient)
+        public OldHandler(ILogger<OldHandler> logger, ISlackClient slackClient)
         {
             _logger = logger;
             _slackClient = slackClient;
         }
-        
+
         public async Task<HandleResponse> Handle(SlackMessage incomingMessage)
         {
 
@@ -34,7 +34,7 @@ namespace Smartbot.Utilities.Strategies
                     var res = await HandleUrl(url, incomingMessage);
                     responses.Add(res);
                 }
-                return new HandleResponse(responses.Aggregate((x,y) => x + "," + y)); 
+                return new HandleResponse(responses.Aggregate((x,y) => x + "," + y));
             }
             return new HandleResponse("IGNORED");
         }
@@ -58,12 +58,12 @@ namespace Smartbot.Utilities.Strategies
                 if (r.user == incomingMessage.User.Id)
                 {
                     return LogHandled("OLD-BUT-SAME-USER-SO-IGNORING");
-                    
+
                 }
 
                 var threadTs = incomingMessage.Timestamp.ToString("N6");
                 var reactionResponse = await _slackClient.AddReactions(incomingMessage.ChatHub.Id, threadTs);
-             
+
                 var message = $"postet av @{r.username} for {TimeSpanExtensions.Ago(r.ts)} siden.";
                 var response = await _slackClient.SendMessage(incomingMessage.ChatHub.Id, message, threadTs, r.permalink);
                 var body = await response.Content.ReadAsStringAsync();
@@ -77,9 +77,9 @@ namespace Smartbot.Utilities.Strategies
             }
             return LogHandled("NEW");
         }
-        
 
-        public bool ShouldExecute(SlackMessage message)
+
+        public bool ShouldHandle(SlackMessage message)
         {
             _logger.LogInformation("Received:" + message.RawData);
 
@@ -95,11 +95,11 @@ namespace Smartbot.Utilities.Strategies
                 LogHandled("IGNORED");
                 return false;
             }
-            
+
             var urls = RegexHelper.FindUrls(message.Text);
             return urls.Any();
         }
-        
+
         private string LogHandled(string body)
         {
             _logger.LogInformation($"Treated as: {body}");

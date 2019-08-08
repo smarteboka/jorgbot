@@ -1,6 +1,5 @@
+using System;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Slackbot.Net;
 using Slackbot.Net.Hosting;
@@ -15,7 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ISlackbotBuilderExtensions
     {
-
         public static ISlackbotBuilder AddSlackbot(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SlackOptions>(configuration);
@@ -23,16 +21,16 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.AddDependencies();
             return builder;
         }
-
-        public static ISlackbotBuilder AddCron<T>(this ISlackbotBuilder builder) where T: CronHostedService
+        public static ISlackbotBuilder AddRecurring<T>(this ISlackbotBuilder builder, Action<CronOptions> o) where T: RecurringAction
         {
+            builder.Services.Configure(typeof(T).ToString(), o);
             builder.Services.AddHostedService<T>();
             return builder;
         }
 
-        public static ISlackbotBuilder AddReplyStrategy<T>(this ISlackbotBuilder builder) where T : class, IReplyStrategy
+        public static ISlackbotBuilder AddHandler<T>(this ISlackbotBuilder builder) where T : class, IHandleMessages
         {
-            builder.Services.AddSingleton<IReplyStrategy, T>();
+            builder.Services.AddSingleton<IHandleMessages, T>();
             return builder;
         }
 
@@ -51,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return new SlackTaskClientExtensions(config.SmartBot_SlackApiKey_SlackApp, config.SmartBot_SlackApiKey_BotUser);
             });
 
-            builder.Services.AddSingleton<StrategySelector>();
+            builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<RealTimeBotHostedService>();
         }
     }

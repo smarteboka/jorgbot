@@ -24,7 +24,7 @@ namespace Oldbot.OldFunction.Tests
                 User = new SlackUser()
             };
 
-            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),new MockClient());
+            var validateOldness = new OldHandler(new NoopLogger(),new MockClient());
             var response = await validateOldness.Handle(request);
             Assert.Equal("IGNORED", response.HandledMessage);
         }
@@ -58,9 +58,9 @@ namespace Oldbot.OldFunction.Tests
                 }
             };
 
-            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),new MockClient());
+            var validateOldness = new OldHandler(new NoopLogger(),new MockClient());
 
-            Assert.False(validateOldness.ShouldExecute(request));
+            Assert.False(validateOldness.ShouldHandle(request));
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Oldbot.OldFunction.Tests
                 }
             };
             
-            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),mockClient);
+            var validateOldness = new OldHandler(new NoopLogger(),mockClient);
 
             var response = await validateOldness.Handle(request);
             Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.HandledMessage);            
@@ -135,7 +135,7 @@ namespace Oldbot.OldFunction.Tests
                 Ts = "1552671370.000200", //older
                 User = "another-smarting"
             });
-            var validateOldness = new OldnessValidatorStrategy(new NoopLogger(),mock);
+            var validateOldness = new OldHandler(new NoopLogger(),mock);
 
             var response = await validateOldness.Handle(new SlackMessage
             {
@@ -153,7 +153,7 @@ namespace Oldbot.OldFunction.Tests
         }
     }
 
-    public class NoopLogger : ILogger<OldnessValidatorStrategy>
+    public class NoopLogger : ILogger<OldHandler>
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {

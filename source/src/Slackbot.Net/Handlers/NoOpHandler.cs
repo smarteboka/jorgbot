@@ -3,14 +3,14 @@ using SlackConnector.Models;
 
 namespace Slackbot.Net.Strategies
 {
-    public class DoNothingStrategy : IReplyStrategy
+    public class NoOpHandler : IHandleMessages
     {
         public Task<HandleResponse> Handle(SlackMessage message)
         {
             return Task.FromResult(new HandleResponse("OK"));
         }
 
-        public bool ShouldExecute(SlackMessage message)
+        public bool ShouldHandle(SlackMessage message)
         {
             return !message.MentionsBot;
         }

@@ -5,14 +5,14 @@ using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Strategies
 {
-    public class MessageSaverStrategy : IReplyStrategy
+    public class MessageSaverReplier : IHandleMessages
     {
         public Task<HandleResponse> Handle(SlackMessage message)
         {
             return Task.FromResult(new HandleResponse("OK"));
         }
 
-        public bool ShouldExecute(SlackMessage message)
+        public bool ShouldHandle(SlackMessage message)
         {
             return message.Text.StartsWith("<@UGWC87WRZ> save", StringComparison.InvariantCultureIgnoreCase);
         }

@@ -32,15 +32,17 @@ namespace Smartbot
                     services.Configure<FourSquareOptions>(context.Configuration);
 
                     services.AddSlackbot(context.Configuration)
-                        .AddCron<JorgingHostedService>()
-                        .AddCron<BirthdayCheckerHostedService>()
-                        .AddCron<HeartBeatHostedService>()
-                        .AddCron<StorsdagsWeekHostedService>()
-                        .AddReplyStrategy<NesteStorsdagStrategy>()
-                        .AddReplyStrategy<AllUpcomingStorsdagerStrategy>()
-                        .AddReplyStrategy<FoursquareStrategy>()
-                        .AddReplyStrategy<OldnessValidatorStrategy>()
-                        .AddReplyStrategy<UrlsSaverStrategy>();
+
+                        .AddRecurring<JorgingHostedService>(c => c.Cron = "0 55 7 * * *")
+                        .AddRecurring<BirthdayCheckerHostedService>(c => c.Cron = "0 0 8 * * *")
+                        .AddRecurring<HeartBeatHostedService>(c => c.Cron = "0 55 7 * * *")
+                        .AddRecurring<StorsdagsWeekHostedService>(c => c.Cron = "0 0 8 * * THUL")
+
+                        .AddHandler<NesteStorsdagHandler>()
+                        .AddHandler<StorsdagerHandler>()
+                        .AddHandler<FourSquareHandler>()
+                        .AddHandler<OldHandler>()
+                        .AddHandler<UrlsSaveHandler>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>

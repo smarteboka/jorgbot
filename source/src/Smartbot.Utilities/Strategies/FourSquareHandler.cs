@@ -12,11 +12,11 @@ using Smartbot.Utilities.FourSquareServices.Entities;
 
 namespace Smartbot.Utilities.Strategies
 {
-    public class FoursquareStrategy : IReplyStrategy
+    public class FourSquareHandler : IHandleMessages
     {
         private readonly FourSquareService _foursquare;
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly ILogger<FoursquareStrategy> _logger;
+        private readonly ILogger<FourSquareHandler> _logger;
 
         private List<string> Categories = new List<string>
         {
@@ -27,7 +27,7 @@ namespace Smartbot.Utilities.Strategies
             "topPicks"
         };
 
-        public FoursquareStrategy(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FoursquareStrategy> logger)
+        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger)
         {
             _foursquare = foursquare;
             _publishers = publishers;
@@ -74,7 +74,7 @@ namespace Smartbot.Utilities.Strategies
             return new HandleResponse("OK");
         }
 
-        public bool ShouldExecute(SlackMessage message)
+        public bool ShouldHandle(SlackMessage message)
         {
             var execute = message.Text.StartsWith("<@UGWC87WRZ> 4sq", StringComparison.InvariantCultureIgnoreCase);
             return execute;
