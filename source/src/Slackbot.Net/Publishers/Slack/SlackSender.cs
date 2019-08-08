@@ -13,7 +13,7 @@ namespace Slackbot.Net.Publishers.Slack
         public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger)
         {
             _logger = logger;
-            _client = new SlackTaskClient(slackOptions.Value.SmartBot_SlackApiKey_SlackApp);
+            _client = new SlackTaskClient(slackOptions.Value.Slackbot_SlackApiKey_SlackApp);
         }
 
         public async Task Send(string msg, string botName, string iconEmoji, string channel)

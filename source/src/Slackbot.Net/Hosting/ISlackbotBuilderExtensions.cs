@@ -21,6 +21,15 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.AddDependencies();
             return builder;
         }
+
+        public static ISlackbotBuilder AddSlackbot(this IServiceCollection services, Action<SlackOptions> action)
+        {
+            services.Configure(action);
+            var builder = new SlackbotBuilder(services);
+            builder.AddDependencies();
+            return builder;
+        }
+
         public static ISlackbotBuilder AddRecurring<T>(this ISlackbotBuilder builder, Action<CronOptions> o) where T: RecurringAction
         {
             builder.Services.Configure(typeof(T).ToString(), o);
@@ -34,19 +43,30 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        public static ISlackbotBuilder AddSlackPublisher(this ISlackbotBuilder builder)
+        {
+            builder.Services.AddSingleton<IPublisher, SlackPublisher>();
+            return builder;
+        }
+
+        public static ISlackbotBuilder AddPublisher<T>(this ISlackbotBuilder builder) where T: class, IPublisher
+        {
+            builder.Services.AddSingleton<IPublisher, T>();
+            return builder;
+        }
+
         internal static void AddDependencies(this ISlackbotBuilder builder)
         {
-            builder.Services.AddSingleton<SlackSender>();
+
             builder.Services.AddSingleton<Timing>();
             builder.Services.AddSingleton<SlackChannels>();
-            builder.Services.AddSingleton<IPublisher, SlackPublisher>();
-            builder.Services.AddSingleton<IPublisher, ConsolePublisher>();
+            builder.Services.AddSingleton<SlackSender>();
 
             builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
             builder.Services.AddSingleton<ISlackClient, SlackTaskClientExtensions>(provider =>
             {
                 var config = provider.GetService<IOptions<SlackOptions>>().Value;
-                return new SlackTaskClientExtensions(config.SmartBot_SlackApiKey_SlackApp, config.SmartBot_SlackApiKey_BotUser);
+                return new SlackTaskClientExtensions(config.Slackbot_SlackApiKey_SlackApp, config.Slackbot_SlackApiKey_BotUser);
             });
 
             builder.Services.AddSingleton<HandlerSelector>();

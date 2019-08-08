@@ -4,10 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Smartbot.Utilities;
-using Smartbot.Utilities.FourSquareServices;
+using Slackbot.Net.Publishers;
 using Smartbot.Utilities.HostedServices;
-using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Strategies;
 
 namespace Smartbot
@@ -24,14 +22,17 @@ namespace Smartbot
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<Smartinger>();
-                    services.Configure<SmartStorageOptions>(context.Configuration);
-                    services.AddSingleton<SlackMessagesStorage>();
+                    services.AddSmartbot(context.Configuration);
 
-                    services.AddSingleton<FourSquareService>();
-                    services.Configure<FourSquareOptions>(context.Configuration);
 
-                    services.AddSlackbot(context.Configuration)
+                    services.AddSlackbot(o =>
+                        {
+                            o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("SmartBot_SlackApiKey_BotUser");
+                            o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("SmartBot_SlackApiKey_SlackApp");
+                        })
+
+                        .AddSlackPublisher()
+                        .AddPublisher<LoggerPublisher>()
 
                         .AddRecurring<JorgingHostedService>(c => c.Cron = "0 55 7 * * *")
                         .AddRecurring<BirthdayCheckerHostedService>(c => c.Cron = "0 0 8 * * *")

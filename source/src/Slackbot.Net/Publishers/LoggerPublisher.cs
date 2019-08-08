@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Slackbot.Net.Publishers
 {
-    internal class ConsolePublisher : IPublisher
+    public class LoggerPublisher : IPublisher
     {
-        private readonly ILogger<ConsolePublisher> _logger;
+        private readonly ILogger<LoggerPublisher> _logger;
 
-        public ConsolePublisher(ILogger<ConsolePublisher> logger)
+        public LoggerPublisher(ILogger<LoggerPublisher> logger)
         {
             _logger = logger;
         }

@@ -33,7 +33,7 @@ namespace Slackbot.Net
             while (!stoppingToken.IsCancellationRequested && !_connected)
             {
                 _logger.LogInformation("Connecting");
-                _connection = await _noobotCore.Connect(_config.SmartBot_SlackApiKey_BotUser);
+                _connection = await _noobotCore.Connect(_config.Slackbot_SlackApiKey_BotUser);
                 _connection.OnMessageReceived += HandleIncomingMessage;
 
                 _connection.OnDisconnect += () =>
