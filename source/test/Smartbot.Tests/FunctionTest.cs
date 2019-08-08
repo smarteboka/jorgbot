@@ -7,11 +7,11 @@ using Slackbot.Net.Utilities;
 using Slackbot.Net.Utilities.EventAPIModels;
 using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using Slackbot.Net.Utilities.SlackAPIFork;
-using Xunit;
 using SlackConnector.Models;
 using Smartbot.Utilities.Handlers;
+using Xunit;
 
-namespace Oldbot.OldFunction.Tests
+namespace Smartbot.Tests
 {
     public class FunctionTest
     {

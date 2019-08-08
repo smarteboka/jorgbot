@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Smartbot.Utilities;
 using Smartbot.Utilities.Storage;
 using Xunit;
 
-namespace Oldbot.OldFunction.Tests
+namespace Smartbot.Tests
 {
     public class StorageTests
     {

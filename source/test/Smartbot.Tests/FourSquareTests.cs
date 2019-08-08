@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Smartbot.Utilities.FourSquareServices;
 using Xunit;
 
-namespace Oldbot.OldFunction.Tests
+namespace Smartbot.Tests
 {
     public class FourSquareTests
     {
