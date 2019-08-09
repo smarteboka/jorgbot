@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Utilities;
-using Slackbot.Net.Utilities.EventAPIModels;
 using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using Slackbot.Net.Utilities.SlackAPIFork;
 using SlackConnector.Models;
@@ -68,11 +67,11 @@ namespace Smartbot.Tests
         {
             var mockClient = new MockClient();
 
-            var existingMessage = new Event
+            var existingMessage = new ContextMessage
             {
-                Text = "A historic tale. I told you about http://db.no some time ago",
-                User = "U0F3P72QM",
-                Ts = "1550000000.000000" //
+                text = "A historic tale. I told you about http://db.no some time ago",
+                user = "U0F3P72QM",
+                ts = "1550000000.000000" //
             };
             mockClient.SetSearchResponse(existingMessage);
 
@@ -129,12 +128,13 @@ namespace Smartbot.Tests
         private static async Task TestIt(string expected, string slackMessage, string historicMessage)
         {
             var mock = new MockClient();
-            mock.SetSearchResponse( new Event {
-                Channel = "CGWGZ90KV", // private channel #bottestsmore
-                Text = historicMessage,
-                Ts = "1552671370.000200", //older
-                User = "another-smarting"
-            });
+            var newMessage = new ContextMessage {
+                //channel = "CGWGZ90KV", // private channel #bottestsmore
+                text = historicMessage,
+                ts = "1552671370.000200", //older
+                user = "another-smarting"
+            };
+            mock.SetSearchResponse(newMessage);
             var validateOldness = new OldHandler(new NoopLogger(),mock);
 
             var response = await validateOldness.Handle(new SlackMessage
@@ -213,7 +213,7 @@ namespace Smartbot.Tests
                 return Task.FromResult(string.Empty);
             }
 
-            public void SetSearchResponse(Event newMessage)
+            public void SetSearchResponse(ContextMessage contextMessage)
             {
                 SearchResponse = new SearchResponseMessages
                 {
@@ -221,12 +221,7 @@ namespace Smartbot.Tests
                     {
                         matches = new[]
                         {
-                            new ContextMessage
-                            {
-                                text = newMessage.Text,
-                                ts = newMessage.Ts,
-                                user = newMessage.User
-                            }
+                            contextMessage
                         }
                     }
                 };
