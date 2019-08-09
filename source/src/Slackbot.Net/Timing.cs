@@ -10,8 +10,20 @@ namespace Slackbot.Net
 
         public static DateTimeOffset NowInOsloTime(DateTimeOffset? nowutc = null)
         {
-            var oslo = TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo);
+            var oslo = GetNorwegianTimeZoneInfo();
             return TimeZoneInfo.ConvertTime(nowutc ?? DateTimeOffset.UtcNow, oslo);
+        }
+
+        public static TimeZoneInfo GetNorwegianTimeZoneInfo()
+        {
+            var timeZoneId = "Central European Standard Time";
+
+            if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+            {
+                timeZoneId = EuropeOslo;
+            }
+
+            return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
         }
 
         public bool IsToday(DateTime date)
@@ -34,7 +46,7 @@ namespace Slackbot.Net
         public static DateTimeOffset? GetNextOccurenceInOsloTime(string cron)
         {
             var expression = CronExpression.Parse(cron, CronFormat.IncludeSeconds);
-            return expression.GetNextOccurrence(DateTimeOffset.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(EuropeOslo));
+            return expression.GetNextOccurrence(DateTimeOffset.UtcNow, GetNorwegianTimeZoneInfo());
         }
 
         public static IEnumerable<DateTime> GetNextOccurences(string cron, int noOfMonths = 0)
