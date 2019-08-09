@@ -4,8 +4,8 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY Smartbot.sln ./Smartbot.sln
 
-COPY src/Smartbot/Smartbot.csproj ./src/Smartbot/Smartbot.csproj
-COPY src/Smartbot.Utilities/Smartbot.Utilities.csproj ./src/Smartbot.Utilities/Smartbot.Utilities.csproj
+COPY src/samples/Smartbot/Smartbot.csproj ./src/samples/Smartbot/Smartbot.csproj
+COPY src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj ./src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj
 
 COPY src/Slackbot.Net/Slackbot.Net.csproj ./src/Slackbot.Net/Slackbot.Net.csproj
 
@@ -16,7 +16,7 @@ RUN dotnet restore Smartbot.sln
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish src/Smartbot/Smartbot.csproj -c Release -o /app/out
+RUN dotnet publish src/samples/Smartbot/Smartbot.csproj -c Release -o /app/out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
