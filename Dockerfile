@@ -10,6 +10,7 @@ COPY source/src/Smartbot.Utilities/Smartbot.Utilities.csproj ./source/src/Smartb
 COPY source/src/Slackbot.Net/Slackbot.Net.csproj ./source/src/Slackbot.Net/Slackbot.Net.csproj
 
 COPY source/test/Smartbot.Tests/Smartbot.Tests.csproj ./source/test/Smartbot.Tests/Smartbot.Tests.csproj
+COPY source/test/Slackbot.Net.Tests/Slackbot.Net.Tests.csproj ./source/test/Slackbot.Net.Tests/Slackbot.Net.Tests.csproj
 
 RUN dotnet restore source/Smartbot.sln
 

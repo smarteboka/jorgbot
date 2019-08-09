@@ -10,10 +10,14 @@ namespace Slackbot.Net.Publishers.Slack
         private readonly ILogger<SlackSender> _logger;
         private readonly SlackTaskClient _client;
 
-        public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger)
+        public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp)
         {
             _logger = logger;
-            _client = new SlackTaskClient(slackOptions.Value.Slackbot_SlackApiKey_SlackApp);
+        }
+
+        public SlackSender(string token)
+        {
+            _client = new SlackTaskClient(token);
         }
 
         public async Task Send(string msg, string botName, string iconEmoji, string channel)

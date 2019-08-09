@@ -50,9 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         internal static void AddDependencies(this ISlackbotBuilder builder)
         {
-
             builder.Services.AddSingleton<Timing>();
-            builder.Services.AddSingleton<SlackChannels>();
             builder.Services.AddSingleton<SlackSender>();
 
             builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();

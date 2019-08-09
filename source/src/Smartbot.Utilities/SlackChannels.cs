@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Slackbot.Net.Publishers.Slack
+namespace Smartbot.Utilities
 {
     public class SlackChannels
     {
@@ -41,12 +41,12 @@ namespace Slackbot.Net.Publishers.Slack
         {
             get;
         }
-        
+
         public string SmartebokaChannel
         {
             get;
         }
-        
+
         public string JorgChannel
         {
             get;
@@ -56,7 +56,7 @@ namespace Slackbot.Net.Publishers.Slack
         {
             get;
         }
-        
+
         public string StorsdagChannel
         {
             get;

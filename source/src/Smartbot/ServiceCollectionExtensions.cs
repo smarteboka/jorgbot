@@ -10,6 +10,7 @@ namespace Smartbot
     {
         public static IServiceCollection AddSmartbot(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<SlackChannels>();
             services.AddSingleton<Smartinger>();
             services.Configure<SmartStorageOptions>(configuration);
             services.AddSingleton<SlackMessagesStorage>();
