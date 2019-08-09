@@ -24,7 +24,7 @@ If you want to run code snippets at recurring intervals (every day at 8AM, or ev
 ## Execute a handler
 If you want to run code given a certain message was posted to Slack, register an implementation of `IHandleMessages` using `.AddHandler<T>`.
 
-The `IHandleMessages` interface requires that you provide when the handler should execute (`ShouldHandle`), and what code it should run if (`Handle`)
+The `IHandleMessages` interface requires that you provide when the handler should execute (`ShouldHandle`), and what code it should run if `ShoulHandle` returns true.
 
 ```
 public interface IHandleMessages
