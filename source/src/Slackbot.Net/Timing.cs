@@ -6,8 +6,6 @@ namespace Slackbot.Net
 {
     public class Timing
     {
-        private const string EuropeOslo = "Europe/Oslo";
-
         public static DateTimeOffset NowInOsloTime(DateTimeOffset? nowutc = null)
         {
             var oslo = GetNorwegianTimeZoneInfo();
@@ -16,14 +14,11 @@ namespace Slackbot.Net
 
         public static TimeZoneInfo GetNorwegianTimeZoneInfo()
         {
-            var timeZoneId = "Central European Standard Time";
-
             if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
             {
-                timeZoneId = EuropeOslo;
+                return TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo");
             }
-
-            return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            return TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
         }
 
         public bool IsToday(DateTime date)
