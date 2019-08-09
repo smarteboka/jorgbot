@@ -14,7 +14,6 @@ namespace Smartbot.Utilities.RecurringActions
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
-        private string _cron;
 
         public HeartBeater(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
