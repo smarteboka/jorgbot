@@ -3,7 +3,7 @@ var configuration = Argument("configuration", "Release");
 var packageName = "Slackbot.Net";
 var proj = $"./source/src/{packageName}/{packageName}.csproj";
 
-var version = "1.0.1-beta001";
+var version = "1.0.1-beta002";
 var outputDir = "./output";
 
 Task("Build")
