@@ -3,9 +3,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SlackAPI;
+using Slackbot.Net.Utilities;
 
-namespace Slackbot.Net.Utilities.SlackAPI.Extensions
+namespace Slackbot.Net.Integrations.SlackAPI.Extensions
 {
     public class SlackTaskClientExtensions : SlackAPIFork.SlackTaskClient, ISlackClient
     {

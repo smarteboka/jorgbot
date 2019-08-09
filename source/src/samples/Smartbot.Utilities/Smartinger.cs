@@ -26,9 +26,10 @@ namespace Smartbot.Utilities
             new Smarting("@fsivertsen", 1981, 3, 21)
         };
 
-        public Smartinger(Timing timing)
+        public Smartinger()
         {
-            _timing = timing;
+            _timing = new Timing();
+            _timing.SetTimeZone("Europe/Oslo");
         }
 
         public IEnumerable<Smarting> ThatHasBirthday()

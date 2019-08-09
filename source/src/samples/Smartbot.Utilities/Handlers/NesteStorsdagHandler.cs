@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Slackbot.Net;
+using Slackbot.Net.Handlers;
 using Slackbot.Net.Publishers;
-using Slackbot.Net.Strategies;
 using SlackConnector.Models;
 using Smartbot.Utilities.RecurringActions;
 
@@ -14,6 +14,7 @@ namespace Smartbot.Utilities.Handlers
     public class NesteStorsdagHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
+
 
         public NesteStorsdagHandler(IEnumerable<IPublisher> publishers)
         {

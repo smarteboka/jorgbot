@@ -14,12 +14,10 @@ namespace Smartbot.Utilities.RecurringActions
     {
         private readonly Smartinger _smartinger;
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly Timing _timing;
         private readonly SlackChannels _channels;
 
         public HappyBirthday(Smartinger smartinger,
             IEnumerable<IPublisher> publishers,
-            Timing timing,
             SlackChannels channels,
             ILogger<HappyBirthday> logger,
             IOptionsSnapshot<CronOptions> options)
@@ -27,7 +25,6 @@ namespace Smartbot.Utilities.RecurringActions
         {
             _smartinger = smartinger;
             _publishers = publishers;
-            _timing = timing;
             _channels = channels;
         }
 
@@ -39,7 +36,7 @@ namespace Smartbot.Utilities.RecurringActions
                 {
                     var notification = new Notification
                     {
-                        Msg = $"Idag jazzulerer vi {smarting.Name} med {_timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
+                        Msg = $"Idag jazzulerer vi {smarting.Name} med {Timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
                         IconEmoji = ":birthday:",
                         Channel = _channels.SmartebokaChannel
                     };

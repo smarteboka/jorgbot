@@ -11,13 +11,17 @@ namespace Slackbot.Net
 {
     public abstract class RecurringAction : BackgroundService
     {
+        protected readonly Timing Timing;
         private readonly ILogger<RecurringAction> _logger;
 
         protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)
         {
+            CronOptions cronOptions = options.Get(GetType().ToString());
+            Timing = new Timing();
+            Timing.SetTimeZone(cronOptions.TimeZoneId);
             _logger = logger;
-            Cron = options.Get(GetType().ToString()).Cron;
-            _logger.LogDebug($"Using {Cron}");
+            Cron = cronOptions.Cron;
+            _logger.LogDebug($"Using {Cron} and timezone '{Timing.TimeZoneInfo.Id}. The time in this timezone: {Timing.RelativeNow()}'");
         }
 
         protected string Cron;
@@ -31,11 +35,11 @@ namespace Slackbot.Net
 
             do
             {
-                var now = Timing.NowInOsloTime();
+                var now = Timing.RelativeNow();
 
                 if (next == null)
                 {
-                    next = Timing.GetNextOccurenceInOsloTime(cron);
+                    next = Timing.GetNextOccurenceInRelativeTime(cron);
 
                     var upcoming = Timing.GetNextOccurences(cron);
                     var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}").Take(10);
@@ -46,7 +50,7 @@ namespace Slackbot.Net
                 if (now > next)
                 {
                     await Process();
-                    next = Timing.GetNextOccurenceInOsloTime(cron);
+                    next = Timing.GetNextOccurenceInRelativeTime(cron);
                     _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
                 else

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +15,7 @@ namespace Slackbot.Net.Publishers
 
         public Task Publish(Notification notification)
         {
-            _logger.LogInformation($"[{Timing.NowInOsloTime().DateTime.ToLongTimeString()}] {notification.Msg}");
+            _logger.LogInformation($"[{DateTime.UtcNow.ToLongTimeString()}] {notification.Msg}");
             return Task.CompletedTask;
         }
     }

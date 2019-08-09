@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Slackbot.Net.Strategies;
+using Slackbot.Net.Handlers;
+using Slackbot.Net.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Utilities;
-using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using SlackConnector.Models;
 using Smartbot.Utilities.Storage;
 

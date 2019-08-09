@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SlackAPI;
 
-namespace Slackbot.Net.Utilities.SlackAPIFork
+namespace Slackbot.Net.Integrations.SlackAPIFork
 {
     public class RequestStateForTask<K>
         where K : Response

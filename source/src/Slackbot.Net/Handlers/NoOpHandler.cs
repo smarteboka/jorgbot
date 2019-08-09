@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using SlackConnector.Models;
 
-namespace Slackbot.Net.Strategies
+namespace Slackbot.Net.Handlers
 {
     public class NoOpHandler : IHandleMessages
     {

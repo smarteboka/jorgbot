@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Slackbot.Net.Handlers;
 using Slackbot.Net.Publishers.Slack;
-using Slackbot.Net.Strategies;
 using SlackConnector;
 using SlackConnector.Models;
 

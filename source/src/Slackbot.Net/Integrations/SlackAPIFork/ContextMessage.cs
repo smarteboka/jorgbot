@@ -1,6 +1,6 @@
 using SlackAPI;
 
-namespace Slackbot.Net.Utilities.SlackAPIFork
+namespace Slackbot.Net.Integrations.SlackAPIFork
 {
     public class ContextMessage : Message
     {

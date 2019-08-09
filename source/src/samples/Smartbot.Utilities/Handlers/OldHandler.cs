@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SlackAPI;
-using Slackbot.Net.Strategies;
+using Slackbot.Net.Handlers;
+using Slackbot.Net.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Utilities;
-using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using SlackConnector.Models;
-using SearchSort = Slackbot.Net.Utilities.SlackAPIFork.SearchSort;
-using SearchSortDirection = Slackbot.Net.Utilities.SlackAPIFork.SearchSortDirection;
+using SearchSort = Slackbot.Net.Integrations.SlackAPIFork.SearchSort;
+using SearchSortDirection = Slackbot.Net.Integrations.SlackAPIFork.SearchSortDirection;
 
 namespace Smartbot.Utilities.Handlers
 {

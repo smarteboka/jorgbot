@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SlackConnector.Models;
 
-namespace Slackbot.Net.Strategies
+namespace Slackbot.Net.Handlers
 {
     public class HandlerSelector
     {

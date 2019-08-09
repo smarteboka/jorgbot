@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Slackbot.Net.Strategies;
+using Slackbot.Net.Handlers;
 using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers

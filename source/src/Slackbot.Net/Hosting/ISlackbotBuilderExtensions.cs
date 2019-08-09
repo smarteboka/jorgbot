@@ -1,16 +1,16 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Slackbot.Net;
-using Slackbot.Net.Hosting;
+using Slackbot.Net.Handlers;
+using Slackbot.Net.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Publishers;
 using Slackbot.Net.Publishers.Slack;
-using Slackbot.Net.Strategies;
-using Slackbot.Net.Utilities.SlackAPI.Extensions;
+using Slackbot.Net.Validations;
 using SlackConnector;
 
 // namespace on purpose:
-namespace Microsoft.Extensions.DependencyInjection
+namespace Slackbot.Net.Hosting
 {
     public static class ISlackbotBuilderExtensions
     {
@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static ISlackbotBuilder AddRecurring<T>(this ISlackbotBuilder builder, Action<CronOptions> o) where T: RecurringAction
         {
-            builder.Services.Configure(typeof(T).ToString(), o);
+            builder.Services.ConfigureAndValidate(typeof(T).ToString(), o);
             builder.Services.AddHostedService<T>();
             return builder;
         }
@@ -50,7 +50,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         internal static void AddDependencies(this ISlackbotBuilder builder)
         {
-            builder.Services.AddSingleton<Timing>();
             builder.Services.AddSingleton<SlackSender>();
 
             builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();

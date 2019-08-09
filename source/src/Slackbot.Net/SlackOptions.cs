@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Slackbot.Net.Publishers.Slack
+namespace Slackbot.Net
 {
     public class SlackOptions
     {
@@ -21,5 +21,4 @@ namespace Slackbot.Net.Publishers.Slack
             set;
         }
     }
-
 }

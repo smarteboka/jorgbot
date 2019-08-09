@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using Slackbot.Net.Utilities.SlackAPI.Extensions;
-using Slackbot.Net.Utilities.SlackAPIFork;
+using Slackbot.Net.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Integrations.SlackAPIFork;
 
 namespace Smartbot.Tests
 {

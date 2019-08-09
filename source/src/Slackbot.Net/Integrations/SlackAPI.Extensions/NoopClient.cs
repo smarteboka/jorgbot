@@ -1,8 +1,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using Slackbot.Net.Utilities.SlackAPIFork;
+using Slackbot.Net.Integrations.SlackAPIFork;
 
-namespace Slackbot.Net.Utilities.SlackAPI.Extensions
+namespace Slackbot.Net.Integrations.SlackAPI.Extensions
 {
     public class NoopClient : ISlackClient
     {

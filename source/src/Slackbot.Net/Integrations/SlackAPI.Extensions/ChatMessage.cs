@@ -1,6 +1,6 @@
 using SlackAPI;
 
-namespace Slackbot.Net.Utilities.SlackAPI.Extensions
+namespace Slackbot.Net.Integrations.SlackAPI.Extensions
 {
     public class ChatMessage
     {

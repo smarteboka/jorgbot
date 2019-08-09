@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Strategies
+namespace Slackbot.Net.Handlers
 {
     public class HandleResponse
     {
