@@ -1,21 +1,23 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Slackbot.Net.Utilities.SlackAPI.Extensions;
 using Slackbot.Net.Utilities.SlackAPIFork;
 
-namespace Slackbot.Net.Utilities.SlackAPI.Extensions
+namespace Smartbot.Tests
 {
-    public class NoopClient : ISlackClient
+    public class MockClient : ISlackClient
     {
+        public MockClient()
+        {
+
+        }
+
         public Task<SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
         {
-            return Task.FromResult(new SearchResponseMessages()
-            {
-                messages = new SlackAPIFork.SearchResponseMessagesContainer
-                {
-                    matches = new SlackAPIFork.ContextMessage[0]
-                }
-            });
+            return Task.FromResult(SearchResponse);
         }
+
+        public SearchResponseMessages SearchResponse { get; set; }
 
         public Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
         {
@@ -32,7 +34,8 @@ namespace Slackbot.Net.Utilities.SlackAPI.Extensions
             {
                 new HttpResponseMessage
                 {
-                    Content = new StringContent("{}")
+                    Content = new StringContent("{}"),
+
                 }
             };
             return Task.FromResult(httpResponseMessage);
@@ -41,6 +44,20 @@ namespace Slackbot.Net.Utilities.SlackAPI.Extensions
         public Task<string> GetPermalink(string channel, string timestamp)
         {
             return Task.FromResult(string.Empty);
+        }
+
+        public void SetSearchResponse(ContextMessage contextMessage)
+        {
+            SearchResponse = new SearchResponseMessages
+            {
+                messages = new SearchResponseMessagesContainer
+                {
+                    matches = new[]
+                    {
+                        contextMessage
+                    }
+                }
+            };
         }
     }
 }

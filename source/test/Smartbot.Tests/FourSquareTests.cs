@@ -6,11 +6,11 @@ namespace Smartbot.Tests
 {
     public class FourSquareTests
     {
-        [Fact]        
+        [Fact]
         public void CanFetchVenues()
         {
             var fs = CreateFourSquareService();
-            var venues = fs.GetOsloVenuesByQuery("beer");
+            var venues = fs.GetOsloVenuesByQuery("øl");
             Assert.NotEmpty(venues);
         }
 

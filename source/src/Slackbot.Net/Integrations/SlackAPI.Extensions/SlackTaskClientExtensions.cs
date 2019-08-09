@@ -20,29 +20,10 @@ namespace Slackbot.Net.Utilities.SlackAPI.Extensions
             BotToken = bottoken;
         }
 
-        public async Task<HttpResponseMessage> SendMessage(string channelId, string message, string thread_ts, string permalink)
+        public async Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
         {
             var httpClient = new HttpClient();
-            var stringContent = new ChatMessage
-            {
-                Channel = channelId,
-                Parse = "full",
-                Link_Names = 1,
-                thread_ts = thread_ts,
-                unfurl_links = "false",
-                unfurl_media = "true",
-                as_user = "false",
-                Text = permalink,
-                attachments = new []
-                {
-                    new Attachment
-                    {
-                        text = $":older_man: {message}",
-                        color = "#FF0000"
-                    }
-                }
-
-            }.ToSerialized();
+            var stringContent = chatMessage.ToSerialized();
 
             var httpContent = new StringContent(stringContent,Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.postMessage");

@@ -3,11 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SlackAPI;
 using Slackbot.Net.Strategies;
 using Slackbot.Net.Utilities;
 using Slackbot.Net.Utilities.SlackAPI.Extensions;
-using Slackbot.Net.Utilities.SlackAPIFork;
 using SlackConnector.Models;
+using SearchSort = Slackbot.Net.Utilities.SlackAPIFork.SearchSort;
+using SearchSortDirection = Slackbot.Net.Utilities.SlackAPIFork.SearchSortDirection;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -65,7 +67,25 @@ namespace Smartbot.Utilities.Handlers
                 var reactionResponse = await _slackClient.AddReactions(incomingMessage.ChatHub.Id, threadTs);
 
                 var message = $"postet av @{r.username} for {TimeSpanExtensions.Ago(r.ts)} siden.";
-                var response = await _slackClient.SendMessage(incomingMessage.ChatHub.Id, message, threadTs, r.permalink);
+
+                var chatMessage = new ChatMessage
+                {
+                    Channel = incomingMessage.ChatHub.Id,
+                    Parse = "full",
+                    Link_Names = 1,
+                    thread_ts = threadTs,
+                    unfurl_links = "false",
+                    unfurl_media = "true",
+                    as_user = "false",
+                    Text = r.permalink,
+                    attachments = new[]
+                    {
+                        new Attachment {text = $":older_man: {message}", color = "#FF0000"}
+                    }
+                };
+
+                var response = await _slackClient.SendMessage(chatMessage);
+
                 var body = await response.Content.ReadAsStringAsync();
                 _logger.LogInformation("Sent message. Response:" + JsonConvert.SerializeObject(body));
 
