@@ -24,8 +24,6 @@ RUN dotnet publish src/samples/Smartbot.Web/Smartbot.Web.csproj -c Release -o /a
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 WORKDIR /smartbot
 COPY --from=build-env /app/out/smartbot .
-
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 WORKDIR /smartbot.web
 COPY --from=build-env /app/out/smartbot.web .
+WORKDIR /
