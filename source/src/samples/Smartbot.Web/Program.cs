@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Smartbot.Web
 {
@@ -27,6 +28,7 @@ namespace Smartbot.Web
                 .ConfigureServices((context, services) =>
                 {
                     services.AddRouting();
+                    services.AddSingleton<InteractiveResponseHandler>();
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {
@@ -38,6 +40,14 @@ namespace Smartbot.Web
                 Configure(app =>
                 {
                     app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, Slack!")));
+                    app.UseRouter(r => r.MapPost("/interactive", async context =>
+                    {
+                        var body = await context.Request.Body.ReadAsStringAsync();
+                        var responseHandler = context.RequestServices.GetService<InteractiveResponseHandler>();
+                        var handleResponse = await responseHandler.RespondToSlackInteractivePayload(body);
+                        context.Response.Headers.Add("Content-Type", "application/json");
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(handleResponse));
+                    }));
                 })
                 .Build();
 
