@@ -18,7 +18,7 @@ namespace Smartbot.Web
             var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls($"http://localhost:{port}")
+                .UseUrls($"http://*:{port}")
                 .UseEnvironment(environment)
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
