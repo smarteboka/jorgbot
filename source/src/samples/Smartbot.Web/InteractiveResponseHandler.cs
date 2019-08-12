@@ -31,7 +31,15 @@ namespace Smartbot.Web
             };
             var serializedResponse = JsonConvert.SerializeObject(response);
             var content = new StringContent(serializedResponse, Encoding.UTF8);
-            await httpClient.PostAsync(incoming.Response_Url, content);
+            var resp = await httpClient.PostAsync(incoming.Response_Url, content);
+
+            if (!resp.IsSuccessStatusCode)
+            {
+                _logger.LogError("Could not reply to response_url");
+            }
+
+            var response_url_response = await resp.Content.ReadAsStringAsync();
+            _logger.LogInformation(response_url_response);
             return response;
         }
     }
