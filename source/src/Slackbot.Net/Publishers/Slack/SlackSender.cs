@@ -28,5 +28,44 @@ namespace Slackbot.Net.Publishers.Slack
                 _logger.LogError(res.error);
             }
         }
+
+        public async Task SendQuestion()
+        {
+            string channel = "#testss";
+            string msg = "yo";
+            await _client.PostMessageAsync(channel, msg, blocks: new[]
+            {
+                new Block
+                {
+                    type = "section",
+                    text = new Text{ text = "Stordag - er du med?"}
+                },
+                new Block
+                {
+                    type = "actions",
+                    elements = new[]
+                    {
+                        new Element
+                        {
+                            type = "button",
+                            text = new Text
+                            {
+                                type = "plain_text",
+                                text = "y"
+                            }
+                        },
+                        new Element
+                        {
+                            type = "button",
+                            text = new Text
+                            {
+                                type = "plain_text",
+                                text = "n"
+                            }
+                        }
+                    }
+                },
+            });
+        }
     }
 }

@@ -1,4 +1,7 @@
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -12,15 +15,24 @@ namespace Smartbot.Web
         {
             _logger = logger;
         }
-        public Task<InteractiveMessageHandledResponse> RespondToSlackInteractivePayload(string body)
+        public async Task<InteractiveMessageHandledResponse> RespondToSlackInteractivePayload(string body)
         {
             _logger.LogInformation(body);
-            var incoming = JsonConvert.DeserializeObject<IncomingInteractiveMessage>(body);
+            var json = body.Substring(9, body.Length-9);
+            var urlDecoded = HttpUtility.UrlDecode(json);
+            _logger.LogInformation(urlDecoded);
+            var incoming = JsonConvert.DeserializeObject<IncomingInteractiveMessage>(urlDecoded);
             _logger.LogInformation($"ResponseUrl : {incoming.Response_Url}");
-            return Task.FromResult(new InteractiveMessageHandledResponse
+            var httpClient = new HttpClient();
+
+            var response = new InteractiveMessageHandledResponse
             {
-                Handled = true
-            });
+                Text = "Ok, thxbye"
+            };
+            var serializedResponse = JsonConvert.SerializeObject(response);
+            var content = new StringContent(serializedResponse, Encoding.UTF8);
+            await httpClient.PostAsync(incoming.Response_Url, content);
+            return response;
         }
     }
 
@@ -35,7 +47,7 @@ namespace Smartbot.Web
 
     internal class InteractiveMessageHandledResponse
     {
-        public bool Handled
+        public string Text
         {
             get;
             set;
