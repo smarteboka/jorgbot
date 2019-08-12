@@ -16,7 +16,6 @@ namespace Smartbot.Web
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
-            Console.WriteLine($"Using port {port}");
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls($"http://localhost:{port}")
@@ -41,6 +40,9 @@ namespace Smartbot.Web
                     app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, John!")));
                 })
                 .Build();
+
+            var logger = host.Services.GetService<ILogger<Program>>();
+            logger.LogInformation($"Using port '{port}'");
 
             using (host)
             {
