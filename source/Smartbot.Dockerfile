@@ -22,4 +22,3 @@ RUN dotnet publish src/samples/Smartbot/Smartbot.csproj -c Release -o /app/out
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 WORKDIR /app
 COPY --from=build-env /app/out .
-CMD ["dotnet", "Smartbot.dll"]
