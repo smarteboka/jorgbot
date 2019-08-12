@@ -15,8 +15,8 @@ namespace Smartbot.Web
         static async Task Main(string[] args)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-            var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
-            Console.WriteLine("Using port");
+            var port = environment == "Production" ? Environment.GetEnvironmentVariable("$PORT") : "1337";
+            Console.WriteLine($"Using port {port}");
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls($"http://localhost:{port}")
