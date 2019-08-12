@@ -51,7 +51,7 @@ namespace Slackbot.Net.Publishers.Slack
                             text = new Text
                             {
                                 type = "plain_text",
-                                text = "y"
+                                text = ":+1:"
                             }
                         },
                         new Element
@@ -60,7 +60,8 @@ namespace Slackbot.Net.Publishers.Slack
                             text = new Text
                             {
                                 type = "plain_text",
-                                text = "n"
+                                text = ":-1:",
+                                emoji = true
                             }
                         }
                     }

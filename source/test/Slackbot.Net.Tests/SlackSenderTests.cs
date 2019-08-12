@@ -7,8 +7,8 @@ namespace Slackbot.Net.Tests
 {
     public class SlackSenderTests
     {
-        [Fact (Skip = "Integration test")]
-        //[Fact]
+        //[Fact (Skip = "Integration test")]
+        [Fact]
         public async Task SendsAMessageToSlack()
         {
             var slackSender = new SlackSender(Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp"));
