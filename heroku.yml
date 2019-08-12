@@ -1,7 +1,3 @@
 build:
   docker:
     worker: /source/Smartbot.Dockerfile
-
-run:
-  worker:
-    command: dotnet Smartbot.dll
