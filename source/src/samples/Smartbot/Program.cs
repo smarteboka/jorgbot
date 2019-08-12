@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Hosting;
@@ -20,20 +15,14 @@ namespace Smartbot
     {
         static async Task Main(string[] args)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-            var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
-
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls($"http://localhost:{port}")
-                .UseEnvironment(environment)
+            var host = new HostBuilder()
+                .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development")
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
                     configApp.AddEnvironmentVariables();
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddRouting();
                     services.AddSmartbot(context.Configuration);
 
                     services.AddSlackbot(o =>
@@ -63,11 +52,8 @@ namespace Smartbot
                         .SetMinimumLevel(LogLevel.Trace)
                         .AddConsole(c => c.DisableColors = true)
                         .AddDebug();
-                }).
-                Configure(app =>
-                {
-                    app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, John!")));
                 })
+                .UseConsoleLifetime()
                 .Build();
 
             using (host)

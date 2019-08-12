@@ -5,6 +5,7 @@ WORKDIR /app
 COPY Smartbot.sln ./Smartbot.sln
 
 COPY src/samples/Smartbot/Smartbot.csproj ./src/samples/Smartbot/Smartbot.csproj
+COPY src/samples/Smartbot.Web/Smartbot.Web.csproj ./src/samples/Smartbot.Web/Smartbot.Web.csproj
 COPY src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj ./src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj
 
 COPY src/Slackbot.Net/Slackbot.Net.csproj ./src/Slackbot.Net/Slackbot.Net.csproj
@@ -16,9 +17,15 @@ RUN dotnet restore Smartbot.sln
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish src/samples/Smartbot/Smartbot.csproj -c Release -o /app/out
+RUN dotnet publish src/samples/Smartbot/Smartbot.csproj -c Release -o /app/out/smartbot
+RUN dotnet publish src/samples/Smartbot.Web/Smartbot.Web.csproj -c Release -o /app/out/smartbot.web
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2
-WORKDIR /app
-COPY --from=build-env /app/out .
+WORKDIR /smartbot
+COPY --from=build-env /app/out/smartbot .
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2
+WORKDIR /smartbot.web
+COPY --from=build-env /app/out/smartbot.web .

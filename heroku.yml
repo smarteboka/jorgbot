@@ -1,9 +1,13 @@
 build:
   docker:
-    worker: /source/Smartbot.Dockerfile
+    smartbot: /source/Smartbot.Dockerfile
 
 run:
   worker:
     command:
-      - dotnet Smartbot.dll
-    image: worker
+      - dotnet ./smartbot/Smartbot.dll
+    image: smartbot
+  web:
+    command:
+      - dotnet ./smartbot.web/Smartbot.Web.dll
+    image: smartbot
