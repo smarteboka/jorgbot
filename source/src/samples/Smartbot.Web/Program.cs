@@ -37,7 +37,7 @@ namespace Smartbot.Web
                 }).
                 Configure(app =>
                 {
-                    app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, John!")));
+                    app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, Slack!")));
                 })
                 .Build();
 
