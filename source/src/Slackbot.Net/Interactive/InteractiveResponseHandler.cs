@@ -5,9 +5,9 @@ using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Smartbot.Web
+namespace Slackbot.Net
 {
-    internal class InteractiveResponseHandler
+    public class InteractiveResponseHandler
     {
         private readonly ILogger<InteractiveResponseHandler> _logger;
 
@@ -15,10 +15,12 @@ namespace Smartbot.Web
         {
             _logger = logger;
         }
+
         public async Task<InteractiveMessageHandledResponse> RespondToSlackInteractivePayload(string body)
         {
             _logger.LogInformation(body);
-            var json = body.Substring(8, body.Length-1); // removes 'payload=' infront of json payload (url-form-encoded POST)
+            // removes 'payload=' infront of json payload (url-form-encoded POST)
+            var json = body.TrimStart("payload=".ToCharArray());
             var urlDecoded = HttpUtility.UrlDecode(json);
             _logger.LogInformation(urlDecoded);
             var incoming = JsonConvert.DeserializeObject<IncomingInteractiveMessage>(urlDecoded);
@@ -41,24 +43,6 @@ namespace Smartbot.Web
             var response_url_response = await resp.Content.ReadAsStringAsync();
             _logger.LogInformation(response_url_response);
             return response;
-        }
-    }
-
-    internal class IncomingInteractiveMessage
-    {
-        public string Response_Url
-        {
-            get;
-            set;
-        }
-    }
-
-    internal class InteractiveMessageHandledResponse
-    {
-        public string Text
-        {
-            get;
-            set;
         }
     }
 }
