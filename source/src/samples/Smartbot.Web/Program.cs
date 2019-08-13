@@ -43,11 +43,23 @@ namespace Smartbot.Web
                     app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, Slack!")));
                     app.UseRouter(r => r.MapPost("/interactive", async context =>
                     {
-                        var body = await context.Request.Body.ReadAsStringAsync();
-                        var responseHandler = context.RequestServices.GetService<InteractiveResponseHandler>();
-                        var handleResponse = await responseHandler.RespondToSlackInteractivePayload(body);
-                        context.Response.Headers.Add("Content-Type", "application/json");
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(handleResponse));
+                        var body = await context.Request.ReadFormAsync();
+                        var payload = body["payload"];
+                        if (string.IsNullOrEmpty(payload))
+                        {
+                            context.Response.StatusCode = 400;
+                            var loggerFactory = context.RequestServices.GetService<ILoggerFactory>();
+                            var errorLogger = loggerFactory.CreateLogger("interactive");
+                            errorLogger.LogError("No payload");
+                            await context.Response.WriteAsync("No payload");
+                        }
+                        else
+                        {
+                            var responseHandler = context.RequestServices.GetService<InteractiveResponseHandler>();
+                            var handleResponse = await responseHandler.RespondToSlackInteractivePayload(payload);
+                            context.Response.Headers.Add("Content-Type", "application/json");
+                            await context.Response.WriteAsync(JsonConvert.SerializeObject(handleResponse));
+                        }
                     }));
                 })
                 .Build();

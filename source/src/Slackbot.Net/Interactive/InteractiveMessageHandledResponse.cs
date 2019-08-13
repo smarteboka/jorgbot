@@ -7,5 +7,17 @@ namespace Slackbot.Net
             get;
             set;
         }
+
+        public bool Is_Ephemeral
+        {
+            get;
+            set;
+        }
+
+        public bool Delete_Original
+        {
+            get;
+            set;
+        }
     }
 }

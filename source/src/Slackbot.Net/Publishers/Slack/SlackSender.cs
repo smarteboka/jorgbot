@@ -66,6 +66,7 @@ namespace Slackbot.Net.Publishers.Slack
                 {
                     new Element
                     {
+                        action_id = "storsdag-rsvp-yes",
                         type = ElementTypes.Button,
                         style = ButtonStyles.Primary,
                         text = new Text
@@ -78,6 +79,7 @@ namespace Slackbot.Net.Publishers.Slack
                     },
                     new Element
                     {
+                        action_id = "storsdag-rsvp-no(",
                         type = ElementTypes.Button,
                         style = ButtonStyles.Danger,
                         text = new Text {text = "Kan ikke 😢️", type = TextTypes.PlainText},
