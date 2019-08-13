@@ -1,9 +1,11 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Slackbot.Net
 {
@@ -29,18 +31,23 @@ namespace Slackbot.Net
 
             var response = new InteractiveMessageHandledResponse
             {
-                Text = "Ok, thxbye"
+                Text = "Nice, takk"
             };
-            var serializedResponse = JsonConvert.SerializeObject(response);
-            var content = new StringContent(serializedResponse, Encoding.UTF8);
+            var serializedResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+            var content = new StringContent(serializedResponse, Encoding.UTF8, "application/json");
             var resp = await httpClient.PostAsync(incoming.Response_Url, content);
+            var response_url_response = await resp.Content.ReadAsStringAsync();
 
             if (!resp.IsSuccessStatusCode)
             {
                 _logger.LogError("Could not reply to response_url");
+                throw new Exception(response_url_response);
             }
 
-            var response_url_response = await resp.Content.ReadAsStringAsync();
+
             _logger.LogInformation(response_url_response);
             return response;
         }
