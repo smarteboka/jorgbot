@@ -1,6 +1,6 @@
-namespace Slackbot.Net
+namespace Slackbot.Net.Interactive
 {
-    public class InteractiveMessageHandledResponse
+    public class Acknowledge
     {
         public string Text
         {

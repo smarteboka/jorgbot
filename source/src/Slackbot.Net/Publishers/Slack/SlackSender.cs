@@ -42,7 +42,7 @@ namespace Slackbot.Net.Publishers.Slack
             if (!res.ok)
             {
                 var response = JsonConvert.SerializeObject(res);
-                //_logger.LogError(res.error);
+                _logger.LogError(res.error);
                 throw new Exception(response);
             }
         }
@@ -95,41 +95,5 @@ namespace Slackbot.Net.Publishers.Slack
                 }
             };
         }
-//
-//        private IEnumerable<Attachment> Attachments()
-//        {
-//            yield return new Attachment()
-//            {
-//                fallback = "Storsdags invite.",
-//                color = "#36a64f",
-//                //pretext = "Det er storsdag",
-////                author_name = "Bobby Tables",
-////                author_link = "http://flickr.com/bobby/",
-////                author_icon = "http://flickr.com/icons/bobby.jpg",
-//                title = "STORSDAG",
-//                //title_link = "https://api.slack.com/",
-//                //text = "Mann/mus?",
-//                //fields = new[] {new Field() {title = "Priority", value = "High", @short = false}, new Field() {title = "Priority", value = "High", @short = true}, new Field() {title = "Priority", value = "High", @short = true}},
-//                actions = new[]
-//                {
-//                    new AttachmentAction("storsdag-ja", "Jeg er med!")
-//                    {
-//                        style = "primary",
-//                        value = "storsdag-ja"
-//
-//                    },
-//                    new AttachmentAction("storsdag-nei", "Sry, kan ikke") {
-//                        style = "danger",
-//                        value = "storsdag-nei",
-//                        confirm = new ActionConfirm
-//                        {
-//                            title = "Jeg er en amøbe",
-//                            text = "Stemmer?",
-//                            dismiss_text = "Æ angre mæ",
-//                            ok_text = "Innrømmelse"
-//                        }},
-//                }
-//            };
-//        }
     }
 }

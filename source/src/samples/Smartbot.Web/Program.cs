@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Slackbot.Net;
+using Slackbot.Net.Interactive;
+using Smartbot.Utilities.Interactive;
 
 namespace Smartbot.Web
 {
@@ -29,7 +29,13 @@ namespace Smartbot.Web
                 .ConfigureServices((context, services) =>
                 {
                     services.AddRouting();
-                    services.AddSingleton<InteractiveResponseHandler>();
+
+                    // Slackbot.Net
+                    services.AddSingleton<IRespond, Responder>();
+                    services.AddSingleton<IHttpResponder, HttpResponder>();
+
+                    // Smartbot:
+                    services.AddSingleton<IHandleInteractiveActions, StorsdagRsvpResponseHandler>();
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {
@@ -43,23 +49,8 @@ namespace Smartbot.Web
                     app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, Slack!")));
                     app.UseRouter(r => r.MapPost("/interactive", async context =>
                     {
-                        var body = await context.Request.ReadFormAsync();
-                        var payload = body["payload"];
-                        if (string.IsNullOrEmpty(payload))
-                        {
-                            context.Response.StatusCode = 400;
-                            var loggerFactory = context.RequestServices.GetService<ILoggerFactory>();
-                            var errorLogger = loggerFactory.CreateLogger("interactive");
-                            errorLogger.LogError("No payload");
-                            await context.Response.WriteAsync("No payload");
-                        }
-                        else
-                        {
-                            var responseHandler = context.RequestServices.GetService<InteractiveResponseHandler>();
-                            var handleResponse = await responseHandler.RespondToSlackInteractivePayload(payload);
-                            context.Response.Headers.Add("Content-Type", "application/json");
-                            await context.Response.WriteAsync(JsonConvert.SerializeObject(handleResponse));
-                        }
+                        var httpResponder = context.RequestServices.GetService<IHttpResponder>();
+                        await httpResponder.Respond(context);
                     }));
                 })
                 .Build();
