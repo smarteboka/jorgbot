@@ -18,7 +18,7 @@ namespace Smartbot.Web
         public async Task<InteractiveMessageHandledResponse> RespondToSlackInteractivePayload(string body)
         {
             _logger.LogInformation(body);
-            var json = body.Substring(8, body.Length-8);
+            var json = body.Substring(8, body.Length-1); // removes 'payload=' infront of json payload (url-form-encoded POST)
             var urlDecoded = HttpUtility.UrlDecode(json);
             _logger.LogInformation(urlDecoded);
             var incoming = JsonConvert.DeserializeObject<IncomingInteractiveMessage>(urlDecoded);
