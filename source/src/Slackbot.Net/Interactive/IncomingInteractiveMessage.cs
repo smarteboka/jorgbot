@@ -43,6 +43,8 @@ namespace Slackbot.Net.Interactive
             get;
             set;
         }
+
+        internal bool HasValues() => !string.IsNullOrEmpty(Response_Url) && Actions != null;
     }
 
     public class ValueBlock

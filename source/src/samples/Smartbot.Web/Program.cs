@@ -28,14 +28,8 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddRouting();
-
-                    // Slackbot.Net
-                    services.AddSingleton<IRespond, Responder>();
-                    services.AddSingleton<IHttpResponder, HttpResponder>();
-
-                    // Smartbot:
-                    services.AddSingleton<IHandleInteractiveActions, StorsdagRsvpResponseHandler>();
+                    services.AddSlackbotEndpoints()
+                        .AddEndpointHandler<StorsdagRsvpResponseHandler>();
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {
@@ -46,12 +40,7 @@ namespace Smartbot.Web
                 }).
                 Configure(app =>
                 {
-                    app.UseRouter(r => r.MapGet("/", context => context.Response.WriteAsync($"Hi, Slack!")));
-                    app.UseRouter(r => r.MapPost("/interactive", async context =>
-                    {
-                        var httpResponder = context.RequestServices.GetService<IHttpResponder>();
-                        await httpResponder.Respond(context);
-                    }));
+                    app.UseSlackbotEndpoint("/interactive");
                 })
                 .Build();
 

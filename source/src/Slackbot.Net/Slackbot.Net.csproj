@@ -28,6 +28,9 @@
       <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
 
+      <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
+
+
       <PackageReference Include="SlackAPI" Version="1.1.1" />
       <PackageReference Include="Cronos" Version="0.7.0" />
       <PackageReference Include="SlackConnector" Version="4.2.74" />

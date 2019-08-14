@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Hosting;
 using Slackbot.Net.Publishers;
 using Slackbot.Net.Publishers.Slack;
 using Smartbot.Utilities.RecurringActions;
@@ -25,7 +25,7 @@ namespace Smartbot
                 {
                     services.AddSmartbot(context.Configuration);
 
-                    services.AddSlackbot(o =>
+                    services.AddSlackbotWorker(o =>
                         {
                             o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
                             o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");

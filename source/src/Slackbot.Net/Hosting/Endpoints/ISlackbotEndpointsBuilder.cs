@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Slackbot.Net.Hosting
 {
-    public interface ISlackbotBuilder
+    public interface ISlackbotEndpointsBuilder
     {
         IServiceCollection Services { get; }
     }

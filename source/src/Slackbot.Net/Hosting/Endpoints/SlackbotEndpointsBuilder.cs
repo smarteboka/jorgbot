@@ -2,9 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Slackbot.Net.Hosting
 {
-    internal class SlackbotBuilder : ISlackbotBuilder
+    internal class SlackbotEndpointsBuilder : ISlackbotEndpointsBuilder
     {
-        public SlackbotBuilder(IServiceCollection services)
+        public SlackbotEndpointsBuilder(IServiceCollection services)
         {
             Services = services;
         }
