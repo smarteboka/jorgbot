@@ -54,7 +54,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         internal static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
         {
-            builder.Services.AddSingleton<SlackSender>();
             builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
             builder.Services.AddSingleton<SlackTaskClientExtensions>();
             builder.Services.AddSingleton<HandlerSelector>();
