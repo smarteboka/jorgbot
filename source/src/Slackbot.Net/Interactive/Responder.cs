@@ -21,7 +21,8 @@ namespace Slackbot.Net.Interactive
             var httpClient = new HttpClient();
             var response = new Acknowledge
             {
-                Text = responseText
+                Text = responseText,
+                Is_Ephemeral = true
             };
             var serializedResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
             var content = new StringContent(serializedResponse, Encoding.UTF8, "application/json");
