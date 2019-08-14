@@ -34,7 +34,7 @@ namespace Smartbot.Web
                 .ConfigureLogging((context, configLogging) =>
                 {
                     configLogging
-                        .SetMinimumLevel(LogLevel.Trace)
+                        .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
                         .AddConsole(c => c.DisableColors = true)
                         .AddDebug();
                 }).

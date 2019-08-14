@@ -31,9 +31,7 @@ namespace Smartbot.Utilities.RecurringActions
                 var notification = new Notification
                 {
                     Msg = $"jorg",
-                    BotName = "jorgbot",
-                    IconEmoji = ":coffee:",
-                    Channel = _channels.JorgChannel
+                    Recipient = _channels.JorgChannel
                 };
                 await publisher.Publish(notification);
             }

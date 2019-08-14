@@ -31,7 +31,7 @@ namespace Smartbot.Utilities.Handlers
                 var notification = new Notification
                 {
                     Msg = $"Neste storsdag er {nextStorsdag.Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture)}",
-                    Channel = message.ChatHub.Id
+                    Recipient = message.ChatHub.Id
                 };
                 await publisher.Publish(notification);
             }

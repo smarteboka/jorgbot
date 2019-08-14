@@ -7,20 +7,7 @@ namespace Slackbot.Net.Publishers
             get;
             set;
         }
-
-        public string BotName
-        {
-            get;
-            set;
-        }
-
-        public string IconEmoji
-        {
-            get;
-            set;
-        }
-
-        public string Channel
+        public string Recipient
         {
             get;
             set;

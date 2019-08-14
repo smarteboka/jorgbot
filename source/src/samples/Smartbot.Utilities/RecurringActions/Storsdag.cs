@@ -32,8 +32,7 @@ namespace Smartbot.Utilities.RecurringActions
                 var notification = new Notification
                 {
                     Msg = $"Storsdags inc! Med? :+1: / :-1: ?",
-                    IconEmoji = ":beer:",
-                    Channel = _channels.SmartebokaChannel
+                    Recipient = _channels.SmartebokaChannel
                 };
                 await publisher.Publish(notification);
             }

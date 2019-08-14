@@ -37,8 +37,7 @@ namespace Smartbot.Utilities.RecurringActions
                     var notification = new Notification
                     {
                         Msg = $"Idag jazzulerer vi {smarting.Name} med {Timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
-                        IconEmoji = ":birthday:",
-                        Channel = _channels.SmartebokaChannel
+                        Recipient = _channels.SmartebokaChannel
                     };
                     await p.Publish(notification);
                 }

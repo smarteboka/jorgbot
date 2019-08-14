@@ -19,25 +19,23 @@ namespace Slackbot.Net.Publishers.Slack
             _logger = logger;
         }
 
-        public SlackSender(string token)
+        public SlackSender(string appToken)
         {
-            _client = new SlackTaskClient(token);
+            _client = new SlackTaskClient(appToken);
         }
 
-        public async Task Send(string msg, string botName, string iconEmoji, string channel)
+        public async Task Send(string msg, string channel)
         {
-            var res = await _client.PostMessageAsync(channel, msg, botName: botName, linkNames: true, icon_emoji: iconEmoji);
+            var res = await _client.PostMessageAsync(channel, msg,  linkNames: true);
             if (!res.ok)
             {
                 _logger.LogError(res.error);
             }
         }
 
-        public async Task SendQuestion()
+        public async Task SendQuestion(Question question)
         {
-            string channel = "#testss";
-            string msg = "Det er storsdag denne uka";
-            var res = await _client.PostMessageAsync(channel, msg, blocks: Blocks().ToArray());
+            var res = await _client.PostMessageAsync(question.Channel, question.Message, blocks: ToBlocks(question).ToArray());
 
             if (!res.ok)
             {
@@ -47,53 +45,126 @@ namespace Slackbot.Net.Publishers.Slack
             }
         }
 
-        private IEnumerable<IBlock> Blocks()
+        private IEnumerable<IBlock> ToBlocks(Question question)
         {
             yield return new Block
             {
                 type = BlockTypes.Section,
                 text = new Text
                 {
-                    text = "Det er storsdag!",
+                    text = question.Message,
                     type = TextTypes.PlainText
                 }
             };
-            yield return new Block()
+            var optionsBlock = new Block()
             {
-                //text = new Text{ text = "Det er storsdag", type = TextTypes.PlainText},
                 type = BlockTypes.Actions,
-                elements = new[]
-                {
-                    new Element
-                    {
-                        action_id = "storsdag-rsvp-yes",
-                        type = ElementTypes.Button,
-                        style = ButtonStyles.Primary,
-                        text = new Text
-                        {
-                            text = "Deltar! 🍺",
-                            type = TextTypes.PlainText
-                        },
-                        value = "deltar",
 
-                    },
-                    new Element
-                    {
-                        action_id = "storsdag-rsvp-no(",
-                        type = ElementTypes.Button,
-                        style = ButtonStyles.Danger,
-                        text = new Text {text = "Kan ikke 😢️", type = TextTypes.PlainText},
-                        value = "deltar-ikke",
-                        confirm = new Confirm
-                        {
-                            title = new Text() {text = "Du er en amøbe",type = TextTypes.PlainText},
-                            text = new Text() {text = "Stemmer?",type = TextTypes.PlainText},
-                            confirm = new Text() {text = "Innrømmelse", type = TextTypes.PlainText},
-                            deny = new Text() {text = "Benektelse", type = TextTypes.PlainText}
-                        }
-                    },
-                }
             };
+            var elements = new List<Element>();
+            foreach (var option in question.Options)
+            {
+                var element = new Element
+                {
+                    action_id = option.ActionId,//"storsdag-rsvp-yes",
+                    type = ElementTypes.Button,
+                    style = ButtonStyles.Primary,
+                    text = new Text
+                    {
+                        text = option.Text, //"Deltar! 🍺",
+                        type = TextTypes.PlainText
+                    },
+                    value = option.Value//"deltar",
+                };
+
+                if (option.Confirmation != null)
+                {
+                    element.confirm = new Confirm
+                    {
+                        title = new Text() {text = option.Confirmation.Title,type = TextTypes.PlainText},
+                        text = new Text() {text = option.Confirmation.Text,type = TextTypes.PlainText},
+                        confirm = new Text() {text = option.Confirmation.ConfirmText, type = TextTypes.PlainText},
+                        deny = new Text() {text = option.Confirmation.DenyText, type = TextTypes.PlainText}
+                    };
+                }
+
+                elements.Add(element);
+            }
+
+            optionsBlock.elements = elements.ToArray();
+            yield return optionsBlock;
+        }
+    }
+
+    public class Question
+    {
+        public string Message
+        {
+            get;
+            set;
+        }
+
+        public string Channel
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<QuestionOption> Options
+        {
+            get;
+            set;
+        }
+    }
+
+    public class QuestionOption
+    {
+
+        public string Text;
+
+        public string ActionId
+        {
+            get;
+            set;
+        }
+
+        public string Value
+        {
+            get;
+            set;
+        }
+
+        public QuestionConfirmation Confirmation
+        {
+            get;
+            set;
+        }
+    }
+
+    public class QuestionConfirmation
+    {
+        public string Title
+        {
+            get;
+            set;
+        }
+
+        public string ConfirmText
+        {
+            get;
+            set;
+        }
+
+        public string DenyText
+        {
+            get;
+            set;
+        }
+
+        public string Text
+        {
+            get;
+            set;
         }
     }
 }

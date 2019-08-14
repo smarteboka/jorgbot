@@ -67,7 +67,7 @@ namespace Smartbot.Utilities.Handlers
                 var notification = new Notification
                 {
                     Msg = sb.ToString(),
-                    Channel = message.ChatHub.Id
+                    Recipient = message.ChatHub.Id
                 };
                 await publisher.Publish(notification);
             }

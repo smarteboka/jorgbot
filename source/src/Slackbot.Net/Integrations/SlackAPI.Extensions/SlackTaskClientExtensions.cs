@@ -13,11 +13,11 @@ namespace Slackbot.Net.Integrations.SlackAPI.Extensions
         /// Need a seperate bottoken when using the reactions API,
         /// or else the app will post reactions as the user installing the app :/
         /// </summary>
-        protected readonly string BotToken;
+        protected readonly string UserToken;
 
-        public SlackTaskClientExtensions(string appToken, string bottoken) : base(appToken)
+        public SlackTaskClientExtensions(string appToken, string userToken) : base(appToken)
         {
-            BotToken = bottoken;
+            UserToken = userToken;
         }
 
         public async Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
@@ -57,7 +57,7 @@ namespace Slackbot.Net.Integrations.SlackAPI.Extensions
             var stuff = await formUrlEncodedContent.ReadAsStringAsync();
             var httpContent = new StringContent(stuff, Encoding.UTF8, "application/x-www-form-urlencoded");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.getPermalink");
-            request.Headers.Add("Authorization", $"Bearer {BotToken}");
+            request.Headers.Add("Authorization", $"Bearer {UserToken}");
             request.Content = httpContent;
             var response =  await httpClient.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
@@ -78,7 +78,7 @@ namespace Slackbot.Net.Integrations.SlackAPI.Extensions
 
             var httpContent = new StringContent(stringContent, Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/reactions.add");
-            request.Headers.Add("Authorization", $"Bearer {BotToken}");
+            request.Headers.Add("Authorization", $"Bearer {UserToken}");
             request.Content = httpContent;
             return await httpClient.SendAsync(request);
         }
