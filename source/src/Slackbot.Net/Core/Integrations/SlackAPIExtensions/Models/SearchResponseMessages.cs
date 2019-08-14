@@ -1,7 +1,18 @@
 using SlackAPI;
 
-namespace Slackbot.Net.Integrations.SlackAPIFork
+namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
 {
+    [RequestPath("search.messages")]
+    public class SearchResponseMessages : Response
+    {
+        public SearchResponseMessagesContainer messages;
+    }
+
+    public class SearchResponseMessagesContainer
+    {
+        public ContextMessage[] matches;
+    }
+
     public class ContextMessage : Message
     {
         public Message previous_2;
@@ -9,7 +20,7 @@ namespace Slackbot.Net.Integrations.SlackAPIFork
         public Message next;
         public Message next_2;
     }
-    
+
     public class Message : SlackSocketMessage
     {
         public Channel channel;

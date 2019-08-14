@@ -1,6 +1,6 @@
 using System;
 
-namespace Slackbot.Net.Validations
+namespace Slackbot.Net.Core.Validations
 {
     internal class ConfigurationException : Exception
     {

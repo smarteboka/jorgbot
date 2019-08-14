@@ -1,7 +1,12 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using Slackbot.Net.Integrations.SlackAPI.Extensions;
-using Slackbot.Net.Integrations.SlackAPIFork;
+using SlackAPI;
+using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
+using ContextMessage = Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.ContextMessage;
+using SearchResponseMessages = Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.SearchResponseMessages;
+using SearchSort = SlackAPI.SearchSort;
+using SearchSortDirection = SlackAPI.SearchSortDirection;
 
 namespace Smartbot.Tests.Workers
 {
@@ -46,11 +51,16 @@ namespace Smartbot.Tests.Workers
             return Task.FromResult(string.Empty);
         }
 
+        public Task<ReactionAddedResponse> AddReactionAsync(string name, string channelId, string threadTs)
+        {
+            return Task.FromResult(new ReactionAddedResponse());
+        }
+
         public void SetSearchResponse(ContextMessage contextMessage)
         {
             SearchResponse = new SearchResponseMessages
             {
-                messages = new SearchResponseMessagesContainer
+                messages = new Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.SearchResponseMessagesContainer
                 {
                     matches = new[]
                     {

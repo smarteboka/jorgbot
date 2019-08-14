@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Slackbot.Net
+namespace Slackbot.Net.Core.Utilities
 {
     public static class OperatingSystem
     {

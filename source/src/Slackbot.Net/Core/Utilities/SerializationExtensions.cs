@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Slackbot.Net.Utilities
+namespace Slackbot.Net.Core.Utilities
 {
     public static class SerializationExtensions
     {

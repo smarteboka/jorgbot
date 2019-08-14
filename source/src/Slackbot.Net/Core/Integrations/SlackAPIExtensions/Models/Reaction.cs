@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Integrations.SlackAPI.Extensions
+namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
 {
     public class Reaction
     {

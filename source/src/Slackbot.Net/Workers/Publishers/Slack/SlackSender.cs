@@ -6,14 +6,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SlackAPI;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 
 namespace Slackbot.Net.Workers.Publishers.Slack
 {
     public class SlackSender
     {
         private readonly ILogger<SlackSender> _logger;
-        private readonly SlackTaskClient _slackAppClient;
-        private readonly SlackTaskClient _slackBotUserClient;
+        private readonly SlackTaskClientExtensions _slackAppClient;
+        private readonly SlackTaskClientExtensions _slackBotUserClient;
 
         public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp, slackOptions.Value.Slackbot_SlackApiKey_BotUser)
         {
@@ -22,16 +24,22 @@ namespace Slackbot.Net.Workers.Publishers.Slack
 
         public SlackSender(string appToken, string userToken)
         {
-            _slackAppClient = new SlackTaskClient(appToken);
-            _slackBotUserClient = new SlackTaskClient(userToken);
+            _slackAppClient = new SlackTaskClientExtensions(appToken, userToken);
+            _slackBotUserClient = new SlackTaskClientExtensions(userToken, userToken);
         }
 
         public async Task Send(string msg, string channel)
         {
-            var res = await _slackAppClient.PostMessageAsync(channel, msg,  linkNames: true);
-            if (!res.ok)
+            var chatMessage = new ChatMessage
             {
-                _logger.LogError(res.error);
+                Text = msg,
+                Channel = channel
+            };
+            var res = await _slackAppClient.SendMessage(chatMessage);
+            if (!res.IsSuccessStatusCode)
+            {
+                var body = await res.Content.ReadAsStringAsync();
+                _logger.LogError(body);
             }
         }
 

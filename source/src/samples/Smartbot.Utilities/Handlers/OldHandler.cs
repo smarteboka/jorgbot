@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SlackAPI;
-using Slackbot.Net.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Utilities;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
-using SearchSort = Slackbot.Net.Integrations.SlackAPIFork.SearchSort;
-using SearchSortDirection = Slackbot.Net.Integrations.SlackAPIFork.SearchSortDirection;
+using SearchSort = SlackAPI.SearchSort;
+using SearchSortDirection = SlackAPI.SearchSortDirection;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -64,7 +65,7 @@ namespace Smartbot.Utilities.Handlers
                 }
 
                 var threadTs = incomingMessage.Timestamp.ToString("N6");
-                var reactionResponse = await _slackClient.AddReactions(incomingMessage.ChatHub.Id, threadTs);
+                var reactionResponses = await AddReactions(incomingMessage.ChatHub.Id, threadTs);
 
                 var message = $"postet av @{r.username} for {TimeSpanExtensions.Ago(r.ts)} siden.";
 
@@ -89,13 +90,23 @@ namespace Smartbot.Utilities.Handlers
                 var body = await response.Content.ReadAsStringAsync();
                 _logger.LogInformation("Sent message. Response:" + JsonConvert.SerializeObject(body));
 
-                var reactionResponseBody = await reactionResponse.First().Content.ReadAsStringAsync();
+                var reactionResponseBody = reactionResponses.First();
                 _logger.LogInformation("Sent reaction. Response:" + JsonConvert.SerializeObject(reactionResponseBody));
 
 
                 return LogHandled("OLD");
             }
             return LogHandled("NEW");
+        }
+
+        private Task<ReactionAddedResponse[]> AddReactions(string channelId, string thread_ts)
+        {
+            var t1 = _slackClient.AddReactionAsync("older_man", channelId, thread_ts);
+            var t2 = _slackClient.AddReactionAsync("older_man::skin-tone-2",channelId, thread_ts);
+            var t3 = _slackClient.AddReactionAsync("older_man::skin-tone-3",channelId, thread_ts);
+            var t4 = _slackClient.AddReactionAsync("older_man::skin-tone-4",channelId, thread_ts);
+            var t5 = _slackClient.AddReactionAsync("older_man::skin-tone-5",channelId, thread_ts);
+            return Task.WhenAll(t1, t2, t3, t4, t5);
         }
 
 

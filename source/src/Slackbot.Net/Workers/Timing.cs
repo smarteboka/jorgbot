@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cronos;
+using OperatingSystem = Slackbot.Net.Core.Utilities.OperatingSystem;
 
 namespace Slackbot.Net.Workers
 {

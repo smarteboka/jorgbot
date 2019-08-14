@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Slackbot.Net.Validations;
+using Slackbot.Net.Core.Utilities;
 using Slackbot.Net.Workers.Validations;
 
 namespace Slackbot.Net.Workers.Configuration
