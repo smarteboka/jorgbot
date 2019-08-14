@@ -13,11 +13,14 @@ namespace Slackbot.Net.Tests
         [Fact]
         public async Task SendsAMessageToSlack()
         {
-            var slackSender = new SlackSender(Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp"));
+            var appToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
+            var botUserToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
+            var slackSender = new SlackSender(appToken,botUserToken);
             var q = new Question()
             {
-                Message = "Det er storsdag denne uka",
-                Channel = "#testss",
+                Message = "Dette er uka si",
+                Channel = "@johnkors",
+                Botname = "smartbot",
                 Options = new []
                 {
                     new QuestionOption { Text = "yes", ActionId = "storsdag-rsvp-yes", Value= "deltar"},

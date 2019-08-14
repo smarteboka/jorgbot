@@ -12,21 +12,23 @@ namespace Slackbot.Net.Publishers.Slack
     public class SlackSender
     {
         private readonly ILogger<SlackSender> _logger;
-        private readonly SlackTaskClient _client;
+        private readonly SlackTaskClient _slackAppClient;
+        private readonly SlackTaskClient _slackBotUserClient;
 
-        public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp)
+        public SlackSender(IOptions<SlackOptions> slackOptions, ILogger<SlackSender> logger) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp, slackOptions.Value.Slackbot_SlackApiKey_BotUser)
         {
             _logger = logger;
         }
 
-        public SlackSender(string appToken)
+        public SlackSender(string appToken, string userToken)
         {
-            _client = new SlackTaskClient(appToken);
+            _slackAppClient = new SlackTaskClient(appToken);
+            _slackBotUserClient = new SlackTaskClient(userToken);
         }
 
         public async Task Send(string msg, string channel)
         {
-            var res = await _client.PostMessageAsync(channel, msg,  linkNames: true);
+            var res = await _slackAppClient.PostMessageAsync(channel, msg,  linkNames: true);
             if (!res.ok)
             {
                 _logger.LogError(res.error);
@@ -35,12 +37,12 @@ namespace Slackbot.Net.Publishers.Slack
 
         public async Task SendQuestion(Question question)
         {
-            var res = await _client.PostMessageAsync(question.Channel, question.Message, blocks: ToBlocks(question).ToArray());
+            var res = await _slackBotUserClient.PostMessageAsync(question.Channel,"yo", as_user:true, blocks: ToBlocks(question).ToArray());
 
             if (!res.ok)
             {
                 var response = JsonConvert.SerializeObject(res);
-                _logger.LogError(res.error);
+                //_logger.LogError(res.error);
                 throw new Exception(response);
             }
         }
@@ -111,6 +113,12 @@ namespace Slackbot.Net.Publishers.Slack
         }
 
         public IEnumerable<QuestionOption> Options
+        {
+            get;
+            set;
+        }
+
+        public string Botname
         {
             get;
             set;
