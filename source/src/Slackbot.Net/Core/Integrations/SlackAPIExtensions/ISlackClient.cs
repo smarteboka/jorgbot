@@ -11,7 +11,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPI.Extensions
     public interface ISlackClient
     {
         Task<SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null);
-        Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage);
+        //Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage);
         Task<string> GetPermalink(string channel, string timestamp);
         Task<ReactionAddedResponse> AddReactionAsync(string name, string channelId, string threadTs);
     }

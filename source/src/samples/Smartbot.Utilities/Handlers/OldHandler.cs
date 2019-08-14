@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SlackAPI;
-using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Utilities;
 using Slackbot.Net.Workers.Handlers;
@@ -17,9 +17,9 @@ namespace Smartbot.Utilities.Handlers
     public class OldHandler : IHandleMessages
     {
         private readonly ILogger<OldHandler> _logger;
-        private readonly ISlackClient _slackClient;
+        private readonly SlackTaskClientExtensions _slackClient;
 
-        public OldHandler(ILogger<OldHandler> logger, ISlackClient slackClient)
+        public OldHandler(ILogger<OldHandler> logger, SlackTaskClientExtensions slackClient)
         {
             _logger = logger;
             _slackClient = slackClient;
@@ -85,10 +85,16 @@ namespace Smartbot.Utilities.Handlers
                     }
                 };
 
-                var response = await _slackClient.SendMessage(chatMessage);
+                var response = await _slackClient.PostMessageAsync(incomingMessage.ChatHub.Id,
+                    r.permalink,
+                    parse: "full",
+                    attachments: new []
+                    {
+                        new Attachment { text = $":older_man: {message}", color = "#FF0000" }
+                    }, thread_ts: threadTs);
 
-                var body = await response.Content.ReadAsStringAsync();
-                _logger.LogInformation("Sent message. Response:" + JsonConvert.SerializeObject(body));
+
+                _logger.LogInformation("Sent message. Response:" + JsonConvert.SerializeObject(response));
 
                 var reactionResponseBody = reactionResponses.First();
                 _logger.LogInformation("Sent reaction. Response:" + JsonConvert.SerializeObject(reactionResponseBody));

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Utilities;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
@@ -12,9 +12,9 @@ namespace Smartbot.Utilities.Handlers
     public class UrlsSaveHandler : IHandleMessages
     {
         private readonly SlackMessagesStorage _storage;
-        private readonly ISlackClient _client;
+        private readonly SlackTaskClientExtensions _client;
 
-        public UrlsSaveHandler(SlackMessagesStorage storage, ISlackClient client)
+        public UrlsSaveHandler(SlackMessagesStorage storage, SlackTaskClientExtensions client)
         {
             _storage = storage;
             _client = client;

@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SlackAPI;
 using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Core.Utilities;
+using Slackbot.Net.Workers;
 using SearchSort = SlackAPI.SearchSort;
 using SearchSortDirection = SlackAPI.SearchSortDirection;
 
@@ -25,6 +28,11 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
         protected readonly string UserToken;
         protected readonly string AppToken;
 
+        public SlackTaskClientExtensions(IOptions<SlackOptions> slackOptions) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp, slackOptions.Value.Slackbot_SlackApiKey_BotUser)
+        {
+
+        }
+
         public SlackTaskClientExtensions(string appToken, string userToken) : base(appToken)
         {
             UserToken = userToken;
@@ -39,7 +47,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
         ///
         /// PR can be sent to SlackAPI
         /// </summary>
-        public new Task<Models.SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
+        public new virtual Task<Models.SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
         {
             var parameters = new List<Tuple<string, string>>();
             parameters.Add(new Tuple<string, string>("query", query));
@@ -63,25 +71,94 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
         }
 
         /// <summary>
-        /// Why:
-        /// - Unable to set parsing of names correctly,
-        ///   @name was not rendered as clickable in some cases
-        ///
-        /// Needs a re-test to verify.
+        ///  Why:
+        ///  - The SlackAPI method is missing the `thread_ts` parameter (Can be sent as a PR to SlackAPI)
+        ///  - The SlackAPI class cannot change the token. For DMs, the bot needs the user token
         /// </summary>
-        public async Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
+        public Task<PostMessageResponse> PostMessageAsync(
+            string channelId,
+            string text,
+            string botName = null,
+            string parse = null,
+            bool linkNames = false,
+            IBlock[] blocks = null,
+            Attachment[] attachments = null,
+            bool unfurl_links = false,
+            string icon_url = null,
+            string icon_emoji = null,
+            bool as_user = false,
+            string thread_ts = null)
         {
-            var httpClient = new HttpClient();
-            chatMessage.Text = chatMessage.Text;
-            var stringContent = chatMessage.ToSerialized();
+            List<Tuple<string,string>> parameters = new List<Tuple<string,string>>();
 
-            var httpContent = new StringContent(stringContent,Encoding.UTF8, "application/json");
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.postMessage");
-            request.Headers.Add("Authorization", $"Bearer {AppToken}");
-            request.Content = httpContent;
+            parameters.Add(new Tuple<string,string>("channel", channelId));
+            parameters.Add(new Tuple<string,string>("text", text));
 
-            return await httpClient.SendAsync(request);
+            if(!string.IsNullOrEmpty(botName))
+                parameters.Add(new Tuple<string,string>("username", botName));
+
+            if (!string.IsNullOrEmpty(parse))
+                parameters.Add(new Tuple<string, string>("parse", parse));
+
+            if (linkNames)
+                parameters.Add(new Tuple<string, string>("link_names", "1"));
+
+            //addition to SlackAPI
+            if (!string.IsNullOrEmpty(thread_ts))
+                parameters.Add(new Tuple<string, string>("thread_ts", thread_ts));
+
+            if (blocks != null && blocks.Length > 0)
+               parameters.Add(new Tuple<string, string>("blocks", JsonConvert.SerializeObject(blocks,
+                  new JsonSerializerSettings()
+                  {
+                     NullValueHandling = NullValueHandling.Ignore
+                  })));
+
+            if (attachments != null && attachments.Length > 0)
+                   parameters.Add(new Tuple<string, string>("attachments", JsonConvert.SerializeObject(attachments,
+                      new JsonSerializerSettings()
+                      {
+                         NullValueHandling = NullValueHandling.Ignore
+                      })));
+
+            if (unfurl_links)
+                parameters.Add(new Tuple<string, string>("unfurl_links", "1"));
+
+            if (!string.IsNullOrEmpty(icon_url))
+                parameters.Add(new Tuple<string, string>("icon_url", icon_url));
+
+            if (!string.IsNullOrEmpty(icon_emoji))
+                parameters.Add(new Tuple<string, string>("icon_emoji", icon_emoji));
+
+            parameters.Add(new Tuple<string, string>("as_user", as_user.ToString()));
+
+            // Addition to SlackAPI.
+            // Necessary for sending a DM as the botuser
+            parameters.Add(new Tuple<string, string>("token", UserToken));
+
+            return APIRequestWithTokenAsync<PostMessageResponse>(parameters.ToArray());
         }
+
+//        /// <summary>
+//        /// Why:
+//        /// - Unable to set parsing of names correctly,
+//        ///   @name was not rendered as clickable in some cases
+//        ///
+//        /// Needs a re-test to verify.
+//        /// </summary>
+//        public async Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
+//        {
+//            var httpClient = new HttpClient();
+//            chatMessage.Text = chatMessage.Text;
+//            var stringContent = chatMessage.ToSerialized();
+//
+//            var httpContent = new StringContent(stringContent,Encoding.UTF8, "application/json");
+//            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.postMessage");
+//            request.Headers.Add("Authorization", $"Bearer {AppToken}");
+//            request.Content = httpContent;
+//
+//            return await httpClient.SendAsync(request);
+//        }
 
         /// <summary>
         /// Missing API in `SlackAPI`
@@ -132,6 +209,64 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
             var content = await res.Content.ReadAsStringAsync();
             var reactionAdded = JsonConvert.DeserializeObject<ReactionAddedResponse>(content);
             return reactionAdded;
+        }
+
+        /// <summary>
+        /// Abstraction over `PostMessageAsync` to make it easier to build interactive DMs
+        /// </summary>
+        public async Task<PostMessageResponse> PostMessageQuestionAsync(Question question)
+        {
+            return await PostMessageAsync(question.Channel,string.Empty, as_user:true, blocks: ToBlocks(question).ToArray());
+        }
+
+        private IEnumerable<IBlock> ToBlocks(Question question)
+        {
+            yield return new Block
+            {
+                type = BlockTypes.Section,
+                text = new Text
+                {
+                    text = question.Message,
+                    type = TextTypes.PlainText
+                }
+            };
+            var optionsBlock = new Block()
+            {
+                type = BlockTypes.Actions,
+
+            };
+            var elements = new List<Element>();
+            foreach (var option in question.Options)
+            {
+                var element = new Element
+                {
+                    action_id = option.ActionId,
+                    type = ElementTypes.Button,
+                    style = ButtonStyles.Primary,
+                    text = new Text
+                    {
+                        text = option.Text,
+                        type = TextTypes.PlainText
+                    },
+                    value = option.Value
+                };
+
+                if (option.Confirmation != null)
+                {
+                    element.confirm = new Confirm
+                    {
+                        title = new Text() {text = option.Confirmation.Title,type = TextTypes.PlainText},
+                        text = new Text() {text = option.Confirmation.Text,type = TextTypes.PlainText},
+                        confirm = new Text() {text = option.Confirmation.ConfirmText, type = TextTypes.PlainText},
+                        deny = new Text() {text = option.Confirmation.DenyText, type = TextTypes.PlainText}
+                    };
+                }
+
+                elements.Add(element);
+            }
+
+            optionsBlock.elements = elements.ToArray();
+            yield return optionsBlock;
         }
     }
 }

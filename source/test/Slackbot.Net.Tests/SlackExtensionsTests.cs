@@ -2,20 +2,22 @@ using System;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Newtonsoft.Json;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
+using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Workers.Publishers.Slack;
 using Xunit;
 
 namespace Slackbot.Net.Tests
 {
-    public class SlackSenderTests
+    public class SlackExtensionsTests
     {
         //[Fact (Skip = "Integration test")]
         [Fact]
-        public async Task SendsAMessageToSlack()
+        public async Task PostsQuestionAsDM()
         {
             var appToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
             var botUserToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
-            var slackSender = new SlackSender(appToken,botUserToken);
+            var slackTaskClientExtensions = new SlackTaskClientExtensions(appToken, botUserToken);
             var q = new Question()
             {
                 Message = "Dette er uka si",
@@ -33,7 +35,8 @@ namespace Slackbot.Net.Tests
                     }}
                 }
             };
-            await slackSender.SendQuestion(q);
+            var res = await slackTaskClientExtensions.PostMessageQuestionAsync(q);
+            Assert.True(res.ok);
         }
     }
 }
