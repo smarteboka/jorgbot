@@ -108,6 +108,7 @@ namespace Smartbot.Tests.Workers
             AssertUrlRegex("https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html", "<https://edition-m.cnn.com/2019/03/24/politics/mueller-report-release/index.html>");
             AssertUrlRegex("https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288", "https://www.linkedin.com/feed/update/urn:li:activity:6545200308086284288");
             AssertUrlRegex("https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65", "https://www.nrk.no/video/PS*ce0b6a6b-5a06-4135-a0cd-a56f88440b65");
+            AssertUrlRegex("https://www.vg.no/nyheter/innenriks/i/1nWAVB/forsvarskjempe-har-blitt-mdg-medlem-klimaendringene-kan-splitte-nato?fbclid=IwAR09_Mu0NW8-S7Qse3SR8aNkhQznXefV_SJAf0_Mhbk5HbXrYL5aNJvGX_s","https://www.vg.no/nyheter/innenriks/i/1nWAVB/forsvarskjempe-har-blitt-mdg-medlem-klimaendringene-kan-splitte-nato?fbclid=IwAR09_Mu0NW8-S7Qse3SR8aNkhQznXefV_SJAf0_Mhbk5HbXrYL5aNJvGX_s");
         }
 
         private static void AssertChannelRegex(string expected, string input)

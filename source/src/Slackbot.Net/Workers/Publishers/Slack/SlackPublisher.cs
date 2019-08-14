@@ -17,7 +17,7 @@ namespace Slackbot.Net.Workers.Publishers.Slack
         public async Task Publish(Notification notification)
         {
             _logger.LogInformation(notification.Msg);
-            await _sender.Send($"Dev - " + notification.Msg,  notification.Recipient);
+            await _sender.Send(notification.Msg,  notification.Recipient);
         }
     }
 }
