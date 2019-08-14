@@ -50,8 +50,8 @@ namespace Slackbot.Net.Workers.Publishers.Slack
             if (!res.ok)
             {
                 var response = JsonConvert.SerializeObject(res);
-                //_logger.LogError(res.error);
-                throw new Exception(response);
+                _logger.LogError(response);
+                _logger.LogError(res.error);
             }
         }
 
