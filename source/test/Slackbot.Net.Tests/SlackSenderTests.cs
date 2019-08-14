@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Newtonsoft.Json;
-using Slackbot.Net.Publishers.Slack;
+using Slackbot.Net.Workers.Publishers.Slack;
 using Xunit;
 
 namespace Slackbot.Net.Tests

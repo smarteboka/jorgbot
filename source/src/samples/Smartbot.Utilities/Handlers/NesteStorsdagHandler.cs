@@ -4,8 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Slackbot.Net;
-using Slackbot.Net.Handlers;
-using Slackbot.Net.Publishers;
+using Slackbot.Net.Workers;
+using Slackbot.Net.Workers.Handlers;
+using Slackbot.Net.Workers.Publishers;
 using SlackConnector.Models;
 using Smartbot.Utilities.RecurringActions;
 

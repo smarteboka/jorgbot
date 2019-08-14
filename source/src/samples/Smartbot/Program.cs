@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Publishers;
-using Slackbot.Net.Publishers.Slack;
+using Slackbot.Net.Workers.Publishers.Logger;
+using Slackbot.Net.Workers.Publishers.Slack;
 using Smartbot.Utilities.RecurringActions;
 using Smartbot.Utilities.Handlers;
 

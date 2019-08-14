@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slackbot.Net;
-using Slackbot.Net.Hosting;
-using Slackbot.Net.Publishers;
-using Slackbot.Net.Publishers.Slack;
+using Slackbot.Net.Workers;
+using Slackbot.Net.Workers.Configuration;
+using Slackbot.Net.Workers.Publishers;
 
 namespace Smartbot.Utilities.RecurringActions
 {

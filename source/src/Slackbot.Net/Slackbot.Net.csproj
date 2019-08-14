@@ -35,4 +35,8 @@
       <PackageReference Include="Cronos" Version="0.7.0" />
       <PackageReference Include="SlackConnector" Version="4.2.74" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core" />
+    </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slackbot.Net;
+using Slackbot.Net.Workers;
 
 namespace Smartbot.Utilities
 {

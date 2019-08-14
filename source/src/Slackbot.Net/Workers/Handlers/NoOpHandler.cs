@@ -1,11 +1,9 @@
-using System;
 using System.Threading.Tasks;
-using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
 
-namespace Smartbot.Utilities.Handlers
+namespace Slackbot.Net.Workers.Handlers
 {
-    public class MessageSaverReplier : IHandleMessages
+    public class NoOpHandler : IHandleMessages
     {
         public Task<HandleResponse> Handle(SlackMessage message)
         {
@@ -14,7 +12,7 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldHandle(SlackMessage message)
         {
-            return message.Text.StartsWith("<@UGWC87WRZ> save", StringComparison.InvariantCultureIgnoreCase);
+            return !message.MentionsBot;
         }
     }
 }

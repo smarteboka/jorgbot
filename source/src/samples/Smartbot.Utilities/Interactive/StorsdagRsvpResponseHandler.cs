@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Interactive;
+using Slackbot.Net.Endpoints.Interactive;
 
 namespace Smartbot.Utilities.Interactive
 {
