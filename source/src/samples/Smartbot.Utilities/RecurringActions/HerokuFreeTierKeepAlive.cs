@@ -7,7 +7,7 @@ namespace Smartbot.Utilities.RecurringActions
     public class HerokuFreeTierKeepAlive : RecurringAction
     {
 
-        public HerokuFreeTierKeepAlive(ILogger<HerokuFreeTierKeepAlive> logger): base( "* */10 * * * *",logger)
+        public HerokuFreeTierKeepAlive(ILogger<HerokuFreeTierKeepAlive> logger): base( "0 */10 * * * *",logger)
         {
 
         }

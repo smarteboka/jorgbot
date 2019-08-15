@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,6 @@ namespace Smartbot.Web
                             o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
                             o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
                         })
-                        .AddPublisher<LoggerPublisher>()
                         .AddRecurring<HerokuFreeTierKeepAlive>();
                     services.AddSlackbotEndpoints()
                         .AddEndpointHandler<StorsdagRsvpResponseHandler>();
@@ -48,6 +48,7 @@ namespace Smartbot.Web
                 }).
                 Configure(app =>
                 {
+                    app.Map("", a => a.Run(context => Task.CompletedTask)); // keep-alive by pinging from uptimerobot
                     app.UseSlackbotEndpoint("/interactive");
                 })
                 .Build();
