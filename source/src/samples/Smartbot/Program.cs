@@ -34,7 +34,7 @@ namespace Smartbot
                         .AddPublisher<SlackPublisher>()
                         .AddPublisher<LoggerPublisher>()
 
-                        .AddRecurring<HerokuFreeTierKeepAlive>(c => c.Cron = "* */20 * * * *")
+                        .AddRecurring<HerokuFreeTierKeepAlive>()
                         .AddRecurring<Jorger>(c => { c.Cron = "0 0 9 * * *"; })
                         .AddRecurring<HappyBirthday>(c => c.Cron = "0 0 8 * * *")
                         .AddRecurring<HeartBeater>(c => c.Cron = "0 55 7 * * *")

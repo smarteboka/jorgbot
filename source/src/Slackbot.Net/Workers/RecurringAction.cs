@@ -11,12 +11,24 @@ namespace Slackbot.Net.Workers
 {
     public abstract class RecurringAction : BackgroundService
     {
-        protected readonly Timing Timing;
-        protected readonly ILogger<RecurringAction> Logger;
+        protected Timing Timing;
+        protected ILogger<RecurringAction> Logger;
 
         protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)
         {
-            CronOptions cronOptions = options.Get(GetType().ToString());
+            var cronOptions = options.Get(GetType().ToString());
+            Init(cronOptions, logger);
+        }
+
+
+        protected RecurringAction(string cron, ILogger<RecurringAction> logger)
+        {
+            var cronOptions = new CronOptions {Cron = cron};
+            Init(cronOptions, logger);
+        }
+
+        private void Init(CronOptions cronOptions, ILogger<RecurringAction> logger)
+        {
             Timing = new Timing();
             Timing.SetTimeZone(cronOptions.TimeZoneId);
             Logger = logger;

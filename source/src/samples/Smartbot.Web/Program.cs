@@ -35,7 +35,7 @@ namespace Smartbot.Web
                             o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
                         })
                         .AddPublisher<LoggerPublisher>()
-                        .AddRecurring<HerokuFreeTierKeepAlive>(c => c.Cron = "* */20 * * * *");
+                        .AddRecurring<HerokuFreeTierKeepAlive>();
                     services.AddSlackbotEndpoints()
                         .AddEndpointHandler<StorsdagRsvpResponseHandler>();
                 })

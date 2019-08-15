@@ -34,6 +34,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder) where T: RecurringAction
+        {
+            builder.Services.AddHostedService<T>();
+            return builder;
+        }
+
         public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder, Action<CronOptions> o) where T: RecurringAction
         {
             builder.Services.ConfigureAndValidate(typeof(T).ToString(), o);
