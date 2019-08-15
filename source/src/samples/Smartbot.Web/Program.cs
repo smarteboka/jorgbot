@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Workers.Publishers.Logger;
 using Smartbot.Utilities.Interactive;
+using Smartbot.Utilities.RecurringActions;
 
 namespace Smartbot.Web
 {
@@ -27,6 +29,13 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddSlackbotWorker(o =>
+                        {
+                            o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
+                            o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
+                        })
+                        .AddPublisher<LoggerPublisher>()
+                        .AddRecurring<HerokuFreeTierKeepAlive>(c => c.Cron = "* */20 * * * *");
                     services.AddSlackbotEndpoints()
                         .AddEndpointHandler<StorsdagRsvpResponseHandler>();
                 })

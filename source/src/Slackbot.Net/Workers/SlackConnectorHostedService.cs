@@ -12,16 +12,19 @@ namespace Slackbot.Net.Workers
 {
     internal class SlackConnectorHostedService : BackgroundService
     {
-        private readonly ISlackConnector _noobotCore;
+        private readonly ISlackConnector _slackConnector;
         private readonly ILogger<SlackConnectorHostedService> _logger;
         private readonly HandlerSelector _handlerSelector;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
 
-        public SlackConnectorHostedService(ISlackConnector noobotCore, IOptions<SlackOptions> options, ILogger<SlackConnectorHostedService> logger, HandlerSelector handlerSelector)
+        public SlackConnectorHostedService(ISlackConnector slackConnector,
+            IOptions<SlackOptions> options,
+            ILogger<SlackConnectorHostedService> logger,
+            HandlerSelector handlerSelector)
         {
-            _noobotCore = noobotCore;
+            _slackConnector = slackConnector;
             _logger = logger;
             _handlerSelector = handlerSelector;
             _config = options.Value;
@@ -32,7 +35,7 @@ namespace Slackbot.Net.Workers
             while (!stoppingToken.IsCancellationRequested && !_connected)
             {
                 _logger.LogInformation("Connecting");
-                _connection = await _noobotCore.Connect(_config.Slackbot_SlackApiKey_BotUser);
+                _connection = await _slackConnector.Connect(_config.Slackbot_SlackApiKey_BotUser);
                 _connection.OnMessageReceived += HandleIncomingMessage;
 
                 _connection.OnDisconnect += () =>

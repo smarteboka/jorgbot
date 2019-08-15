@@ -12,16 +12,16 @@ namespace Slackbot.Net.Workers
     public abstract class RecurringAction : BackgroundService
     {
         protected readonly Timing Timing;
-        private readonly ILogger<RecurringAction> _logger;
+        protected readonly ILogger<RecurringAction> Logger;
 
         protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)
         {
             CronOptions cronOptions = options.Get(GetType().ToString());
             Timing = new Timing();
             Timing.SetTimeZone(cronOptions.TimeZoneId);
-            _logger = logger;
+            Logger = logger;
             Cron = cronOptions.Cron;
-            _logger.LogDebug($"Using {Cron} and timezone '{Timing.TimeZoneInfo.Id}. The time in this timezone: {Timing.RelativeNow()}'");
+            Logger.LogDebug($"Using {Cron} and timezone '{Timing.TimeZoneInfo.Id}. The time in this timezone: {Timing.RelativeNow()}'");
         }
 
         protected string Cron;
@@ -43,7 +43,7 @@ namespace Slackbot.Net.Workers
 
                     var upcoming = Timing.GetNextOccurences(cron);
                     var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}").Take(10);
-                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
+                    Logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
                                            $"Upcoming:\n{uText.Aggregate((x,y) => x + "\n" + y)}");
                 }
 
@@ -51,7 +51,7 @@ namespace Slackbot.Net.Workers
                 {
                     await Process();
                     next = Timing.GetNextOccurenceInRelativeTime(cron);
-                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
+                    Logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
                 else
                 {
