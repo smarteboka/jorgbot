@@ -48,12 +48,16 @@ namespace Smartbot.Web
                 }).
                 Configure(app =>
                 {
-                    app.UseSlackbotEndpoint("/interactive");
-                    app.Map("", a =>
+                    // keep-alive by pinging from uptimerobot
+                    app.UseWhen(c => c.Request.Path == "/", a =>
                     {
-                        a.Run(context => Task.CompletedTask);
+                        a.Run(async c =>
+                        {
+                            c.Response.StatusCode = 200;
+                        });
+                    });
 
-                    }); // keep-alive by pinging from uptimerobot
+                    app.UseSlackbotEndpoint("/interactive");
                 })
                 .Build();
 
