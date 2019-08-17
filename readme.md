@@ -6,7 +6,7 @@ A .NET framework for building a Slack bot in a .NET Core host.
 ## What it's not
 * Tied to a hosting provider/cloud vendor. Install it in your host application, and deploy where you want.
 * Not a competitor to [the Microsoft Bot Framework](https://github.com/microsoft/botframework-sdk)
-* Allthough it makes use of one, it's not only a raw C# Slack Client. If you want that, go to (github.com/Inumedia/SlackAPI)[https://github.com/Inumedia/SlackAPI].
+* Allthough it makes use of one, it's not only a raw C# Slack Client. If you want that, go to [github.com/Inumedia/SlackAPI](https://github.com/Inumedia/SlackAPI).
 
 # Install
 Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.svg)](https://www.nuget.org/packages/slackbot.net/)
