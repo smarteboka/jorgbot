@@ -7,11 +7,15 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.sv
 
 `$ dotnet add package slackbot.net`
 
+# Features
+* Workers: 
+  - Listen to all incoming messages, and execute a handler given a specific message is incoming
+  - Execute code on regular intervals 
+* Endpoints:
+  - Receive payloads from Slack and execute code.
 
-# Host setup
-
-Sample setup, using .NET Core DI extensions:
-
+## Workers hosting
+Wire it up using .NET Core DI:
 ```
 services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  })
     .AddPublisher<SlackPublisher>()
@@ -22,14 +26,18 @@ services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  
 })
 ```
 
-# Features
-* Workers: 
-  - Listen to all incoming messages, and execute a handler given a specific message is incoming
-  - Execute code on regular intervals 
-* Endpoints:
-  - Receive payloads from Slack and execute code.
+## Endpoints setup
+Wire it up using .NET Core DI _and_ the corresponding middleware which executes the handler:
+```
+services.AddSlackbotEndpoints()
+        .AddEndpointHandler<MyHandlerOfIncomingCallbacksFromSlack>();
+[..]        
+app.UseSlackbotEndpoint("/mycallbackendpoint");
+```
 
-## Workers
+Or you could of course combine the two, hosting a worker as well as the endpoints in the same host. That's up to you.
+
+# Workers
 `SlackbotWorkers` use the [Slack Real Time API](https://api.slack.com/rtm), meaning they would have to be always running on a host. You could of course host in a Web host along with Kestrel, but it would mean it would be turning off when idle in many hosting scenarios (behind IIS for example). The worker listens to incoming messages in channels the bot is invited to, and executes any action that you define:
 
 ### Execute a handler on received messages
