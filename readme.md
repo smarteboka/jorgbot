@@ -26,7 +26,7 @@ services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  
 })
 ```
 
-## Endpoints setup
+## Endpoints hosting
 Wire it up using .NET Core DI _and_ the corresponding middleware which executes the handler:
 ```
 services.AddSlackbotEndpoints()
