@@ -1,4 +1,4 @@
-# About
+# Slackbot.NET
 
 ## What it is
 A .NET framework for building a Slack bot in a .NET Core host.
@@ -16,7 +16,7 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.sv
 # Features
 * Workers: 
   - Listen to all incoming messages, and execute a handler given a specific message is incoming
-  - Execute code on regular intervals 
+  - Execute code on regular intervals, for example publish a message to a recipient.
 * Endpoints:
   - Receive payloads from Slack and execute code.
 
