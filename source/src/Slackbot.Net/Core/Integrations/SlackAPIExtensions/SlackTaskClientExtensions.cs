@@ -139,27 +139,6 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
             return APIRequestWithTokenAsync<PostMessageResponse>(parameters.ToArray());
         }
 
-//        /// <summary>
-//        /// Why:
-//        /// - Unable to set parsing of names correctly,
-//        ///   @name was not rendered as clickable in some cases
-//        ///
-//        /// Needs a re-test to verify.
-//        /// </summary>
-//        public async Task<HttpResponseMessage> SendMessage(ChatMessage chatMessage)
-//        {
-//            var httpClient = new HttpClient();
-//            chatMessage.Text = chatMessage.Text;
-//            var stringContent = chatMessage.ToSerialized();
-//
-//            var httpContent = new StringContent(stringContent,Encoding.UTF8, "application/json");
-//            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.postMessage");
-//            request.Headers.Add("Authorization", $"Bearer {AppToken}");
-//            request.Content = httpContent;
-//
-//            return await httpClient.SendAsync(request);
-//        }
-
         /// <summary>
         /// Missing API in `SlackAPI`
         /// NB! Does not require User token, so could be sent as a PR to SlackAPI

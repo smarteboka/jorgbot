@@ -19,7 +19,6 @@ namespace Smartbot.Utilities.Interactive
         public async Task<object> RespondToSlackInteractivePayload(IncomingInteractiveMessage incoming)
         {
             LoggerExtensions.LogInformation(_logger, $"ResponseUrl : {incoming.Response_Url}");
-            RespondResult res;
             if (incoming.Actions.Any(a => a.value == "deltar"))
             {
                 var yesRes = await _responder.Respond(incoming.Response_Url, "Nice!");

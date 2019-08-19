@@ -51,9 +51,10 @@ namespace Smartbot.Web
                     // keep-alive by pinging from uptimerobot
                     app.UseWhen(c => c.Request.Path == "/", a =>
                     {
-                        a.Run(async c =>
+                        a.Run(c =>
                         {
                             c.Response.StatusCode = 200;
+                            return Task.CompletedTask;
                         });
                     });
 
