@@ -104,7 +104,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
         {
             var q = new Question()
             {
-                QuestionId = invitationEntity.EventId,
+                QuestionId = invitationEntity.RowKey,
                 Message = invitationEntity.EventTopic,
                 Recipient = invitationEntity.SlackUserId,
                 Botname = "smartbot",
