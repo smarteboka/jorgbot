@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Interactive;
-using Smartbot.Utilities.Interactive;
+using Smartbot.Utilities.Storage.Events;
+using Smartbot.Utilities.Storsdager.Interactive;
 using Xunit;
 
 namespace Smartbot.Tests.Endpoints
@@ -16,10 +17,24 @@ namespace Smartbot.Tests.Endpoints
             var mockResponder = A.Fake<IRespond>();
             A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
 
-            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder);
-            var deltarMessage = IncomingWith("deltar");
+            var mockStorage = A.Fake<IInvitationsStorage>();
+            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var deltarMessage = IncomingWith(RsvpValues.Attending);
             var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
-            Assert.True((res as RsvpResult).Attending);
+            Assert.Equal(RsvpValues.Attending,(res as RsvpResult).Rsvp);
+        }
+
+        [Fact]
+        public async Task HandlesDeltarKanskje()
+        {
+            var mockResponder = A.Fake<IRespond>();
+            A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
+            var mockStorage = A.Fake<IInvitationsStorage>();
+
+            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var deltarMessage = IncomingWith(RsvpValues.Maybe);
+            var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
+            Assert.Equal(RsvpValues.Maybe,(res as RsvpResult).Rsvp);
         }
 
         [Fact]
@@ -27,11 +42,12 @@ namespace Smartbot.Tests.Endpoints
         {
             var mockResponder = A.Fake<IRespond>();
             A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
+            var mockStorage = A.Fake<IInvitationsStorage>();
 
-            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder);
-            var deltarMessage = IncomingWith("deltar-ikke");
+            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var deltarMessage = IncomingWith(RsvpValues.NotAttending);
             var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
-            Assert.False((res as RsvpResult).Attending);
+            Assert.Equal(RsvpValues.NotAttending,(res as RsvpResult).Rsvp);
         }
 
 
@@ -43,6 +59,7 @@ namespace Smartbot.Tests.Endpoints
                 {
                     new ValueBlock
                     {
+                        block_id = "someblockid",
                         value = value
                     }
                 }

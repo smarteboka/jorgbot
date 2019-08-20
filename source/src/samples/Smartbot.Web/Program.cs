@@ -9,8 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Workers.Publishers.Logger;
-using Smartbot.Utilities.Interactive;
 using Smartbot.Utilities.RecurringActions;
+using Smartbot.Utilities.Storage.Events;
+using Smartbot.Utilities.Storsdager.Interactive;
 
 namespace Smartbot.Web
 {
@@ -30,6 +31,7 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddSingleton<IInvitationsStorage, InvitationsStorage>();
                     services.AddSlackbotWorker(o =>
                         {
                             o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");

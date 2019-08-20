@@ -11,7 +11,12 @@ namespace Slackbot.Net.Workers
 {
     public abstract class RecurringAction : BackgroundService
     {
-        protected Timing Timing;
+        public Timing Timing
+        {
+            get;
+            set;
+        }
+
         protected ILogger<RecurringAction> Logger;
 
         protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Slackbot.Net.Utilities
+namespace Smartbot.Utilities
 {
     public static class RegexHelper
     {

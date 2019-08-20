@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
-using Slackbot.Net.Utilities;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
 using Smartbot.Utilities.Storage;
+using Smartbot.Utilities.Storage.SlackUrls;
 
 namespace Smartbot.Utilities.Handlers
 {

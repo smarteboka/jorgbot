@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using SlackAPI;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
-using Slackbot.Net.Utilities;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
 using SearchSort = SlackAPI.SearchSort;

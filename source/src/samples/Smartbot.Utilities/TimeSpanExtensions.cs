@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Slackbot.Net.Utilities
+namespace Smartbot.Utilities
 {
     public static class TimeSpanExtensions
     {

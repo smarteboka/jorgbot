@@ -8,6 +8,8 @@ using Slackbot.Net.Workers.Publishers.Logger;
 using Slackbot.Net.Workers.Publishers.Slack;
 using Smartbot.Utilities.RecurringActions;
 using Smartbot.Utilities.Handlers;
+using Smartbot.Utilities.Handlers._4sq;
+using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot
 {
@@ -38,7 +40,7 @@ namespace Smartbot
                         .AddRecurring<Jorger>(c => { c.Cron = "0 0 9 * * *"; })
                         .AddRecurring<HappyBirthday>(c => c.Cron = "0 0 8 * * *")
                         .AddRecurring<HeartBeater>(c => c.Cron = "0 55 7 * * *")
-                        .AddRecurring<Storsdag>(c => c.Cron = "0 0 8 * * THUL")
+                        .AddRecurring<StorsdagReminder>(c => c.Cron = StorsdagReminder.LastThursdayOfMonthCron)
 
                         .AddHandler<NesteStorsdagHandler>()
                         .AddHandler<StorsdagerHandler>()

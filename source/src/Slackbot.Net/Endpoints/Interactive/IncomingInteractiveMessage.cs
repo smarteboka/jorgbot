@@ -50,5 +50,6 @@ namespace Slackbot.Net.Endpoints.Interactive
     public class ValueBlock
     {
         public string value { get; set; }
+        public string block_id { get; set; }
     }
 }

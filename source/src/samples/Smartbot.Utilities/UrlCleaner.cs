@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
-namespace Slackbot.Net.Utilities
+namespace Smartbot.Utilities
 {
     public class UrlCleaner
     {

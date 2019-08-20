@@ -11,8 +11,8 @@ namespace Slackbot.Net.Tests
 {
     public class SlackExtensionsTests
     {
-        //[Fact (Skip = "Integration test")]
-        [Fact]
+        [Fact (Skip = "Integration test")]
+        //[Fact]
         public async Task PostsQuestionAsDM()
         {
             var appToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
@@ -20,8 +20,9 @@ namespace Slackbot.Net.Tests
             var slackTaskClientExtensions = new SlackTaskClientExtensions(appToken, botUserToken);
             var q = new Question()
             {
+                QuestionId = "someId",
                 Message = "Dette er uka si",
-                Channel = "@johnkors",
+                Recipient = "@johnkors",
                 Botname = "smartbot",
                 Options = new []
                 {

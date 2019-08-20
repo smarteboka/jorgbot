@@ -9,6 +9,7 @@ using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Publishers;
 using SlackConnector.Models;
 using Smartbot.Utilities.RecurringActions;
+using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -24,7 +25,7 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var upcomingEvents = Timing.GetNextOccurences(Storsdag.LastThursdayOfMonthCron);
+            var upcomingEvents = Timing.GetNextOccurences(StorsdagReminder.LastThursdayOfMonthCron);
             var nextStorsdag = upcomingEvents.FirstOrDefault();
             var culture = new CultureInfo("nb-NO");
             foreach (var publisher in _publishers)

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SlackAPI;
-using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Core.Utilities;
 using Slackbot.Net.Workers;
@@ -19,7 +18,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
     /// <summary>
     /// An extension for what is missing in SlackTaskClient
     /// </summary>
-    public class SlackTaskClientExtensions : SlackTaskClient, ISlackClient
+    public class SlackTaskClientExtensions : SlackTaskClient
     {
         /// <summary>
         /// Need a seperate bottoken when using the reactions API,
@@ -190,12 +189,30 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
             return reactionAdded;
         }
 
+        public async Task<IEnumerable<string>> GetMembersOf(string channel)
+        {
+            var httpClient = new HttpClient();
+            var formUrlEncodedContent = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("channel", channel),
+            });
+            var stuff = await formUrlEncodedContent.ReadAsStringAsync();
+            var httpContent = new StringContent(stuff, Encoding.UTF8, "application/x-www-form-urlencoded");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/conversations.members");
+            request.Headers.Add("Authorization", $"Bearer {AppToken}");
+            request.Content = httpContent;
+            var response =  await httpClient.SendAsync(request);
+            var content = await response.Content.ReadAsStringAsync();
+            var membersResponse = JsonConvert.DeserializeObject<MembersResponse>(content);
+            return membersResponse.members;
+        }
+
         /// <summary>
         /// Abstraction over `PostMessageAsync` to make it easier to build interactive DMs
         /// </summary>
         public async Task<PostMessageResponse> PostMessageQuestionAsync(Question question)
         {
-            return await PostMessageAsync(question.Channel,string.Empty, as_user:true, blocks: ToBlocks(question).ToArray());
+            return await PostMessageAsync(question.Recipient, string.Empty, as_user:true, blocks: ToBlocks(question).ToArray());
         }
 
         private IEnumerable<IBlock> ToBlocks(Question question)
@@ -212,7 +229,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
             var optionsBlock = new Block()
             {
                 type = BlockTypes.Actions,
-
+                block_id = question.QuestionId,
             };
             var elements = new List<Element>();
             foreach (var option in question.Options)
@@ -220,8 +237,9 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
                 var element = new Element
                 {
                     action_id = option.ActionId,
+
                     type = ElementTypes.Button,
-                    style = ButtonStyles.Primary,
+                    style = option.Style,
                     text = new Text
                     {
                         text = option.Text,

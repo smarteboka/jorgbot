@@ -17,6 +17,12 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
             set;
         }
 
+        public string Style
+        {
+            get;
+            set;
+        }
+
         public QuestionConfirmation Confirmation
         {
             get;

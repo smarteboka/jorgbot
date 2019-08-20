@@ -1,5 +1,5 @@
 using System;
-using Smartbot.Utilities.FourSquareServices;
+using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Xunit;
 
 namespace Smartbot.Tests.Workers

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 
 namespace Slackbot.Net.Workers.Publishers.Slack

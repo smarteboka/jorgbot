@@ -1,8 +1,5 @@
 using System;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Slackbot.Net;
-using Slackbot.Net.Core.Integrations.SlackAPI.Extensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Validations;
 using Slackbot.Net.Workers;
@@ -10,7 +7,6 @@ using Slackbot.Net.Workers.Configuration;
 using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Hosting;
 using Slackbot.Net.Workers.Publishers;
-using Slackbot.Net.Workers.Publishers.Slack;
 using SlackConnector;
 
 // namespace on purpose:

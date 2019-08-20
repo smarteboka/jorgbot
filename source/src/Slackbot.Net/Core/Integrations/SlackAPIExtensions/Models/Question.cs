@@ -10,7 +10,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
             set;
         }
 
-        public string Channel
+        public string Recipient
         {
             get;
             set;
@@ -23,6 +23,13 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
         }
 
         public string Botname
+        {
+            get;
+            set;
+        }
+
+        // block_id
+        public string QuestionId
         {
             get;
             set;

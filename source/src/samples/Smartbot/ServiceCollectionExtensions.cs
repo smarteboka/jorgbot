@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smartbot.Utilities;
-using Smartbot.Utilities.FourSquareServices;
+using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Smartbot.Utilities.Storage;
+using Smartbot.Utilities.Storage.Events;
+using Smartbot.Utilities.Storage.SlackUrls;
 
 namespace Smartbot
 {
@@ -17,6 +19,9 @@ namespace Smartbot
 
             services.AddSingleton<FourSquareService>();
             services.Configure<FourSquareOptions>(configuration);
+
+            services.AddSingleton<EventsStorage>();
+            services.AddSingleton<InvitationsStorage>();
             return services;
         }
     }

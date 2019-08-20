@@ -44,7 +44,9 @@ namespace Slackbot.Net.Endpoints.Hosting
                 if (incomingInteractiveMessage != null && incomingInteractiveMessage.HasValues())
                 {
                     var handleResponse = await _responseHandler.RespondToSlackInteractivePayload(incomingInteractiveMessage);
-                    await context.WriteJsonResponse(200, JsonConvert.SerializeObject(handleResponse));
+                    var serializeObject = JsonConvert.SerializeObject(handleResponse);
+                    _logger.LogInformation(serializeObject);
+                    await context.WriteJsonResponse(200, serializeObject);
                 }
                 else
                 {
