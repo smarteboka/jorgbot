@@ -9,7 +9,7 @@ namespace Slackbot.Net.Core.Validations
 {
     public static class ValidationExtensions
     {
-        public static IEnumerable<ValueTuple<string, string>> ValidationErrors(this object @this)
+        internal static IEnumerable<ValueTuple<string, string>> ValidationErrors(this object @this)
         {
             var context = new ValidationContext(@this, serviceProvider: null, items: null);
             var results = new List<ValidationResult>();

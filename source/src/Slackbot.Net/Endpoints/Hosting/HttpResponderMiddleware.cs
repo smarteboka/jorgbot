@@ -22,7 +22,9 @@ namespace Slackbot.Net.Endpoints.Hosting
 
         public async Task Invoke(HttpContext context)
         {
+
             var body = await context.Request.ReadFormAsync();
+            _logger.LogInformation(JsonConvert.SerializeObject(body));
             var payload = body["payload"];
             if (string.IsNullOrEmpty(payload))
             {
