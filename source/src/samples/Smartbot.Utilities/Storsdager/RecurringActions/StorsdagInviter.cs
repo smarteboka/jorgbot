@@ -17,32 +17,27 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
         private readonly EventsStorage _eventStorage;
         private readonly InvitationsStorage _inviteStorage;
         private readonly SlackTaskClientExtensions _slackClient;
-        private readonly SlackChannels _channels;
 
         public StorsdagInviter(IOptionsSnapshot<CronOptions> options,
             ILogger<RecurringAction> logger,
             EventsStorage eventStorage,
             InvitationsStorage inviteStorage,
-            SlackTaskClientExtensions slackClient,
-            SlackChannels channels) : base(options, logger)
+            SlackTaskClientExtensions slackClient) : base(options, logger)
         {
             _eventStorage = eventStorage;
             _inviteStorage = inviteStorage;
             _slackClient = slackClient;
-            _channels = channels;
         }
 
         public StorsdagInviter(string cron,
             ILogger<RecurringAction> logger,
             EventsStorage eventStorage,
             InvitationsStorage inviteStorage,
-            SlackTaskClientExtensions slackClient,
-            SlackChannels channels) : base(cron, logger)
+            SlackTaskClientExtensions slackClient) : base(cron, logger)
         {
             _eventStorage = eventStorage;
             _inviteStorage = inviteStorage;
             _slackClient = slackClient;
-            _channels = channels;
         }
 
         public override async Task Process()
@@ -53,8 +48,11 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
                 var invitations = await _inviteStorage.GetInvitations(nextStorsdag.RowKey);
                 if (!invitations.Any())
                 {
-                    var members = await _slackClient.GetMembersOf(_channels.TestChannel);
-                    foreach (var member in members)
+                    var members = await _slackClient.GetUserListAsync();
+                    var allSlackUsers = members.members;
+                    var filtered = allSlackUsers.Where(u => !u.is_bot && !u.IsSlackBot);
+                    var beta = filtered.Where(u => u.name == "johnkors");
+                    foreach (var member in beta)
                     {
                         await Invite(member, nextStorsdag);
                     }
@@ -66,14 +64,15 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             }
         }
 
-        private async Task Invite(string member, EventEntity nextStorsdag)
+        private async Task Invite(User user, EventEntity nextStorsdag)
         {
             var invite = new InvitationsEntity(Guid.NewGuid())
             {
                 EventId = nextStorsdag.RowKey,
                 EventTime = nextStorsdag.EventTime,
                 EventTopic = nextStorsdag.Topic,
-                SlackUserId = member,
+                SlackUsername = user.name,
+                SlackUserId = user.id,
                 Rsvp = RsvpValues.Invited
             };
             await _inviteStorage.Save(invite);
@@ -81,11 +80,11 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
 
             if(inviteSentOk)
             {
-                Logger.LogInformation($"Sent invite {nextStorsdag.Topic} to {member}");
+                Logger.LogInformation($"Sent invite {nextStorsdag.Topic} to {user.name}");
             }
             else
             {
-                Logger.LogError($"Could not send invite {nextStorsdag.Topic} to {member}");
+                Logger.LogError($"Could not send invite {nextStorsdag.Topic} to {user.name}");
             }
         }
 
@@ -108,6 +107,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
                 Message = invitationEntity.EventTopic,
                 Recipient = invitationEntity.SlackUserId,
                 Botname = "smartbot",
+                Image = "https://placebeer.com/500/500",
                 Options = new[]
                 {
                     new QuestionOption

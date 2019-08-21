@@ -30,6 +30,12 @@ namespace Smartbot.Utilities.Storage.Events
             set;
         }
 
+        public string SlackUsername
+        {
+            get;
+            set;
+        }
+
         public string SlackUserId
         {
             get;
@@ -47,5 +53,7 @@ namespace Smartbot.Utilities.Storage.Events
             get;
             set;
         }
+
+
     }
 }

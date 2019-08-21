@@ -34,5 +34,11 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
             get;
             set;
         }
+
+        public string Image
+        {
+            get;
+            set;
+        }
     }
 }

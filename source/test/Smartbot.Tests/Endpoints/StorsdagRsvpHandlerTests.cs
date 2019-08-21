@@ -18,7 +18,7 @@ namespace Smartbot.Tests.Endpoints
             A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
 
             var mockStorage = A.Fake<IInvitationsStorage>();
-            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var responseHandler = new EventRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
             var deltarMessage = IncomingWith(RsvpValues.Attending);
             var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
             Assert.Equal(RsvpValues.Attending,(res as RsvpResult).Rsvp);
@@ -31,7 +31,7 @@ namespace Smartbot.Tests.Endpoints
             A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
             var mockStorage = A.Fake<IInvitationsStorage>();
 
-            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var responseHandler = new EventRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
             var deltarMessage = IncomingWith(RsvpValues.Maybe);
             var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
             Assert.Equal(RsvpValues.Maybe,(res as RsvpResult).Rsvp);
@@ -44,7 +44,7 @@ namespace Smartbot.Tests.Endpoints
             A.CallTo(() => mockResponder.Respond(A<string>._, A<string>._)).Returns(new RespondResult { Success = true });
             var mockStorage = A.Fake<IInvitationsStorage>();
 
-            var responseHandler = new StorsdagRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
+            var responseHandler = new EventRsvpResponseHandler(new DummyLogger(), mockResponder, mockStorage);
             var deltarMessage = IncomingWith(RsvpValues.NotAttending);
             var res = await responseHandler.RespondToSlackInteractivePayload(deltarMessage);
             Assert.Equal(RsvpValues.NotAttending,(res as RsvpResult).Rsvp);
@@ -68,7 +68,7 @@ namespace Smartbot.Tests.Endpoints
         }
     }
 
-    internal class DummyLogger : ILogger<StorsdagRsvpResponseHandler>
+    internal class DummyLogger : ILogger<EventRsvpResponseHandler>
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {

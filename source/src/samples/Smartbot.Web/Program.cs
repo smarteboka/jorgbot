@@ -42,7 +42,7 @@ namespace Smartbot.Web
                         })
                         .AddRecurring<HerokuFreeTierKeepAlive>();
                     services.AddSlackbotEndpoints()
-                        .AddEndpointHandler<StorsdagRsvpResponseHandler>();
+                        .AddEndpointHandler<EventRsvpResponseHandler>();
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {

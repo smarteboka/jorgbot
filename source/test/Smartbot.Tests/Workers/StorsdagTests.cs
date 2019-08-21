@@ -112,16 +112,14 @@ namespace Smartbot.Tests.Workers
         }
 
         [Fact]
-        public async Task SendsInvitesToAllMembersOfChannel()
+        public async Task SendsInvites()
         {
-            var env = A.Fake<IHostingEnvironment>();
             var logger = A.Fake<ILogger<StorsdagInviter>>();
-            var channels = new SlackChannels(env, A.Fake<ILogger<SlackChannels>>());
             var client = SlackClient();
             var eventsStorage = EventsStorage();
             var dontCareCron = "* * * * *";
             var invitationsStorage = InvitationsStorage();
-            var inviter = new StorsdagInviter(dontCareCron,logger,eventsStorage, invitationsStorage, client, channels);
+            var inviter = new StorsdagInviter(dontCareCron,logger,eventsStorage, invitationsStorage, client);
             await inviter.Process();
         }
 

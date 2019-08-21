@@ -226,6 +226,13 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
                     type = TextTypes.PlainText
                 }
             };
+            yield return new Block
+            {
+                type = BlockTypes.Image,
+                alt_text = "øl",
+                image_url = question.Image
+            };
+
             var optionsBlock = new Block()
             {
                 type = BlockTypes.Actions,
