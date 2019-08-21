@@ -46,7 +46,8 @@ namespace Smartbot
                         .AddHandler<StorsdagerHandler>()
                         .AddHandler<FourSquareHandler>()
                         .AddHandler<OldHandler>()
-                        .AddHandler<UrlsSaveHandler>();
+                        .AddHandler<UrlsSaveHandler>()
+                        .AddHandler<RandomSmartingHandler>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>
