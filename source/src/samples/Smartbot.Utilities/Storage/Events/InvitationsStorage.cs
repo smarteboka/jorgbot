@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
@@ -37,13 +38,14 @@ namespace Smartbot.Utilities.Storage.Events
             return invite;
         }
 
-        public async Task<InvitationsEntity> Update(string inviteId, string rsvp)
+        public async Task<InvitationsEntity> Update(string inviteId, string rsvp, DateTimeOffset? rsvpTime = null)
         {
             var toBeReplaced = await GetById(inviteId);
 
             try
             {
                 toBeReplaced.Rsvp = rsvp;
+                toBeReplaced.RsvpTime = rsvpTime ?? DateTimeOffset.UtcNow;
                 var replace = TableOperation.Replace(toBeReplaced);
                 var result = await _invitationsTable.ExecuteAsync(replace);
                 toBeReplaced = result.Result as InvitationsEntity;

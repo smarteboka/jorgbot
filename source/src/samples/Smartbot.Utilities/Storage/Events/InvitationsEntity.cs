@@ -48,6 +48,12 @@ namespace Smartbot.Utilities.Storage.Events
             set;
         }
 
+        public DateTimeOffset? RsvpTime
+        {
+            get;
+            set;
+        }
+
         public string EventId
         {
             get;
