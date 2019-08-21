@@ -107,7 +107,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
                 Message = invitationEntity.EventTopic,
                 Recipient = invitationEntity.SlackUserId,
                 Botname = "smartbot",
-                Image = "https://placebeer.com/500/500",
+                Image = "https://placebeer.com/300/150",
                 Options = new[]
                 {
                     new QuestionOption
