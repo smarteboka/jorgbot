@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SlackAPI;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Workers;
+using SlackConnector.Models;
 using Smartbot.Utilities;
+using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 using Xunit;
@@ -114,13 +118,39 @@ namespace Smartbot.Tests.Workers
         [Fact]
         public async Task SendsInvites()
         {
+            var inviter = StorsdagInviter();
+            await inviter.Process();
+        }
+
+        private StorsdagInviter StorsdagInviter(SlackTaskClientExtensions anotherClient = null)
+        {
             var logger = A.Fake<ILogger<StorsdagInviter>>();
-            var client = SlackClient();
+            var client = anotherClient ?? SlackClient();
             var eventsStorage = EventsStorage();
             var dontCareCron = "* * * * *";
             var invitationsStorage = InvitationsStorage();
-            var inviter = new StorsdagInviter(dontCareCron,logger,eventsStorage, invitationsStorage, client);
-            await inviter.Process();
+            var inviter = new StorsdagInviter(dontCareCron, logger, eventsStorage, invitationsStorage, client);
+            return inviter;
+        }
+
+        [Fact]
+        public async Task Reminder()
+        {
+            var slackClient = SlackClient();
+            var eventStorage = EventsStorage();
+            var nextStorsdag = await eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
+            var inviteStorage = InvitationsStorage();
+            var invitations = await inviteStorage.GetInvitations(nextStorsdag.RowKey);
+//            var unanswered = invitations.Where(i => i.Rsvp == RsvpValues.Invited);
+//            Assert.NotEmpty(unanswered);
+//            Assert.Equal(3, unanswered.Count());
+
+//            var inviter = StorsdagInviter(slackClient);
+//            foreach (var invite in unanswered)
+//            {
+//                var res = await slackClient.PostMessageAsync(invite.SlackUserId, "Hei, hørte ikke noe fra deg angående storsdag! :/ ", as_user:true);
+//                await inviter.SendInviteInSlackDM(invite);
+//            }
         }
 
         public SlackTaskClientExtensions SlackClient()

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Slackbot.Net;
+using Slackbot.Net.Core.Utilities;
 using Slackbot.Net.Workers;
 
 namespace Smartbot.Utilities
@@ -30,7 +31,14 @@ namespace Smartbot.Utilities
         public Smartinger()
         {
             _timing = new Timing();
-            _timing.SetTimeZone("Europe/Oslo");
+            if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+            {
+                _timing.SetTimeZone("Europe/Oslo");
+            }
+            else
+            {
+                _timing.SetTimeZone("Central European Standard Time");
+            }
         }
 
         public IEnumerable<Smarting> ThatHasBirthday()

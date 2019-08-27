@@ -9,6 +9,7 @@ using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Publishers;
 using SlackConnector.Models;
 using Smartbot.Utilities.RecurringActions;
+using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot.Utilities.Handlers
@@ -16,27 +17,41 @@ namespace Smartbot.Utilities.Handlers
     public class NesteStorsdagHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
+        private readonly EventsStorage _eventStorage;
+        private readonly InvitationsStorage _inviteStorage;
 
 
-        public NesteStorsdagHandler(IEnumerable<IPublisher> publishers)
+        public NesteStorsdagHandler(IEnumerable<IPublisher> publishers, EventsStorage eventStorage, InvitationsStorage inviteStorage)
         {
             _publishers = publishers;
+            _eventStorage = eventStorage;
+            _inviteStorage = inviteStorage;
         }
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var upcomingEvents = Timing.GetNextOccurences(StorsdagReminder.LastThursdayOfMonthCron);
-            var nextStorsdag = upcomingEvents.FirstOrDefault();
+            var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
+            var invitations = await _inviteStorage.GetInvitations(nextStorsdag.RowKey);
+
+            var rapport = nextStorsdag.Topic;
+            foreach (var inviteGroup in invitations.GroupBy(i => i.Rsvp))
+            {
+                string names = inviteGroup.Select(i => i.SlackUsername).Aggregate((x, y) => x + ", " + y);
+                rapport += $"\n• `{inviteGroup.Key}` : {names}";
+            }
+
             var culture = new CultureInfo("nb-NO");
             foreach (var publisher in _publishers)
             {
                 var notification = new Notification
                 {
-                    Msg = $"Neste storsdag er {nextStorsdag.Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture)}",
+                    Msg = rapport,
                     Recipient = message.ChatHub.Id
                 };
                 await publisher.Publish(notification);
             }
+
+
             return new HandleResponse("OK");
         }
 

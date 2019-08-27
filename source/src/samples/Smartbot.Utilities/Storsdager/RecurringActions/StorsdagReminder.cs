@@ -29,7 +29,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             {
                 var notification = new Notification
                 {
-                    Msg = $"Storsdags inc! Med? :+1: / :-1: ?",
+                    Msg = $"Storsdag!",
                     Recipient = _channels.SmartebokaChannel
                 };
                 await publisher.Publish(notification);
