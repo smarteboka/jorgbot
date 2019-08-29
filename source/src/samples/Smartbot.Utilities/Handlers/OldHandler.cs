@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,11 @@ namespace Smartbot.Utilities.Handlers
             _logger = logger;
             _slackClient = slackClient;
         }
+
+        public bool ShouldShowInHelp => false;
+
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("<alt>", "Sjekker delte lenker for oldness");
 
         public async Task<HandleResponse> Handle(SlackMessage incomingMessage)
         {

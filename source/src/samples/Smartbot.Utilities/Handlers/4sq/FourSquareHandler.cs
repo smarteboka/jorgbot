@@ -34,6 +34,11 @@ namespace Smartbot.Utilities.Handlers._4sq
             _logger = logger;
         }
 
+        public bool ShouldShowInHelp => true;
+
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("4sq <search>", "Søker i FourSquare etter <search> i Oslo");
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var matchingCategory = Categories.FirstOrDefault(c => message.Text.Contains(c, StringComparison.InvariantCultureIgnoreCase));

@@ -20,6 +20,10 @@ namespace Smartbot.Utilities.Handlers
             _client = client;
         }
 
+        public bool ShouldShowInHelp => false;
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("<all>", "Lagrer unna lenker");
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var urls = RegexHelper.FindUrls(message.Text);

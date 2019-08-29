@@ -22,6 +22,11 @@ namespace Smartbot.Utilities.Handlers
             _publishers = publishers;
         }
 
+        public bool ShouldShowInHelp => true;
+
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("storsdager", "Viser kommende storsdager");
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var upcomingEvents = Timing.GetNextOccurences(StorsdagReminder.LastThursdayOfMonthCron);

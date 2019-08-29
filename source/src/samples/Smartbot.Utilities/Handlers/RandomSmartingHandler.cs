@@ -19,6 +19,11 @@ namespace Smartbot.Utilities.Handlers
             _publishers = publishers;
         }
 
+        public bool ShouldShowInHelp => true;
+
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("random, tilfeldig", "Gir deg en tilfeldig smarting");
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var index = new Random().Next(_smartinger.Smartingene.Count);

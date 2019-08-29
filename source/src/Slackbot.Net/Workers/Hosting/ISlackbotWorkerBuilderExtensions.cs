@@ -54,12 +54,13 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        internal static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
+        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
             builder.Services.AddSingleton<SlackTaskClientExtensions>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
+            builder.Services.AddSingleton<HelpHandler>();
         }
     }
 }

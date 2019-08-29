@@ -28,6 +28,11 @@ namespace Smartbot.Utilities.Handlers
             _inviteStorage = inviteStorage;
         }
 
+        public bool ShouldShowInHelp => true;
+
+
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("neste storsdag", "Viser litt info om neste storsdag");
+
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);

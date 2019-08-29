@@ -15,6 +15,7 @@ namespace Slackbot.Net.Workers
         private readonly ISlackConnector _slackConnector;
         private readonly ILogger<SlackConnectorHostedService> _logger;
         private readonly HandlerSelector _handlerSelector;
+        private readonly HelpHandler _helpHandler;
         private readonly SlackOptions _config;
         private ISlackConnection _connection;
         private bool _connected;
@@ -22,11 +23,12 @@ namespace Slackbot.Net.Workers
         public SlackConnectorHostedService(ISlackConnector slackConnector,
             IOptions<SlackOptions> options,
             ILogger<SlackConnectorHostedService> logger,
-            HandlerSelector handlerSelector)
+            HandlerSelector handlerSelector, HelpHandler helpHandler)
         {
             _slackConnector = slackConnector;
             _logger = logger;
             _handlerSelector = handlerSelector;
+            _helpHandler = helpHandler;
             _config = options.Value;
         }
 
@@ -53,6 +55,12 @@ namespace Slackbot.Net.Workers
 
         private async Task HandleIncomingMessage(SlackMessage message)
         {
+            if (_helpHandler.ShouldHandle(message))
+            {
+                await _helpHandler.Handle(message);
+                return;
+            }
+
             var handlers = _handlerSelector.SelectHandler(message);
             foreach (var handler in handlers)
             {
