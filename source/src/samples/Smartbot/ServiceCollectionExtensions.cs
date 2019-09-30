@@ -5,6 +5,7 @@ using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storage.SlackUrls;
+using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot
 {
@@ -22,6 +23,8 @@ namespace Smartbot
 
             services.AddSingleton<EventsStorage>();
             services.AddSingleton<InvitationsStorage>();
+
+            services.AddSingleton<StorsdagInviter>();
             return services;
         }
     }

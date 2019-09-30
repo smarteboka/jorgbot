@@ -1,46 +1,32 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SlackAPI;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
-using Slackbot.Net.Workers;
-using Slackbot.Net.Workers.Configuration;
 using Smartbot.Utilities.Storage.Events;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
-    public class StorsdagInviter : RecurringAction
+    public class StorsdagInviter
     {
+
         private readonly EventsStorage _eventStorage;
         private readonly InvitationsStorage _inviteStorage;
         private readonly SlackTaskClientExtensions _slackClient;
+        private readonly ILogger<StorsdagInviter> _logger;
 
-        public StorsdagInviter(IOptionsSnapshot<CronOptions> options,
-            ILogger<RecurringAction> logger,
-            EventsStorage eventStorage,
-            InvitationsStorage inviteStorage,
-            SlackTaskClientExtensions slackClient) : base(options, logger)
+        public StorsdagInviter(EventsStorage eventStorage, InvitationsStorage inviteStorage, SlackTaskClientExtensions slackClient, ILogger<StorsdagInviter> logger)
         {
             _eventStorage = eventStorage;
             _inviteStorage = inviteStorage;
             _slackClient = slackClient;
+            _logger = logger;
         }
 
-        public StorsdagInviter(string cron,
-            ILogger<RecurringAction> logger,
-            EventsStorage eventStorage,
-            InvitationsStorage inviteStorage,
-            SlackTaskClientExtensions slackClient) : base(cron, logger)
-        {
-            _eventStorage = eventStorage;
-            _inviteStorage = inviteStorage;
-            _slackClient = slackClient;
-        }
-
-        public override async Task Process()
+        public async Task InviteNextStorsdag()
         {
             var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
             if (nextStorsdag != null)
@@ -60,8 +46,23 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             }
             else
             {
-                Logger.LogWarning($"No events found.");
+                _logger.LogWarning($"No events found.");
             }
+        }
+
+        public async Task<IEnumerable<InvitationsEntity>> SendRemindersToUnanswered()
+        {
+            var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
+            var invitations = await _inviteStorage.GetInvitations(nextStorsdag.RowKey);
+            var unanswered = invitations.Where(i => i.Rsvp == RsvpValues.Invited);
+            foreach (var invite in unanswered)
+            {
+                _logger.LogInformation($"Reminding {invite.SlackUsername} about {invite.EventTopic}");
+                //var res = await _slackClient.PostMessageAsync(invite.SlackUserId, "Hei, hørte ikke noe fra deg angående storsdag! :/ ", as_user:true);
+                //await SendInviteInSlackDM(invite);
+            }
+
+            return unanswered;
         }
 
         private async Task Invite(User user, EventEntity nextStorsdag)
@@ -80,11 +81,11 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
 
             if(inviteSentOk)
             {
-                Logger.LogInformation($"Sent invite {nextStorsdag.Topic} to {user.name}");
+                _logger.LogInformation($"Sent invite {nextStorsdag.Topic} to {user.name}");
             }
             else
             {
-                Logger.LogError($"Could not send invite {nextStorsdag.Topic} to {user.name}");
+                _logger.LogError($"Could not send invite {nextStorsdag.Topic} to {user.name}");
             }
         }
 

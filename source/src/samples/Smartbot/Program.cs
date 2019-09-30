@@ -42,14 +42,15 @@ namespace Smartbot
                         .AddRecurring<HappyBirthday>(c => c.Cron = Crons.EveryDayAtEight)
                         .AddRecurring<HeartBeater>(c => c.Cron = Crons.EveryDayAtSeven55)
                         .AddRecurring<StorsdagMention>(c => c.Cron = Crons.LastThursdayOfMonthCron)
-                        .AddRecurring<StorsdagInviter>(c => c.Cron = Crons.ThirdSaturdayOfMonth)
+                        .AddRecurring<StorsdagInvitationRecurrer>(c => c.Cron = Crons.ThirdSaturdayOfMonth)
 
                         .AddHandler<NesteStorsdagHandler>()
                         .AddHandler<StorsdagerHandler>()
                         .AddHandler<FourSquareHandler>()
                         .AddHandler<OldHandler>()
                         .AddHandler<UrlsSaveHandler>()
-                        .AddHandler<RandomSmartingHandler>();
+                        .AddHandler<RandomSmartingHandler>()
+                        .AddHandler<RsvpReminder>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>
