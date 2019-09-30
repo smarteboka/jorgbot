@@ -10,12 +10,12 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
     {
         private readonly StorsdagInviter _inviter;
 
-        public StorsdagInvitationRecurrer(IOptionsSnapshot<CronOptions> options, StorsdagInviter inviter, ILogger<RecurringAction> logger): base(options, logger)
+        public StorsdagInvitationRecurrer(IOptionsSnapshot<CronOptions> options, StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(options, logger)
         {
             _inviter = inviter;
         }
 
-        public StorsdagInvitationRecurrer(string cron, StorsdagInviter inviter, ILogger<RecurringAction> logger): base(cron, logger)
+        public StorsdagInvitationRecurrer(string cron, StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(cron, logger)
         {
             _inviter = inviter;
         }
