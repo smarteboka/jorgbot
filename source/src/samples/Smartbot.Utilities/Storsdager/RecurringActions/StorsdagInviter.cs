@@ -51,7 +51,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
                     var members = await _slackClient.GetUserListAsync();
                     var allSlackUsers = members.members;
                     var filtered = allSlackUsers.Where(u => !u.is_bot && !u.IsSlackBot);
-                    filtered = filtered.Where(u => u.name == "johnkors");
+                    //filtered = filtered.Where(u => u.name == "johnkors");
                     foreach (var member in filtered)
                     {
                         await Invite(member, nextStorsdag);

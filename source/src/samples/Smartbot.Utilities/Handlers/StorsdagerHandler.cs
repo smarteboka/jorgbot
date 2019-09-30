@@ -29,7 +29,7 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var upcomingEvents = Timing.GetNextOccurences(StorsdagReminder.LastThursdayOfMonthCron);
+            var upcomingEvents = Timing.GetNextOccurences(Crons.LastThursdayOfMonthCron);
             var culture = new CultureInfo("nb-NO");
             var uText = upcomingEvents.Select(u => $"{u.Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture)}");
             var aggr = $"{uText.Aggregate((x, y) => x + "\n" + y)}";

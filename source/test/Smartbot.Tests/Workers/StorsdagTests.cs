@@ -15,16 +15,24 @@ using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Smartbot.Tests.Workers
 {
     public class StorsdagTests
     {
+        private readonly ITestOutputHelper _output;
+
+        public StorsdagTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact(Skip = "Already seeded")]
         public async Task SeedStorsdager()
         {
             var eventStorage = EventsStorage();
-            var nesteStorsdager = Timing.GetNextOccurences(StorsdagReminder.LastThursdayOfMonthCron, 12);
+            var nesteStorsdager = Timing.GetNextOccurences(Crons.LastThursdayOfMonthCron, 12);
             var culture = new CultureInfo("nb-NO");
 
             foreach (var storsdagDate in nesteStorsdager)
@@ -41,6 +49,21 @@ namespace Smartbot.Tests.Workers
             var fetched = await eventStorage.GetEventsInRange(EventTypes.StorsdagEventType, knownStorsdag, knownStorsdag.AddDays(1));
             Assert.NotEmpty(fetched);
             Assert.Single(fetched);
+        }
+
+        [Fact]
+        public void GetFutureInviteDates()
+        {
+            var nesteStorsdager = Timing.GetNextOccurences(Crons.LastThursdayOfMonthCron, 12).ToArray();
+
+            var inviteDates = Timing.GetNextOccurences(Crons.ThirdSaturdayOfMonth, 12).ToArray();
+
+            for (var i = 0; i < 12; i++)
+            {
+                var stors = nesteStorsdager[i];
+                var inviteDay = inviteDates[i];
+                _output.WriteLine($"{stors.Day - inviteDay.Day} days before stors. Storsdag {stors}. Invite {inviteDay}");
+            }
         }
 
         [Fact]
