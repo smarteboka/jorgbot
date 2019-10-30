@@ -1,6 +1,6 @@
 # Smartbot Deployment
 
-Running the app i Heroku using containers:
+## Running the app i Heroku using containers:
 
 * Create an app in Heroku
 * Either setup a GitHub integration or use the Heroku Git integration
