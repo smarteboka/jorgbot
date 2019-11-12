@@ -75,12 +75,12 @@ namespace Slackbot.Net.Workers
             }
         }
 
-        public override Task StopAsync(CancellationToken token)
+        public override async Task StopAsync(CancellationToken token)
         {
             _logger.LogInformation("Closing");
-             _connection.Close().GetAwaiter().GetResult();
+            await _connection.Close();
             _logger.LogInformation("Closed");
-            return base.StopAsync(token);
+            await base.StopAsync(token);
         }
     }
 }
