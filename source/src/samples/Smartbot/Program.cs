@@ -50,7 +50,8 @@ namespace Smartbot
                         .AddHandler<OldHandler>()
                         .AddHandler<UrlsSaveHandler>()
                         .AddHandler<RandomSmartingHandler>()
-                        .AddHandler<RsvpReminder>();
+                        .AddHandler<RsvpReminder>()
+                        .AddHandler<FplHandler>();
 
                 })
                 .ConfigureLogging((context, configLogging) =>
