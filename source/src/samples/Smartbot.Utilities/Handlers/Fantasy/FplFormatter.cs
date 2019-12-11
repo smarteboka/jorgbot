@@ -46,7 +46,7 @@ namespace Smartbot.Utilities.Handlers
 
             if (player.Rank == numPlayers)
             {
-                emojiString.Append(":rip:");
+                emojiString.Append(":eyes:");
             }
 
             return emojiString.ToString();
