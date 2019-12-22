@@ -26,7 +26,6 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            
             var standings = await GetStandings();
 
             foreach (var p in _publishers)
