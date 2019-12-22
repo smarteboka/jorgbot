@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Fpl.Client;
 using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Publishers;
-using SlackConnector;
 using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers
@@ -13,13 +12,11 @@ namespace Smartbot.Utilities.Handlers
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly IFplClient _fplClient;
-        private readonly ISlackConnection _connection;
 
-        public FplHandler(IEnumerable<IPublisher> publishers, IFplClient fplClient, ISlackConnection connection)
+        public FplHandler(IEnumerable<IPublisher> publishers, IFplClient fplClient)
         {
             _publishers = publishers;
             _fplClient = fplClient;
-            _connection = connection;
         }
 
         public Tuple<string, string> GetHelpDescription()
@@ -42,7 +39,6 @@ namespace Smartbot.Utilities.Handlers
 
         private async Task<string> GetStandings()
         {
-            return $"{_connection.Self.Id}{_connection.Self.Name}";
             try
             {
                 var scoreboard = await _fplClient.GetScoreBoard("89903");
