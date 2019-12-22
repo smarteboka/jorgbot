@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -6,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector;
-using SlackConnector.Models;
 
 namespace Slackbot.Net.Workers
 {
@@ -20,59 +18,43 @@ namespace Slackbot.Net.Workers
         private ISlackConnection _connection;
         private bool _connected;
 
-        public SlackConnectorHostedService(ISlackConnector slackConnector,
-            IOptions<SlackOptions> options,
-            ILogger<SlackConnectorHostedService> logger,
-            HandlerSelector handlerSelector, HelpHandler helpHandler)
+        // public SlackConnectorHostedService(ISlackConnector slackConnector,
+        //     IOptions<SlackOptions> options,
+        //     ILogger<SlackConnectorHostedService> logger,
+        //     HandlerSelector handlerSelector)
+        // {
+        //     _slackConnector = slackConnector;
+        //     _logger = logger;
+        //     _handlerSelector = handlerSelector;
+        //     _config = options.Value;
+        // }
+
+        public SlackConnectorHostedService(ISlackConnection connection)
         {
-            _slackConnector = slackConnector;
-            _logger = logger;
-            _handlerSelector = handlerSelector;
-            _helpHandler = helpHandler;
-            _config = options.Value;
+            _connection = connection;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested && !_connected)
-            {
-                _logger.LogInformation("Connecting");
-                _connection = await _slackConnector.Connect(_config.Slackbot_SlackApiKey_BotUser);
-                _connection.OnMessageReceived += HandleIncomingMessage;
-
-                _connection.OnDisconnect += () =>
-                {
-                    _connected = false;
-                    _logger.LogInformation("Disconnecting");
-                };
-                if (_connection.IsConnected)
-                {
-                    _logger.LogInformation("Connected");
-                    _connected = true;
-                }
-            }
-        }
-
-        private async Task HandleIncomingMessage(SlackMessage message)
-        {
-            if (_helpHandler.ShouldHandle(message))
-            {
-                await _helpHandler.Handle(message);
-                return;
-            }
-
-            var handlers = _handlerSelector.SelectHandler(message);
-            foreach (var handler in handlers)
-            {
-                try
-                {
-                    await handler.Handle(message);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, e.Message);
-                }
-            }
+             
+            // _connection = await _slackConnector.Connect(_config.Slackbot_SlackApiKey_BotUser);
+            // _connection.OnMessageReceived += _handlerSelector.HandleIncomingMessage;
+            //
+            // _connection.OnDisconnect += () =>
+            // {
+            //     _connected = false;
+            //     _logger.LogInformation("Disconnecting");
+            // };
+            // if (_connection.IsConnected)
+            // {
+            //     _logger.LogInformation("Connected");
+            //     _connected = true;
+            // }
+            //
+            // while (!stoppingToken.IsCancellationRequested && !_connected)
+            // {
+            //
+            // }
         }
 
         public override async Task StopAsync(CancellationToken token)

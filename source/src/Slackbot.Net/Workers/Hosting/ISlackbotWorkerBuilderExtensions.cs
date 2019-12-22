@@ -1,5 +1,7 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Validations;
 using Slackbot.Net.Workers;
@@ -56,11 +58,27 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
         {
-            builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
+            builder.Services.AddSingleton<ISlackConnection>(ImplementationFactory);
+            
             builder.Services.AddSingleton<SlackTaskClientExtensions>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
             builder.Services.AddSingleton<HelpHandler>();
         }
+
+        private static ISlackConnection ImplementationFactory(IServiceProvider s)
+        {
+            var options = s.GetService<IOptions<SlackOptions>>();
+            var logger = s.GetService<ILogger<SlackConnector.SlackConnector>>();
+            var slackConnector = new SlackConnector.SlackConnector();
+            var handlerSelector = s.GetService<HandlerSelector>();
+            var connection = slackConnector.Connect(options.Value.Slackbot_SlackApiKey_BotUser).GetAwaiter().GetResult();
+            connection.OnMessageReceived += handlerSelector.HandleIncomingMessage;
+            if (connection.IsConnected)
+                logger.LogInformation("Connected");
+
+            return connection;
+        }
+
     }
 }
