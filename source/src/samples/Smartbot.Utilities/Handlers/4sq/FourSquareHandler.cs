@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Workers.Connections;
 using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Publishers;
 using SlackConnector.Models;
@@ -17,6 +18,7 @@ namespace Smartbot.Utilities.Handlers._4sq
         private readonly FourSquareService _foursquare;
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly ILogger<FourSquareHandler> _logger;
+        private readonly BotDetails _botDetails;
 
         private List<string> Categories = new List<string>
         {
@@ -27,11 +29,12 @@ namespace Smartbot.Utilities.Handlers._4sq
             "topPicks"
         };
 
-        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger)
+        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger, BotDetails botDetails)
         {
             _foursquare = foursquare;
             _publishers = publishers;
             _logger = logger;
+            _botDetails = botDetails;
         }
 
         public bool ShouldShowInHelp => true;
@@ -51,7 +54,7 @@ namespace Smartbot.Utilities.Handlers._4sq
             }
             else
             {
-                var messageText = message.Text.Replace("<@UGWC87WRZ> 4sq ", "");
+                var messageText = message.Text.Replace($"<@{_botDetails.Id}> 4sq ", "");
                 _logger.LogInformation($"Searching by query {messageText}");
                 var osloVenuesByQuery = _foursquare.GetOsloVenuesByQuery(messageText);
                 venueExplores = new List<VenueExplore>(osloVenuesByQuery);
@@ -81,7 +84,7 @@ namespace Smartbot.Utilities.Handlers._4sq
 
         public bool ShouldHandle(SlackMessage message)
         {
-            var execute = message.Text.StartsWith("<@UGWC87WRZ> 4sq", StringComparison.InvariantCultureIgnoreCase);
+            var execute = message.Text.StartsWith($"<@{_botDetails.Id}> 4sq", StringComparison.InvariantCultureIgnoreCase);
             return execute;
         }
     }

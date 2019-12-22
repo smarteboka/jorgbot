@@ -4,10 +4,10 @@ using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Validations;
 using Slackbot.Net.Workers;
 using Slackbot.Net.Workers.Configuration;
+using Slackbot.Net.Workers.Connections;
 using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Hosting;
 using Slackbot.Net.Workers.Publishers;
-using SlackConnector;
 
 // namespace on purpose:
 namespace Microsoft.Extensions.DependencyInjection
@@ -56,11 +56,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
         {
-            builder.Services.AddSingleton<ISlackConnector, SlackConnector.SlackConnector>();
+            builder.Services.AddSingleton<SlackConnectionSetup>();
+            builder.Services.AddSingleton(s =>
+            {
+                var connection = s.GetService<SlackConnectionSetup>().Connection.Self;
+                return new BotDetails
+                {
+                    Id = connection.Id,
+                    Name = connection.Name
+                };
+            });
             builder.Services.AddSingleton<SlackTaskClientExtensions>();
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
-            builder.Services.AddSingleton<HelpHandler>();
         }
     }
 }
