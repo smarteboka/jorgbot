@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Slackbot.Net.Workers.Handlers
 {
-    public class HelpHandler
+    internal class HelpHandler
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly IEnumerable<IHandleMessages> _handlers;
