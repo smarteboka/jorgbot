@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using SlackAPI;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
 using Slackbot.Net.Core.Utilities;
+using Slackbot.Net.Core.Validations;
 using Slackbot.Net.Workers;
 using SearchSort = SlackAPI.SearchSort;
 using SearchSortDirection = SlackAPI.SearchSortDirection;
@@ -24,18 +25,18 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
         /// Need a seperate bottoken when using the reactions API,
         /// or else the app will post reactions as the user installing the app :/
         /// </summary>
-        protected readonly string UserToken;
-        protected readonly string AppToken;
+        protected readonly string BotToken;
+        protected readonly string AppUserToken;
 
         public SlackTaskClientExtensions(IOptions<SlackOptions> slackOptions) : this(slackOptions.Value.Slackbot_SlackApiKey_SlackApp, slackOptions.Value.Slackbot_SlackApiKey_BotUser)
         {
 
         }
 
-        public SlackTaskClientExtensions(string appToken, string userToken) : base(appToken)
+        public SlackTaskClientExtensions(string appUserToken, string botToken) : base(botToken)
         {
-            UserToken = userToken;
-            AppToken = appToken;
+            BotToken = botToken;
+            AppUserToken = appUserToken;
         }
 
         /// <summary>
@@ -48,6 +49,9 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
         /// </summary>
         public new virtual Task<Models.SearchResponseMessages> SearchMessagesAsync(string query, SearchSort? sorting = null, SearchSortDirection? direction = null, bool enableHighlights = false, int? count = null, int? page = null)
         {
+            if(string.IsNullOrEmpty(AppUserToken))
+                throw new ConfigurationException($"To search messages, set a OAuth user token: {nameof(SlackOptions.Slackbot_SlackApiKey_SlackApp)}");
+            
             var parameters = new List<Tuple<string, string>>();
             parameters.Add(new Tuple<string, string>("query", query));
 
@@ -65,8 +69,10 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
 
             if (page.HasValue)
                 parameters.Add(new Tuple<string, string>("page", page.Value.ToString()));
+            
+            parameters.Add(new Tuple<string, string>("token", AppUserToken));
 
-            return APIRequestWithTokenAsync<SlackAPIExtensions.Models.SearchResponseMessages>(parameters.ToArray());
+            return APIRequestAsync<SlackAPIExtensions.Models.SearchResponseMessages>(parameters.ToArray(), null);
         }
 
         /// <summary>
@@ -133,7 +139,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
 
             // Addition to SlackAPI.
             // Necessary for sending a DM as the botuser
-            parameters.Add(new Tuple<string, string>("token", UserToken));
+            parameters.Add(new Tuple<string, string>("token", BotToken));
 
             return APIRequestWithTokenAsync<PostMessageResponse>(parameters.ToArray());
         }
@@ -155,7 +161,7 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
             var stuff = await formUrlEncodedContent.ReadAsStringAsync();
             var httpContent = new StringContent(stuff, Encoding.UTF8, "application/x-www-form-urlencoded");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/chat.getPermalink");
-            request.Headers.Add("Authorization", $"Bearer {AppToken}");
+            request.Headers.Add("Authorization", $"Bearer {BotToken}");
             request.Content = httpContent;
             var response =  await httpClient.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
@@ -181,30 +187,12 @@ namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions
 
             var httpContent = new StringContent(stringContent, Encoding.UTF8, "application/json");
             var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/reactions.add");
-            request.Headers.Add("Authorization", $"Bearer {UserToken}");
+            request.Headers.Add("Authorization", $"Bearer {BotToken}");
             request.Content = httpContent;
             var res = await httpClient.SendAsync(request);
             var content = await res.Content.ReadAsStringAsync();
             var reactionAdded = JsonConvert.DeserializeObject<ReactionAddedResponse>(content);
             return reactionAdded;
-        }
-
-        public async Task<IEnumerable<string>> GetMembersOf(string channel)
-        {
-            var httpClient = new HttpClient();
-            var formUrlEncodedContent = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("channel", channel),
-            });
-            var stuff = await formUrlEncodedContent.ReadAsStringAsync();
-            var httpContent = new StringContent(stuff, Encoding.UTF8, "application/x-www-form-urlencoded");
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://slack.com/api/conversations.members");
-            request.Headers.Add("Authorization", $"Bearer {AppToken}");
-            request.Content = httpContent;
-            var response =  await httpClient.SendAsync(request);
-            var content = await response.Content.ReadAsStringAsync();
-            var membersResponse = JsonConvert.DeserializeObject<MembersResponse>(content);
-            return membersResponse.members;
         }
 
         /// <summary>

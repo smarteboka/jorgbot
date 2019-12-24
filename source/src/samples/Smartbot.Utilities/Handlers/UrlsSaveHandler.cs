@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
 using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.SlackUrls;
+using ILogger = SlackConnector.Logging.ILogger;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -13,11 +15,13 @@ namespace Smartbot.Utilities.Handlers
     {
         private readonly SlackMessagesStorage _storage;
         private readonly SlackTaskClientExtensions _client;
+        private readonly ILogger<UrlsSaveHandler> _logger;
 
-        public UrlsSaveHandler(SlackMessagesStorage storage, SlackTaskClientExtensions client)
+        public UrlsSaveHandler(SlackMessagesStorage storage, SlackTaskClientExtensions client, ILogger<UrlsSaveHandler> logger)
         {
             _storage = storage;
             _client = client;
+            _logger = logger;
         }
 
         public bool ShouldShowInHelp => false;
@@ -44,6 +48,7 @@ namespace Smartbot.Utilities.Handlers
                     Permalink = permalink
                 };
                 await _storage.Save(slackMessageEntity);
+                _logger.LogInformation($"Saved url. {cleansedUrl}");
             }
             return new HandleResponse("OK");
         }
