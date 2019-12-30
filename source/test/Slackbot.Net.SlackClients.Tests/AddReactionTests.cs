@@ -5,14 +5,14 @@ using Xunit.Abstractions;
 
 namespace Slackbot.Net.Tests
 {
-    public class ChatGetPermalinkTests : Setup
+    public class AddReactionTests : Setup
     {
-        public ChatGetPermalinkTests(ITestOutputHelper helper) : base(helper)
+        public AddReactionTests(ITestOutputHelper helper) : base(helper)
         {
         }
         
         [Fact]
-        public async Task GetPermalinkWorks()
+        public async Task AddReactionWorks()
         {
             var request = new ChatPostMessageMinimalRequest
             {
@@ -20,9 +20,8 @@ namespace Slackbot.Net.Tests
                 Text = "hei"
             };
             var response = await SlackClient.ChatPostMessage(request);
-            var permalink = await SlackClient.ChatGetPermalink(response.channel, response.ts);
-            Assert.True(permalink.ok);
-            Assert.NotNull(permalink.Permalink);
+            var reactionResponse = await SlackClient.ReactionsAdd("thumbsup", response.channel, response.ts);
+            Assert.True(reactionResponse.ok);
         }
     }
 }
