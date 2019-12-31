@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Exceptions;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage.Minimal;
+using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -8,31 +8,35 @@ namespace Slackbot.Net.Tests
 {
     public class ChatPostMessageTests : Setup
     {
+
         public ChatPostMessageTests(ITestOutputHelper helper) : base(helper)
         {
+            
         }
         
         [Fact]
         public async Task PostMinimalWorks()
         {
-            var request = new ChatPostMessageMinimalRequest
+            var response = await SlackClient.ChatPostMessage(Channel, Text);
+            Assert.True(response.Ok);
+        }
+        
+        [Fact]
+        public async Task PostWorks()
+        {
+            var msg = new ChatPostMessageRequest
             {
-                Channel = "testss", 
-                Text = "hei"
+                Channel = Channel,
+                Text = Text
             };
-            var response = await SlackClient.ChatPostMessage(request);
-            Assert.True(response.ok);
+            var response = await SlackClient.ChatPostMessage(msg);
+            Assert.True(response.Ok);
         }
         
         [Fact]
         public async Task PostMissingChannelThrowsSlackApiException()
         {
-            var request = new ChatPostMessageMinimalRequest
-            {
-                Channel = "thisdoesnotexist", 
-                Text = "hei"
-            };
-            await Assert.ThrowsAsync<SlackApiException>(() => SlackClient.ChatPostMessage(request));
+            await Assert.ThrowsAsync<SlackApiException>(() => SlackClient.ChatPostMessage(Channel, Text));
         }
     }
 }

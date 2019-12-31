@@ -2,7 +2,7 @@ namespace Slackbot.Net.SlackClients.Models.Responses.SearchMessages
 {
     public class SearchMessagesResponse : Response
     {
-        public SearchResponseMessagesContainer messages;
+        public SearchResponseMessagesContainer Messages;
     }
 
     public class SearchResponseMessagesContainer

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,11 @@ namespace Slackbot.Net.SlackClients.Extensions
 {
     internal static class HttpClientExtensions
     {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver()};
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore
+        };
 
         public static async Task<T> PostJson<T>(this HttpClient httpClient, object payload, string api, Action<string> logger = null) where T:Response
         {
@@ -25,7 +30,7 @@ namespace Slackbot.Net.SlackClients.Extensions
 
             var response =  await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            logger?.Invoke($"{response.StatusCode} - ${responseContent}");
+            logger?.Invoke($"{response.StatusCode} - {responseContent}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -34,24 +39,24 @@ namespace Slackbot.Net.SlackClients.Extensions
             
             var resObj = JsonConvert.DeserializeObject<T>(responseContent, JsonSerializerSettings);
             
-            if(!resObj.ok)
-                throw new SlackApiException($"{resObj.error}");
+            if(!resObj.Ok)
+                throw new SlackApiException($"{resObj.Error}");
             
             return resObj;
         }
         
         public static async Task<T> PostParametersAsForm<T>(this HttpClient httpClient, IEnumerable<KeyValuePair<string, string>> parameters, string api, Action<string> logger = null) where T: Response
         {
-            var formUrlEncodedContent = new FormUrlEncodedContent(parameters);
+            var request = new HttpRequestMessage(HttpMethod.Post, api);
 
-            var requestContent = await formUrlEncodedContent.ReadAsStringAsync();
-            var httpContent = new StringContent(requestContent, Encoding.UTF8, "application/x-www-form-urlencoded");
-            httpContent.Headers.ContentType.CharSet = string.Empty;
-
-            var request = new HttpRequestMessage(HttpMethod.Post, api)
+            if (parameters != null && parameters.Any())
             {
-                Content = httpContent
-            };
+                var formUrlEncodedContent = new FormUrlEncodedContent(parameters);
+                var requestContent = await formUrlEncodedContent.ReadAsStringAsync();
+                var httpContent = new StringContent(requestContent, Encoding.UTF8, "application/x-www-form-urlencoded");
+                httpContent.Headers.ContentType.CharSet = string.Empty;
+                request.Content = httpContent;
+            }
 
             var response =  await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -65,8 +70,8 @@ namespace Slackbot.Net.SlackClients.Extensions
             
             var resObj = JsonConvert.DeserializeObject<T>(responseContent, JsonSerializerSettings);
             
-            if(!resObj.ok)
-                throw new SlackApiException($"{resObj.error}");
+            if(!resObj.Ok)
+                throw new SlackApiException($"{resObj.Error}");
             
             return resObj;        
         }

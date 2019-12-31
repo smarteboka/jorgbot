@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage.Minimal;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,14 +13,9 @@ namespace Slackbot.Net.Tests
         [Fact]
         public async Task GetPermalinkWorks()
         {
-            var request = new ChatPostMessageMinimalRequest
-            {
-                Channel = "testss", 
-                Text = "hei"
-            };
-            var response = await SlackClient.ChatPostMessage(request);
+            var response = await SlackClient.ChatPostMessage(Channel, Text);
             var permalink = await SlackClient.ChatGetPermalink(response.channel, response.ts);
-            Assert.True(permalink.ok);
+            Assert.True(permalink.Ok);
             Assert.NotNull(permalink.Permalink);
         }
     }

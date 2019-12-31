@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Extensions;
 using Xunit.Abstractions;
@@ -12,6 +11,8 @@ namespace Slackbot.Net.Tests
     {
         protected readonly ISearchClient SearchClient;
         protected readonly ISlackClient SlackClient;
+        protected string Channel;
+        protected string Text;
 
         public Setup(ITestOutputHelper helper)
         {
@@ -31,6 +32,8 @@ namespace Slackbot.Net.Tests
             var provider = services.BuildServiceProvider();
             SearchClient = provider.GetService<ISearchClient>();
             SlackClient = provider.GetService<ISlackClient>();
+            Channel = "#testss";
+            Text = "Test";
         }
     }
 }
