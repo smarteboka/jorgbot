@@ -6,6 +6,8 @@ using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
 
 namespace Slackbot.Net.SlackClients
 {
+    /// <inheritdoc/>
+
     internal class SearchClient : ISearchClient
     {
         private readonly HttpClient _httpClient;
@@ -14,6 +16,8 @@ namespace Slackbot.Net.SlackClients
         {
             _httpClient = httpClient;
         }
+
+        /// <inheritdoc/>
 
         public async Task<SearchMessagesResponse> SearchMessagesAsync(string query)
         {

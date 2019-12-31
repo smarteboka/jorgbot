@@ -11,6 +11,7 @@ using Slackbot.Net.SlackClients.Models.Responses.UsersList;
 
 namespace Slackbot.Net.SlackClients
 {
+    /// <inheritdoc/>
     internal class SlackClient : ISlackClient
     {
         private readonly HttpClient _client;
@@ -22,10 +23,7 @@ namespace Slackbot.Net.SlackClients
             _logger = logger;
         }
 
-        /// <summary>
-        /// https://api.slack.com/methods/chat.postMessage
-        /// Scopes required: `chat:write`
-        /// </summary>
+        /// <inheritdoc/>
         public async Task<ChatPostMessageResponse> ChatPostMessage(string channel, string text)
         {
             var parameters = new List<KeyValuePair<string, string>>
@@ -36,19 +34,13 @@ namespace Slackbot.Net.SlackClients
             return await _client.PostParametersAsForm<ChatPostMessageResponse>(parameters, "chat.postMessage", s => _logger.LogTrace(s));
         }
 
-        /// <summary>
-        /// https://api.slack.com/methods/chat.postMessage
-        /// Scopes required: `chat:write`
-        /// </summary>
+        /// <inheritdoc/>
         public async Task<ChatPostMessageResponse> ChatPostMessage(ChatPostMessageRequest postMessage)
         {
             return await _client.PostJson<ChatPostMessageResponse>(postMessage, "chat.postMessage", s => _logger.LogTrace(s));
         }
-        
-        /// <summary>
-        /// https://api.slack.com/methods/reactions.add
-        /// Scopes required: no scopes required
-        /// </summary>
+
+        /// <inheritdoc/>
         public async Task<ChatGetPermalinkResponse> ChatGetPermalink(string channel, string message_ts)
         {
             var parameters = new List<KeyValuePair<string, string>>
@@ -59,11 +51,8 @@ namespace Slackbot.Net.SlackClients
           
             return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"chat.getPermalink", s => _logger.LogTrace(s));
         }
-        
-        /// <summary>
-        /// https://api.slack.com/methods/reactions.add
-        /// Scopes required: `reactions:write`
-        /// </summary>
+
+        /// <inheritdoc/>
         public async Task<Response> ReactionsAdd(string name, string channel, string timestamp)
         {
             var parameters = new List<KeyValuePair<string, string>>
@@ -75,19 +64,11 @@ namespace Slackbot.Net.SlackClients
           
             return await _client.PostParametersAsForm<ChatGetPermalinkResponse>(parameters,"reactions.add", s => _logger.LogTrace(s));
         }
-        
-        /// <summary>
-        /// https://api.slack.com/methods/users.list
-        /// Scopes required: `users:read`
-        /// </summary>
+
+        /// <inheritdoc/>
         public async Task<UsersListResponse> UsersList()
         {
-            // var parameters = new List<KeyValuePair<string, string>>
-            // {
-            //     new KeyValuePair<string, string>("include_locale", "true")
-            // };
             return await _client.PostParametersAsForm<UsersListResponse>(null,"users.list", s => _logger.LogTrace(s));
         }
-        
     }
 }
