@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
@@ -154,12 +155,9 @@ namespace Smartbot.Tests.Workers
         private StorsdagInviter CreateInviter()
         {
             var inviteLogger = A.Fake<ILogger<StorsdagInviter>>();
+            // var client = GetSlackClient();
             var client = A.Fake<ISlackClient>();
-            var questioner = new SlackQuestionClient(client);
-            var eventsStorage = EventsStorage();
-            var invitationsStorage = InvitationsStorage();
-            var slackClient = A.Fake<ISlackClient>();
-            A.CallTo(() => slackClient.UsersList()).Returns(new UsersListResponse { 
+            A.CallTo(() => client.UsersList()).Returns(new UsersListResponse { 
                 Ok = true,
                 Members = new []
                 {
@@ -171,7 +169,16 @@ namespace Smartbot.Tests.Workers
                 }
                 
             });
+            var questioner = new SlackQuestionClient(client);
+            var eventsStorage = EventsStorage();
+            var invitationsStorage = InvitationsStorage();
+  
             return new StorsdagInviter(eventsStorage, invitationsStorage, client, questioner, inviteLogger);
+        }
+
+        private ISlackClient GetSlackClient()
+        {
+            return new Setup(_output).SlackClient;
         }
 
         [Fact]
