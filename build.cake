@@ -2,15 +2,22 @@ var target = Argument("target", "Pack");
 var configuration = Argument("configuration", "Release");
 
 var packageNameWorker = "Slackbot.Net";
-var packageNameRawClient = "Slackbot.Net.SlackClients";
 var packageNameEndpoints = "Slackbot.Net.Endpoints";
 
+var packageNameRawClient = "Slackbot.Net.SlackClients";
+
+var packageNameAbstractionsHandlers = "Slackbot.Net.Abstractions.Handlers";
+var packageNameAbstractionsHosting = "Slackbot.Net.Abstractions.Hosting";
+var packageNameAbstractionsPublishers = "Slackbot.Net.Abstractions.Publishers";
+
+var packageNamePublishersLogger = "Slackbot.Net.Extensions.Publishers.Logger";
+var packageNamePublishersSlack = "Slackbot.Net.Extensions.Publishers.Slack";
 
 private string ProjectPath(string name){
     return $"./source/src/{name}/{name}.csproj";
 }
 
-var version = "1.0.1-beta010";
+var version = "1.0.1-beta011";
 var outputDir = "./output";
 
 Task("Build")
@@ -27,9 +34,17 @@ Task("Test")
 Task("Pack")
     .IsDependentOn("Test")
     .Does(() => {
-        Pack(packageNameWorker);
-        Pack(packageNameRawClient);
+        Pack(packageNameWorker);        
         Pack(packageNameEndpoints);
+
+        Pack(packageNameRawClient);
+        
+        Pack(packageNameAbstractionsHandlers);
+        Pack(packageNameAbstractionsHosting);
+        Pack(packageNameAbstractionsPublishers);
+
+        Pack(packageNamePublishersLogger);
+        Pack(packageNamePublishersSlack);
 });
 
 private void Pack(string proj){
@@ -54,8 +69,17 @@ Task("Publish")
         };
 
         DotNetCoreNuGetPush($"{outputDir}/{packageNameWorker}.{version}.nupkg", settings);
-        DotNetCoreNuGetPush($"{outputDir}/{packageNameRawClient}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameEndpoints}.{version}.nupkg", settings);
+
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameRawClient}.{version}.nupkg", settings);
+
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameAbstractionsHandlers}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameAbstractionsHosting}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameAbstractionsPublishers}.{version}.nupkg", settings);
+
+        DotNetCoreNuGetPush($"{outputDir}/{packageNamePublishersLogger}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNamePublishersSlack}.{version}.nupkg", settings);
+
 });
 
 RunTarget(target);

@@ -2,10 +2,32 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>Slackbot.Net.Abstractions.Handlers</RootNamespace>
+
+        <PackageId>Slackbot.Net.Abstractions.Handlers</PackageId>
+        <Authors>John Korsnes</Authors>
+        <Description>
+            Abstractions for Slackbot.NET hosting
+        </Description>
+        <Copyright>John Korsnes</Copyright>
+        <PackageTags>slack dotnetcore</PackageTags>
+        <PackageProjectUrl>https://github.com/smarteboka/smartbot</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/smarteboka/smartbot/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/smarteboka/smartbot</RepositoryUrl>
+        <PackageIconUrl>images/slack.png</PackageIconUrl>
+        <PackageIcon>slack.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="SlackConnector" Version="4.2.74" />
+    </ItemGroup>
+
+     <ItemGroup>
+        <None Include="images/slack.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>
