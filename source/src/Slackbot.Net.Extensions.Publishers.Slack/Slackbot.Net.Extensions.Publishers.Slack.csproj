@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net.Abstractions.Publishers\Slackbot.Net.Abstractions.Publishers.csproj" />
+      <ProjectReference Include="..\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj" />
+    </ItemGroup>
+
+</Project>

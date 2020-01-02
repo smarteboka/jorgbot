@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Slackbot.Net;
-using Slackbot.Net.Configuration;
-using Slackbot.Net.Publishers;
+using Slackbot.Net.Abstractions.Publishers;
 
 namespace Smartbot.Utilities.RecurringActions
 {
@@ -16,8 +13,8 @@ namespace Smartbot.Utilities.RecurringActions
 
         public HeartBeater(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
-            ILogger<HeartBeater> logger, IOptionsSnapshot<CronOptions> options)
-            : base(options, logger)
+            ILogger<HeartBeater> logger)
+            : base(Crons.EveryDayAtSeven55, logger)
         {
             _publishers = publishers;
             _channels = channels;

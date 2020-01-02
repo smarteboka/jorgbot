@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Slackbot.Net.Handlers;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Models.Responses;

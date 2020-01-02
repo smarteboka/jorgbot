@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Slackbot.Net;
-using Slackbot.Net.Configuration;
-using Slackbot.Net.Publishers;
+using Slackbot.Net.Abstractions.Publishers;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
@@ -15,8 +13,8 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
 
         public StorsdagMention(IEnumerable<IPublisher> publishers,
             SlackChannels channels,
-            ILogger<StorsdagMention> logger, IOptionsSnapshot<CronOptions> options)
-            : base(options,logger)
+            ILogger<StorsdagMention> logger)
+            : base(Crons.LastThursdayOfMonthCron,logger)
         {
             _publishers = publishers;
             _channels = channels;

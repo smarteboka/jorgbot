@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Slackbot.Net.Abstractions.Handlers;
 using SlackConnector.Models;
 
 namespace Slackbot.Net.Handlers

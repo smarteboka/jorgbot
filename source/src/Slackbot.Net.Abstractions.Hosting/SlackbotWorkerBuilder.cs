@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Slackbot.Net.Hosting
+namespace Slackbot.Net.Abstractions.Hosting
 {
-    internal class SlackbotWorkerBuilder : ISlackbotWorkerBuilder
+    public class SlackbotWorkerBuilder : ISlackbotWorkerBuilder
     {
         public SlackbotWorkerBuilder(IServiceCollection services)
         {

@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Abstractions.Publishers;
 
-namespace Slackbot.Net.Publishers.Logger
+namespace Slackbot.Net.Extensions.Publishers.Logger
 {
     public class LoggerPublisher : IPublisher
     {

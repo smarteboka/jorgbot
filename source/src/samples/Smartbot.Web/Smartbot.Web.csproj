@@ -18,9 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />
-      <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
-      <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
+        <ProjectReference Include="..\..\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />
+        <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
+        <ProjectReference Include="..\..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+        <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
     </ItemGroup>
 
 </Project>

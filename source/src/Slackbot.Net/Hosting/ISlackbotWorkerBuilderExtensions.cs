@@ -1,11 +1,10 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using Slackbot.Net;
+using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
 using Slackbot.Net.Handlers;
-using Slackbot.Net.Hosting;
-using Slackbot.Net.Publishers;
 using Slackbot.Net.SlackClients.Extensions;
 using Slackbot.Net.Validations;
 
@@ -13,7 +12,7 @@ using Slackbot.Net.Validations;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ISlackbotWorkerBuilderExtensions
+    public static class SlackbotWorkerBuilderExtensions
     {
         public static ISlackbotWorkerBuilder AddSlackbotWorker(this IServiceCollection services, IConfiguration configuration)
         {
@@ -28,30 +27,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.ConfigureAndValidate(action);
             var builder = new SlackbotWorkerBuilder(services);
             builder.AddWorkerDependencies(action);
-            return builder;
-        }
-        
-        public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder) where T: RecurringAction
-        {
-            builder.Services.AddHostedService<T>();
-            return builder;
-        }
-
-        public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder, Action<CronOptions> o) where T: RecurringAction
-        {
-            builder.Services.ConfigureAndValidate(typeof(T).ToString(), o);
-            builder.Services.AddHostedService<T>();
-            return builder;
-        }
-
-        public static ISlackbotWorkerBuilder AddHandler<T>(this ISlackbotWorkerBuilder builder) where T : class, IHandleMessages
-        {
-            builder.Services.AddSingleton<IHandleMessages, T>();
-            return builder;
-        }
-        public static ISlackbotWorkerBuilder AddPublisher<T>(this ISlackbotWorkerBuilder builder) where T: class, IPublisher
-        {
-            builder.Services.AddSingleton<IPublisher, T>();
             return builder;
         }
 

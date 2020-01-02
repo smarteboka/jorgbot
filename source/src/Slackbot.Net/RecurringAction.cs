@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Utilities;
 
@@ -19,13 +18,6 @@ namespace Slackbot.Net
         }
 
         protected ILogger<RecurringAction> Logger;
-
-        protected RecurringAction(IOptionsSnapshot<CronOptions> options, ILogger<RecurringAction> logger)
-        {
-            var cronOptions = options.Get(GetType().ToString());
-            Init(cronOptions, logger);
-        }
-
 
         protected RecurringAction(string cron, ILogger<RecurringAction> logger)
         {

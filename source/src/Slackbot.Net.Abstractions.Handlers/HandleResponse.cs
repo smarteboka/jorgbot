@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Handlers
+namespace Slackbot.Net.Abstractions.Handlers
 {
     public class HandleResponse
     {

@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Slackbot.Net;
-using Slackbot.Net.Configuration;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
@@ -10,7 +8,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
     {
         private readonly StorsdagInviter _inviter;
 
-        public StorsdagInvitationRecurrer(IOptionsSnapshot<CronOptions> options, StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(options, logger)
+        public StorsdagInvitationRecurrer(StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(Crons.ThirdSaturdayOfMonth, logger)
         {
             _inviter = inviter;
         }

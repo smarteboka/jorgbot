@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Slackbot.Net.Publishers
+namespace Slackbot.Net.Abstractions.Publishers
 {
     public interface IPublisher
     {

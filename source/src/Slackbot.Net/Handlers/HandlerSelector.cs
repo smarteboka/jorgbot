@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Publishers;
+using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Publishers;
 using SlackConnector.Models;
 
 namespace Slackbot.Net.Handlers
 {
-    public class HandlerSelector
+    internal class HandlerSelector
     {
         private readonly IServiceProvider _provider;
         private readonly ILogger<HandlerSelector> _logger;

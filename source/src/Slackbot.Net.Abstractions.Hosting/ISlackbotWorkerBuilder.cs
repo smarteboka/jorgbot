@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Slackbot.Net.Hosting
+namespace Slackbot.Net.Abstractions.Hosting
 {
     public interface ISlackbotWorkerBuilder
     {

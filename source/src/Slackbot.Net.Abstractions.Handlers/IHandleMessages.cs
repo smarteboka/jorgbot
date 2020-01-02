@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using SlackConnector.Models;
 
-namespace Slackbot.Net.Handlers
+namespace Slackbot.Net.Abstractions.Handlers
 {
     public interface IHandleMessages
     {

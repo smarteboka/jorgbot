@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Publishers.Logger;
-using Slackbot.Net.Publishers.Slack;
-using Smartbot.Utilities;
+using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Extensions.Publishers.Logger;
+using Slackbot.Net.Extensions.Publishers.Slack;
 using Smartbot.Utilities.RecurringActions;
 using Smartbot.Utilities.Handlers;
 using Smartbot.Utilities.Handlers._4sq;
@@ -38,11 +38,11 @@ namespace Smartbot
                         .AddPublisher<LoggerPublisher>()
 
                         .AddRecurring<HerokuFreeTierKeepAlive>()
-                        .AddRecurring<Jorger>(c => { c.Cron = Crons.EveryDayAtNine; })
-                        .AddRecurring<HappyBirthday>(c => c.Cron = Crons.EveryDayAtEight)
-                        .AddRecurring<HeartBeater>(c => c.Cron = Crons.EveryDayAtSeven55)
-                        .AddRecurring<StorsdagMention>(c => c.Cron = Crons.LastThursdayOfMonthCron)
-                        .AddRecurring<StorsdagInvitationRecurrer>(c => c.Cron = Crons.ThirdSaturdayOfMonth)
+                        .AddRecurring<Jorger>()
+                        .AddRecurring<HappyBirthday>()
+                        .AddRecurring<HeartBeater>()
+                        .AddRecurring<StorsdagMention>()
+                        .AddRecurring<StorsdagInvitationRecurrer>()
 
                         .AddHandler<NesteStorsdagHandler>()
                         .AddHandler<StorsdagerHandler>()
