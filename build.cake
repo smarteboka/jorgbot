@@ -11,7 +11,7 @@ var outputDir = "./output";
 
 Task("Build")
     .Does(() => {
-        DotNetCoreBuild("./source/Smartbot.sln", new DotNetCoreBuildSettings { Configuration = "Release" });
+        DotNetCoreBuild("./source/Slackbot.Net.sln", new DotNetCoreBuildSettings { Configuration = "Release" });
     });
 
 Task("Test")

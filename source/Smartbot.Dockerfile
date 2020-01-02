@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY Smartbot.sln ./Smartbot.sln
+COPY Slackbot.Net.sln ./Slackbot.Net.sln
 
 COPY src/samples/Smartbot/Smartbot.csproj ./src/samples/Smartbot/Smartbot.csproj
 COPY src/samples/Smartbot.Web/Smartbot.Web.csproj ./src/samples/Smartbot.Web/Smartbot.Web.csproj
@@ -14,7 +14,7 @@ COPY src/Slackbot.Net.SlackClients/Slackbot.Net.SlackClients.csproj ./src/Slackb
 COPY test/Smartbot.Tests/Smartbot.Tests.csproj ./test/Smartbot.Tests/Smartbot.Tests.csproj
 COPY test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj ./test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj
 
-RUN dotnet restore Smartbot.sln
+RUN dotnet restore Slackbot.Net.sln
 
 # Copy everything else and build
 COPY . ./
