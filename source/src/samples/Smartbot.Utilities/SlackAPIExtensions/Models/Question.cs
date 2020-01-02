@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models
+namespace Smartbot.Utilities.SlackAPIExtensions.Models
 {
     public class Question
     {

@@ -18,12 +18,14 @@ namespace Slackbot.Net.SlackClients
         }
 
         /// <inheritdoc/>
-
         public async Task<SearchMessagesResponse> SearchMessagesAsync(string query)
         {
             var parameters = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("query", query)
+                new KeyValuePair<string, string>("query", query),
+                new KeyValuePair<string, string>("sort", "timestamp"),
+                new KeyValuePair<string, string>("count", "1"),
+                new KeyValuePair<string, string>("sort_dir", "asc")
             };
             return await _httpClient.PostParametersAsForm<SearchMessagesResponse>(parameters, "search.messages");
         }

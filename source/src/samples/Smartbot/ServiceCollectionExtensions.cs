@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smartbot.Utilities;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
+using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storage.SlackUrls;
@@ -27,6 +28,7 @@ namespace Smartbot
             services.AddSingleton<InvitationsStorage>();
 
             services.AddSingleton<StorsdagInviter>();
+            services.AddSingleton<SlackQuestionClient>();
             return services;
         }
     }

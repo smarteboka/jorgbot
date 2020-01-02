@@ -15,7 +15,7 @@ namespace Slackbot.Net.Tests
         {
             var response = await SearchClient.SearchMessagesAsync("http");
             Assert.True(response.Ok);
-            Assert.NotEmpty(response.Messages.matches);
+            Assert.NotEmpty(response.Messages.Matches);
         }
     }
 }

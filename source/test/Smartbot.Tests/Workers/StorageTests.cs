@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.SlackUrls;
 using Xunit;
 

@@ -1,3 +1,5 @@
+using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage.Blocks;
+
 namespace Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage
 {
     public class ChatPostMessageRequest
@@ -13,6 +15,8 @@ namespace Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage
         public string as_user { get; set; }
         
         public Attachment[] attachments { get; set; }
+        
+        public IBlock[] Blocks { get; set; }
     }
     
     public class Attachment

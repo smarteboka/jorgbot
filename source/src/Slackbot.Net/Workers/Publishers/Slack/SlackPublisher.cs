@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
+using Slackbot.Net.SlackClients;
 
 namespace Slackbot.Net.Workers.Publishers.Slack
 {
     public class SlackPublisher : IPublisher
     {
-        private readonly SlackTaskClientExtensions _sender;
+        private readonly ISlackClient _sender;
         private readonly ILogger<SlackPublisher> _logger;
 
-        public SlackPublisher(SlackTaskClientExtensions sender, ILogger<SlackPublisher> logger)
+        public SlackPublisher(ISlackClient sender, ILogger<SlackPublisher> logger)
         {
             _sender = sender;
             _logger = logger;
@@ -18,7 +18,7 @@ namespace Slackbot.Net.Workers.Publishers.Slack
         public async Task Publish(Notification notification)
         {
             _logger.LogInformation(notification.Msg);
-            await _sender.PostMessageAsync(notification.Recipient,notification.Msg, linkNames: true);
+            await _sender.ChatPostMessage(notification.Recipient, notification.Msg);
         }
     }
 }

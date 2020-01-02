@@ -29,7 +29,7 @@ namespace Slackbot.Net.SlackClients
             var parameters = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("channel", channel),
-                new KeyValuePair<string, string>("text", text)
+                new KeyValuePair<string, string>("text", text),
             };
             return await _client.PostParametersAsForm<ChatPostMessageResponse>(parameters, "chat.postMessage", s => _logger.LogTrace(s));
         }

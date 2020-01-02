@@ -2,22 +2,20 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
+using Slackbot.Net.SlackClients;
 using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
-using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.SlackUrls;
-using ILogger = SlackConnector.Logging.ILogger;
 
 namespace Smartbot.Utilities.Handlers
 {
     public class UrlsSaveHandler : IHandleMessages
     {
         private readonly SlackMessagesStorage _storage;
-        private readonly SlackTaskClientExtensions _client;
+        private readonly ISlackClient _client;
         private readonly ILogger<UrlsSaveHandler> _logger;
 
-        public UrlsSaveHandler(SlackMessagesStorage storage, SlackTaskClientExtensions client, ILogger<UrlsSaveHandler> logger)
+        public UrlsSaveHandler(SlackMessagesStorage storage, ISlackClient client, ILogger<UrlsSaveHandler> logger)
         {
             _storage = storage;
             _client = client;
@@ -31,7 +29,7 @@ namespace Smartbot.Utilities.Handlers
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var urls = RegexHelper.FindUrls(message.Text);
-            var permalink = await _client.GetPermalink(message.ChatHub.Id, message.Timestamp.ToString("N6"));
+            var permalink = await _client.ChatGetPermalink(message.ChatHub.Id, message.Timestamp.ToString("N6"));
 
             foreach (var url in urls)
             {
@@ -45,7 +43,7 @@ namespace Smartbot.Utilities.Handlers
                     Url = cleansedUrl,
                     Raw = message.RawData,
                     SlackTimestamp = message.Timestamp.ToString("N6"),
-                    Permalink = permalink
+                    Permalink = permalink.Permalink
                 };
                 await _storage.Save(slackMessageEntity);
                 _logger.LogInformation($"Saved url. {cleansedUrl}");

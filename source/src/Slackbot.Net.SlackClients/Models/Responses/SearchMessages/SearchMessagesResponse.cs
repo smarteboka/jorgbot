@@ -7,31 +7,31 @@ namespace Slackbot.Net.SlackClients.Models.Responses.SearchMessages
 
     public class SearchResponseMessagesContainer
     {
-        public ContextMessage[] matches;
+        public ContextMessage[] Matches;
     }
 
     public class ContextMessage : Message
     {
-        public Message previous_2;
-        public Message previous;
-        public Message next;
-        public Message next_2;
+        public Message Previous_2;
+        public Message Previous;
+        public Message Next;
+        public Message Next_2;
     }
     
     public class Error
     {
-        public int code;
-        public string msg;
+        public int Code;
+        public string Msg;
     }
     
     public class SlackSocketMessage
     {
-        public bool ok = true;
-        public int id;
-        public int reply_to;
-        public string type;
-        public string subtype;
-        public Error error;
+        public bool Ok = true;
+        public int Id;
+        public int Reply_To;
+        public string Type;
+        public string SubType;
+        public Error Error;
     }
     
     public class Reaction
@@ -43,19 +43,19 @@ namespace Slackbot.Net.SlackClients.Models.Responses.SearchMessages
 
     public class Message : SlackSocketMessage
     {
-        public Channel channel;
-        public string ts; //epoch
-        public string user;
-        public string username;
-        public string text;
-        public bool is_starred;
-        public string permalink;
-        public Reaction[] reactions;
+        public Channel Channel;
+        public string Ts; //epoch
+        public string User;
+        public string Username;
+        public string Text;
+        public bool Is_Starred;
+        public string Permalink;
+        public Reaction[] Reactions;
     }
 
     public class Channel
     {
-        public string name;
-        public string id;
+        public string Name;
+        public string Id;
     }
 }

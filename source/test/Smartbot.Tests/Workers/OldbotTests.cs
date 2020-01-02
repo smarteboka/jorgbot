@@ -3,15 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using SlackAPI;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models;
+using Slackbot.Net.SlackClients;
+using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
 using SlackConnector.Models;
 using Smartbot.Utilities;
 using Smartbot.Utilities.Handlers;
 using Xunit;
-using ContextMessage = Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.ContextMessage;
-using SearchResponseMessages = Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.SearchResponseMessages;
 
 namespace Smartbot.Tests.Workers
 {
@@ -26,7 +23,9 @@ namespace Smartbot.Tests.Workers
                 User = new SlackUser()
             };
 
-            var validateOldness = new OldHandler(new NoopLogger(),new SlackTaskClientExtensions(null,null));
+            var clientMock = A.Fake<ISlackClient>();
+            var searchClient = A.Fake<ISearchClient>();
+            var validateOldness = new OldHandler(new NoopLogger(), clientMock, searchClient);
             var response = await validateOldness.Handle(request);
             Assert.Equal("IGNORED", response.HandledMessage);
         }
@@ -59,8 +58,9 @@ namespace Smartbot.Tests.Workers
                     IsBot = true
                 }
             };
-            var mockClient = A.Fake<SlackTaskClientExtensions>();
-            var validateOldness = new OldHandler(new NoopLogger(), mockClient);
+            var clientMock = A.Fake<ISlackClient>();
+            var searchClient = A.Fake<ISearchClient>();            
+            var validateOldness = new OldHandler(new NoopLogger(), clientMock, searchClient);
 
             Assert.False(validateOldness.ShouldHandle(request));
         }
@@ -68,25 +68,26 @@ namespace Smartbot.Tests.Workers
         [Fact]
         public async Task DoesNotOldIfIsSameAuthor()
         {
-            var mockClient = A.Fake<SlackTaskClientExtensions>();
+            var mockClient = A.Fake<ISearchClient>();
+            var clientMock = A.Fake<ISlackClient>();
 
             var existingMessage = new ContextMessage
             {
-                text = "A historic tale. I told you about http://db.no some time ago",
-                user = "U0F3P72QM",
-                ts = "1550000000.000000" //
+                Text = "A historic tale. I told you about http://db.no some time ago",
+                User = "U0F3P72QM",
+                Ts = "1550000000.000000" //
             };
-            var searchResponse = new SearchResponseMessages
+            var searchResponse = new SearchMessagesResponse()
             {
-                messages = new Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.SearchResponseMessagesContainer
+                Messages = new SearchResponseMessagesContainer
                 {
-                    matches = new []
+                    Matches = new []
                     {
                         existingMessage
                     }
                 }
             };
-            A.CallTo(() => mockClient.SearchMessagesAsync(null,null,null,false,null,null)).WithAnyArguments()
+            A.CallTo(() => mockClient.SearchMessagesAsync("")).WithAnyArguments()
                 .Returns(Task.FromResult(searchResponse));
 
             var request = new SlackMessage
@@ -103,7 +104,7 @@ namespace Smartbot.Tests.Workers
                 }
             };
 
-            var validateOldness = new OldHandler(new NoopLogger(), mockClient);
+            var validateOldness = new OldHandler(new NoopLogger(), clientMock, mockClient);
             var response = await validateOldness.Handle(request);
             Assert.Equal("OLD-BUT-SAME-USER-SO-IGNORING", response.HandledMessage);
         }
@@ -141,30 +142,31 @@ namespace Smartbot.Tests.Workers
 
         private static async Task TestIt(string expected, string slackMessage, string historicMessage)
         {
-            var mockClient = A.Fake<SlackTaskClientExtensions>();
+            var mockClient = A.Fake<ISearchClient>();
 
             var newMessage = new ContextMessage {
                 //channel = "CGWGZ90KV", // private channel #bottestsmore
-                text = historicMessage,
-                ts = "1552671370.000200", //older
-                user = "another-smarting",
-                permalink = "http://link.to/message"
+                Text = historicMessage,
+                Ts = "1552671370.000200", //older
+                User = "another-smarting",
+                Permalink = "http://link.to/message"
             };
-            var searchResponse = new SearchResponseMessages
+            var searchResponse = new SearchMessagesResponse
             {
-                messages = new Slackbot.Net.Core.Integrations.SlackAPIExtensions.Models.SearchResponseMessagesContainer
+                Messages = new SearchResponseMessagesContainer
                 {
-                    matches = new []
+                    Matches = new []
                     {
                         newMessage
                     }
                 }
             };
-            A.CallTo(() => mockClient.SearchMessagesAsync(null,null,null,false,null,null))
+            A.CallTo(() => mockClient.SearchMessagesAsync(null))
                 .WithAnyArguments()
                 .Returns(Task.FromResult(searchResponse));
 
-            var validateOldness = new OldHandler(new NoopLogger(), mockClient);
+            var slackClient = A.Fake<ISlackClient>();
+            var validateOldness = new OldHandler(new NoopLogger(), slackClient, mockClient);
 
             var response = await validateOldness.Handle(new SlackMessage
             {

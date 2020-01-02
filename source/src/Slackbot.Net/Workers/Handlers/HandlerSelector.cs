@@ -22,8 +22,26 @@ namespace Slackbot.Net.Workers.Handlers
 
         public async Task HandleIncomingMessage(SlackMessage message)
         {
-            var allHandlers = _provider.GetServices<IHandleMessages>();
-            var publishers = _provider.GetServices<IPublisher>();
+            IEnumerable<IHandleMessages> allHandlers = null;
+            IEnumerable<IPublisher> publishers = null;
+            try
+            {
+                allHandlers = _provider.GetServices<IHandleMessages>();
+                publishers = _provider.GetServices<IPublisher>();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                throw e;
+            }
+            
+            if (allHandlers == null)
+                throw new Exception("No handlers registred");
+
+            allHandlers = allHandlers.ToList();
+            publishers = publishers.ToList();
+            
             var helpHandler = new HelpHandler(publishers, allHandlers);
 
             if (helpHandler.ShouldHandle(message))

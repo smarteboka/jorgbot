@@ -26,14 +26,18 @@ namespace Slackbot.Net.SlackClients.Configurations
             if (name is nameof(SearchClient))
                 token = _humanOptions.Value.OauthToken;
 
-            if (string.IsNullOrEmpty(token))
+            if ((name is nameof(SlackClient) || name is nameof(SearchClient)) && string.IsNullOrEmpty(token))
                 throw new Exception("Missing token. Check configuration!");
             
-            options.HttpClientActions.Add(c =>
+            if (name is nameof(SlackClient) || name is nameof(SearchClient))
             {
-                c.BaseAddress = new Uri("https://slack.com/api/");
-                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            });
+                options.HttpClientActions.Add(c =>
+                {
+                    c.BaseAddress = new Uri("https://slack.com/api/");
+                    c.Timeout = TimeSpan.FromSeconds(15);
+                    c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                });
+            }
         }
 
         public void Configure(HttpClientFactoryOptions options)

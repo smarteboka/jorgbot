@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Configuration;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
 using Slackbot.Net.Core.Validations;
+using Slackbot.Net.SlackClients.Extensions;
 using Slackbot.Net.Workers;
 using Slackbot.Net.Workers.Configuration;
 using Slackbot.Net.Workers.Connections;
@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.ConfigureAndValidate<SlackOptions>(configuration);
             var builder = new SlackbotWorkerBuilder(services);
-            builder.AddWorkerDependencies();
+            builder.AddWorkerDependencies(configuration);
             return builder;
         }
 
@@ -26,10 +26,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.ConfigureAndValidate(action);
             var builder = new SlackbotWorkerBuilder(services);
-            builder.AddWorkerDependencies();
+            builder.AddWorkerDependencies(action);
             return builder;
         }
-
+        
         public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder) where T: RecurringAction
         {
             builder.Services.AddHostedService<T>();
@@ -54,7 +54,29 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder)
+        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
+        {
+            builder.Services.AddSlackbotClient(configuration);
+            builder.Services.AddSlackbotOauthClient(configuration);
+            AddWorker(builder);
+        }
+        
+        private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, Action<SlackOptions> configuration)
+        {
+            var slackOptions = new SlackOptions();
+            configuration(slackOptions);
+            builder.Services.AddSlackbotClient(c =>
+            {
+                c.BotToken = slackOptions.Slackbot_SlackApiKey_BotUser;
+            });
+            builder.Services.AddSlackbotOauthClient(c =>
+            {
+                c.OauthToken = slackOptions.Slackbot_SlackApiKey_SlackApp;
+            });
+            AddWorker(builder);
+        }
+
+        private static void AddWorker(ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSingleton<SlackConnectionSetup>();
             builder.Services.AddSingleton(s =>
@@ -66,9 +88,11 @@ namespace Microsoft.Extensions.DependencyInjection
                     Name = connection.Name
                 };
             });
-            builder.Services.AddSingleton<SlackTaskClientExtensions>();
+ 
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
         }
+
+   
     }
 }

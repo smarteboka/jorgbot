@@ -3,15 +3,12 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using FakeItEasy;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using SlackAPI;
-using Slackbot.Net.Core.Integrations.SlackAPIExtensions;
+using Slackbot.Net.SlackClients;
+using Slackbot.Net.SlackClients.Models.Responses.UsersList;
 using Slackbot.Net.Workers;
-using SlackConnector.Models;
 using Smartbot.Utilities;
-using Smartbot.Utilities.Storage;
+using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.Storage.Events;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 using Xunit;
@@ -157,10 +154,24 @@ namespace Smartbot.Tests.Workers
         private StorsdagInviter CreateInviter()
         {
             var inviteLogger = A.Fake<ILogger<StorsdagInviter>>();
-            var client = SlackClient();
+            var client = A.Fake<ISlackClient>();
+            var questioner = new SlackQuestionClient(client);
             var eventsStorage = EventsStorage();
             var invitationsStorage = InvitationsStorage();
-            return new StorsdagInviter(eventsStorage, invitationsStorage, client, inviteLogger);
+            var slackClient = A.Fake<ISlackClient>();
+            A.CallTo(() => slackClient.UsersList()).Returns(new UsersListResponse { 
+                Ok = true,
+                Members = new []
+                {
+                    new User
+                    {
+                        Id = "U0EBWMGG4",
+                        Name = "johnkors"
+                    } 
+                }
+                
+            });
+            return new StorsdagInviter(eventsStorage, invitationsStorage, client, questioner, inviteLogger);
         }
 
         [Fact]
@@ -168,14 +179,6 @@ namespace Smartbot.Tests.Workers
         {
             var inviter = CreateInviter();
             await inviter.SendRemindersToUnanswered();
-        }
-
-        public SlackTaskClientExtensions SlackClient()
-        {
-            var appToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
-            var botUserToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
-            var client = new SlackTaskClientExtensions(appToken, botUserToken);
-            return client;
         }
     }
 }

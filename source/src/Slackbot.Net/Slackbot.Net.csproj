@@ -31,12 +31,15 @@
       <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
 
 
-      <PackageReference Include="SlackAPI" Version="1.1.1" />
       <PackageReference Include="Cronos" Version="0.7.0" />
       <PackageReference Include="SlackConnector" Version="4.2.74" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Core" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj" />
     </ItemGroup>
 </Project>
