@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Workers;
+using Slackbot.Net;
 
 namespace Smartbot.Utilities.RecurringActions
 {

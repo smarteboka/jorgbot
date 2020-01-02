@@ -4,7 +4,7 @@ using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Interactive;
 using Smartbot.Utilities.Storage.Events;
-using Smartbot.Utilities.Storsdager.Interactive;
+using Smartbot.Web;
 using Xunit;
 
 namespace Smartbot.Tests.Endpoints

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fpl.Client.Abstractions;
-using Slackbot.Net.Workers.Handlers;
-using Slackbot.Net.Workers.Publishers;
+using Slackbot.Net.Handlers;
+using Slackbot.Net.Publishers;
 using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers

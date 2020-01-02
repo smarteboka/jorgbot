@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Slackbot.Net.Workers.Handlers;
-using Slackbot.Net.Workers.Publishers;
+using Slackbot.Net.Handlers;
+using Slackbot.Net.Publishers;
 using SlackConnector.Models;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 

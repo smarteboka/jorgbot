@@ -8,11 +8,9 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Workers.Publishers.Logger;
 using Smartbot.Utilities.RecurringActions;
 using Smartbot.Utilities.Storage;
 using Smartbot.Utilities.Storage.Events;
-using Smartbot.Utilities.Storsdager.Interactive;
 
 namespace Smartbot.Web
 {

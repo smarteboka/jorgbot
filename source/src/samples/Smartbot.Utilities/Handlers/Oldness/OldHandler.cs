@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Models.Responses;
-using Slackbot.Net.Workers.Handlers;
 using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers

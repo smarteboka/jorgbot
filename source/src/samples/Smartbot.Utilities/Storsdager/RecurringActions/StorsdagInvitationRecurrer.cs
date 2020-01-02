@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Slackbot.Net.Workers;
-using Slackbot.Net.Workers.Configuration;
+using Slackbot.Net;
+using Slackbot.Net.Configuration;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {

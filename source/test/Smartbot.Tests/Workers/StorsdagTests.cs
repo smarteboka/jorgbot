@@ -7,7 +7,7 @@ using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Responses.UsersList;
-using Slackbot.Net.Workers;
+using Slackbot.Net.Utilities;
 using Smartbot.Utilities;
 using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.Storage.Events;

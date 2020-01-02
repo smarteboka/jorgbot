@@ -1,12 +1,16 @@
 var target = Argument("target", "Pack");
 var configuration = Argument("configuration", "Release");
-var packageName = "Slackbot.Net";
-var proj = $"./source/src/{packageName}/{packageName}.csproj";
 
+var packageNameWorker = "Slackbot.Net";
 var packageNameRawClient = "Slackbot.Net.SlackClients";
-var projRawClient = $"./source/src/{packageNameRawClient}/{packageNameRawClient}.csproj";
+var packageNameEndpoints = "Slackbot.Net.Endpoints";
 
-var version = "1.0.1-beta009";
+
+private string ProjectPath(string name){
+    return $"./source/src/{name}/{name}.csproj";
+}
+
+var version = "1.0.1-beta010";
 var outputDir = "./output";
 
 Task("Build")
@@ -23,8 +27,9 @@ Task("Test")
 Task("Pack")
     .IsDependentOn("Test")
     .Does(() => {
-        Pack(proj);
-        Pack(projRawClient);
+        Pack(packageNameWorker);
+        Pack(packageNameRawClient);
+        Pack(packageNameEndpoints);
 });
 
 private void Pack(string proj){
@@ -36,7 +41,7 @@ private void Pack(string proj){
     coresettings.MSBuildSettings = new DotNetCoreMSBuildSettings()
                                     .WithProperty("Version", new[] { version });
 
-    DotNetCorePack(proj, coresettings);
+    DotNetCorePack(ProjectPath(proj), coresettings);
 }
 
 Task("Publish")
@@ -48,8 +53,9 @@ Task("Publish")
             ApiKey = Argument("nugetapikey", "must-be-given")
         };
 
-        DotNetCoreNuGetPush($"{outputDir}/{packageName}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameWorker}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameRawClient}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameEndpoints}.{version}.nupkg", settings);
 });
 
 RunTarget(target);
