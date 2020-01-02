@@ -5,6 +5,7 @@ using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
 using Slackbot.Net.Handlers;
+using Slackbot.Net.Hosting;
 using Slackbot.Net.SlackClients.Extensions;
 using Slackbot.Net.Validations;
 

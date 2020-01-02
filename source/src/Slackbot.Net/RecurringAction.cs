@@ -4,64 +4,55 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Utilities;
 
 namespace Slackbot.Net
 {
-    public abstract class RecurringAction : BackgroundService
+    internal class RecurringAction : BackgroundService
     {
-        public Timing Timing
+
+        private readonly IRecurringAction _action;
+        private readonly ILogger _logger;
+        private readonly Timing _timing;
+
+        public RecurringAction(IRecurringAction action, ILogger logger)
         {
-            get;
-            set;
+            var cronOptions = new CronOptions { Cron = action.Cron };
+            _timing = new Timing();
+            _timing.SetTimeZone(cronOptions.TimeZoneId);
+            _action = action;
+            _logger = logger;
+            Cron = action.Cron;
+            _logger.LogDebug($"Using {Cron} and timezone '{_timing.TimeZoneInfo.Id}. The time in this timezone: {_timing.RelativeNow()}'");
         }
 
-        protected ILogger<RecurringAction> Logger;
-
-        protected RecurringAction(string cron, ILogger<RecurringAction> logger)
-        {
-            var cronOptions = new CronOptions {Cron = cron};
-            Init(cronOptions, logger);
-        }
-
-        private void Init(CronOptions cronOptions, ILogger<RecurringAction> logger)
-        {
-            Timing = new Timing();
-            Timing.SetTimeZone(cronOptions.TimeZoneId);
-            Logger = logger;
-            Cron = cronOptions.Cron;
-            Logger.LogDebug($"Using {Cron} and timezone '{Timing.TimeZoneInfo.Id}. The time in this timezone: {Timing.RelativeNow()}'");
-        }
-
-        protected string Cron;
-
-        public abstract Task Process();
+        private string Cron { get; }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var cron = Cron;
             DateTimeOffset? next = null;
 
             do
             {
-                var now = Timing.RelativeNow();
+                var now = _timing.RelativeNow();
 
                 if (next == null)
                 {
-                    next = Timing.GetNextOccurenceInRelativeTime(cron);
+                    next = _timing.GetNextOccurenceInRelativeTime(Cron);
 
-                    var upcoming = Timing.GetNextOccurences(cron);
+                    var upcoming = Timing.GetNextOccurences(Cron);
                     var uText = upcoming.Select(u => $"{u.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}").Take(10);
-                    Logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
+                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}\n" +
                                            $"Upcoming:\n{uText.Aggregate((x,y) => x + "\n" + y)}");
                 }
 
                 if (now > next)
                 {
-                    await Process();
-                    next = Timing.GetNextOccurenceInRelativeTime(cron);
-                    Logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
+                    await _action.Process();
+                    next = _timing.GetNextOccurenceInRelativeTime(Cron);
+                    _logger.LogInformation($"Next at {next.Value.DateTime.ToLongDateString()} {next.Value.DateTime.ToLongTimeString()}");
                 }
                 else
                 {

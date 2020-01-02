@@ -145,11 +145,8 @@ namespace Smartbot.Tests.Workers
 
         private StorsdagInvitationRecurrer StorsdagRecurrer()
         {
-            var dontCareCron = "* * * * *";
-            var logger = A.Fake<ILogger<StorsdagInvitationRecurrer>>();
             var inviter = CreateInviter();
-            var recurrer = new StorsdagInvitationRecurrer(dontCareCron, inviter, logger);
-            return recurrer;
+            return new StorsdagInvitationRecurrer(inviter);
         }
 
         private StorsdagInviter CreateInviter()

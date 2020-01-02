@@ -1,21 +1,25 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net;
+using Slackbot.Net.Abstractions.Handlers;
 
 namespace Smartbot.Utilities.RecurringActions
 {
-    public class HerokuFreeTierKeepAlive : RecurringAction
+    public class HerokuFreeTierKeepAlive : IRecurringAction
     {
+        private readonly ILogger<HerokuFreeTierKeepAlive> _logger;
 
-        public HerokuFreeTierKeepAlive(ILogger<HerokuFreeTierKeepAlive> logger): base( "0 */10 * * * *",logger)
+        public HerokuFreeTierKeepAlive(ILogger<HerokuFreeTierKeepAlive> logger)
         {
-
+            _logger = logger;
+            Cron = "0 */10 * * * *";
         }
 
-        public override Task Process()
+        public Task Process()
         {
-            Logger.LogInformation("Keep process alive");
+            _logger.LogInformation("Keep process alive");
             return Task.CompletedTask;
         }
+
+        public string Cron { get; }
     }
 }

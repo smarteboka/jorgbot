@@ -1,30 +1,27 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Slackbot.Net;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Utilities;
 
 namespace Smartbot.Utilities.RecurringActions
 {
-    public class HappyBirthday : RecurringAction
+    public class HappyBirthday : IRecurringAction
     {
         private readonly Smartinger _smartinger;
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
+        private readonly Timing _timing;
 
-        public HappyBirthday(Smartinger smartinger,
-            IEnumerable<IPublisher> publishers,
-            SlackChannels channels,
-            ILogger<HappyBirthday> logger
-            )
-            : base(Crons.EveryDayAtEight,logger)
+        public HappyBirthday(Smartinger smartinger, IEnumerable<IPublisher> publishers, SlackChannels channels)
         {
             _smartinger = smartinger;
             _publishers = publishers;
             _channels = channels;
+            _timing = new Timing();
         }
 
-        public override async Task Process()
+        public async Task Process()
         {
             foreach (var smarting in _smartinger.ThatHasBirthday())
             {
@@ -32,12 +29,14 @@ namespace Smartbot.Utilities.RecurringActions
                 {
                     var notification = new Notification
                     {
-                        Msg = $"Idag jazzulerer vi {smarting.Name} med {Timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
+                        Msg = $"Idag jazzulerer vi {smarting.Name} med {_timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
                         Recipient = _channels.SmartebokaChannel
                     };
                     await p.Publish(notification);
                 }
             }
         }
+
+        public string Cron => Crons.EveryDayAtEight;
     }
 }

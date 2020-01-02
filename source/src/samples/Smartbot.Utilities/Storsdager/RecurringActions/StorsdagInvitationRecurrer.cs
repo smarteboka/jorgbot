@@ -1,26 +1,22 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Slackbot.Net;
+using Slackbot.Net.Abstractions.Handlers;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
-    public class StorsdagInvitationRecurrer : RecurringAction
+    public class StorsdagInvitationRecurrer : IRecurringAction
     {
         private readonly StorsdagInviter _inviter;
-
-        public StorsdagInvitationRecurrer(StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(Crons.ThirdSaturdayOfMonth, logger)
+    
+        public StorsdagInvitationRecurrer(StorsdagInviter inviter)
         {
             _inviter = inviter;
         }
-
-        public StorsdagInvitationRecurrer(string cron, StorsdagInviter inviter, ILogger<StorsdagInvitationRecurrer> logger): base(cron, logger)
-        {
-            _inviter = inviter;
-        }
-
-        public override async Task Process()
+    
+        public async Task Process()
         {
             await _inviter.InviteNextStorsdag();
         }
+
+        public string Cron => Crons.ThirdSaturdayOfMonth;
     }
 }

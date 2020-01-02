@@ -40,7 +40,6 @@ namespace Smartbot
                         .AddRecurring<HerokuFreeTierKeepAlive>()
                         .AddRecurring<Jorger>()
                         .AddRecurring<HappyBirthday>()
-                        .AddRecurring<HeartBeater>()
                         .AddRecurring<StorsdagMention>()
                         .AddRecurring<StorsdagInvitationRecurrer>()
 
@@ -51,7 +50,8 @@ namespace Smartbot
                         .AddHandler<UrlsSaveHandler>()
                         .AddHandler<RandomSmartingHandler>()
                         .AddHandler<RsvpReminder>()
-                        .AddHandler<FplHandler>();
+                        .AddHandler<FplHandler>()
+                        .BuildRecurrers();
 
                 })
                 .ConfigureLogging((context, configLogging) =>

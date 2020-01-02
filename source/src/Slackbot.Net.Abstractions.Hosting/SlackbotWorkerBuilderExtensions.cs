@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
 
@@ -12,16 +11,16 @@ namespace Slackbot.Net.Abstractions.Hosting
             builder.Services.AddSingleton<IHandleMessages, T>();
             return builder;
         }
-        
+
         public static ISlackbotWorkerBuilder AddPublisher<T>(this ISlackbotWorkerBuilder builder) where T: class, IPublisher
         {
             builder.Services.AddSingleton<IPublisher, T>();
             return builder;
         }
         
-        public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder) where T: class, IHostedService
+        public static ISlackbotWorkerBuilder AddRecurring<T>(this ISlackbotWorkerBuilder builder) where T: class, IRecurringAction
         {
-            builder.Services.AddHostedService<T>();
+            builder.Services.AddSingleton<IRecurringAction, T>();
             return builder;
         }
     }

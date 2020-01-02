@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Slackbot.Net.Utilities;
 
 namespace Smartbot.Utilities
@@ -29,7 +31,7 @@ namespace Smartbot.Utilities
         public Smartinger()
         {
             _timing = new Timing();
-            if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 _timing.SetTimeZone("Europe/Oslo");
             }
