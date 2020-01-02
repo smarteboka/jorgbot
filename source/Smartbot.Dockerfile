@@ -12,8 +12,18 @@ COPY src/Slackbot.Net/Slackbot.Net.csproj ./src/Slackbot.Net/Slackbot.Net.csproj
 COPY src/Slackbot.Net.SlackClients/Slackbot.Net.SlackClients.csproj ./src/Slackbot.Net.SlackClients/Slackbot.Net.SlackClients.csproj
 COPY src/Slackbot.Net.Endpoints/Slackbot.Net.Endpoints.csproj ./src/Slackbot.Net.Endpoints/Slackbot.Net.Endpoints.csproj
 
+COPY src/Slackbot.Net.Abstractions.Handlers/Slackbot.Net.Abstractions.Handlers.csproj ./src/Slackbot.Net.Abstractions.Handlers/Slackbot.Net.Abstractions.Handlers.csproj
+COPY src/Slackbot.Net.Abstractions.Hosting/Slackbot.Net.Abstractions.Hosting.csproj ./src/Slackbot.Net.Abstractions.Hosting/Slackbot.Net.Abstractions.Hosting.csproj
+COPY src/Slackbot.Net.Abstractions.Publishers/Slackbot.Net.Abstractions.Publishers.csproj ./src/Slackbot.Net.Abstractions.Publishers/Slackbot.Net.Abstractions.Publishers.csproj
+
+COPY src/Slackbot.Net.Extensions.Publishers.Logger/Slackbot.Net.Extensions.Publishers.Logger.csproj ./src/Slackbot.Net.Extensions.Publishers.Logger/Slackbot.Net.Extensions.Publishers.Logger.csproj
+COPY src/Slackbot.Net.Extensions.Publishers.Slack/Slackbot.Net.Extensions.Publishers.Slack.csproj ./src/Slackbot.Net.Extensions.Publishers.Slack/Slackbot.Net.Extensions.Publishers.Slack.csproj
+
+
+
 COPY test/Smartbot.Tests/Smartbot.Tests.csproj ./test/Smartbot.Tests/Smartbot.Tests.csproj
 COPY test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj ./test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj
+COPY test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj ./test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj
 
 RUN dotnet restore Slackbot.Net.sln
 

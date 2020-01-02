@@ -10,11 +10,9 @@
       <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
       <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+      <PackageReference Include="Slackbot.Net" Version="1.0.1-beta011" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj" />
-      <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
-    </ItemGroup>
+  
 
 </Project>
