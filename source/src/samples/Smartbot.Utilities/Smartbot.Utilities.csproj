@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Fpl.Client" Version="0.2.0" />
+      <PackageReference Include="Fpl.Client" Version="0.3.1" />
       <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
       <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />

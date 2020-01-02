@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fpl.Client;
+using Fpl.Client.Abstractions;
 using Slackbot.Net.Workers.Handlers;
 using Slackbot.Net.Workers.Publishers;
 using SlackConnector.Models;
@@ -11,12 +11,14 @@ namespace Smartbot.Utilities.Handlers
     public class FplHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly IFplClient _fplClient;
+        private readonly IGameweekClient _gameweekClient;
+        private readonly ILeagueClient _leagueClient;
 
-        public FplHandler(IEnumerable<IPublisher> publishers, IFplClient fplClient)
+        public FplHandler(IEnumerable<IPublisher> publishers, IGameweekClient gameweekClient, ILeagueClient leagueClient)
         {
             _publishers = publishers;
-            _fplClient = fplClient;
+            _gameweekClient = gameweekClient;
+            _leagueClient = leagueClient;
         }
 
         public Tuple<string, string> GetHelpDescription()
@@ -40,9 +42,9 @@ namespace Smartbot.Utilities.Handlers
         {
             try
             {
-                var scoreboard = await _fplClient.GetScoreBoard("89903");
-                var bootstrap = await _fplClient.GetBootstrap();
-                var standings = FplFormatter.GetStandings(scoreboard, bootstrap);
+                var scoreboard = await _leagueClient.GetClassicLeague(89903);
+                var gameweeks = await _gameweekClient.GetGameweeks();
+                var standings = FplFormatter.GetStandings(scoreboard, gameweeks);
                 return standings;
             }
             catch (Exception e)

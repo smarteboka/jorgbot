@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Fpl.Client.Models;
@@ -6,29 +7,29 @@ namespace Smartbot.Utilities.Handlers
 {
     public static class FplFormatter
     {
-        public static string GetStandings(ScoreBoard scoreBoard, Bootstrap bootstrap)
+        public static string GetStandings(ClassicLeague league, ICollection<Gameweek> gameweeks)
         {
             var sb = new StringBuilder();
 
-            var sortedByRank = scoreBoard.Standings.Results.OrderBy(x => x.Rank);
+            var sortedByRank = league.Standings.Entries.OrderBy(x => x.Rank);
 
-            var numPlayers = scoreBoard.Standings.Results.Count();
+            var numPlayers = league.Standings.Entries.Count();
 
-            var currentGw = bootstrap.Events.SingleOrDefault(x => x.IsCurrent)?.Id.ToString() ?? "?";
+            var currentGw = gameweeks.SingleOrDefault(x => x.IsCurrent)?.Id.ToString() ?? "?";
 
-
+            
             sb.Append($":star: *Resultater etter GW {currentGw}* :star: \n\n");
 
             foreach (var player in sortedByRank)
             {
                 var arrow = GetRankChangeEmoji(player, numPlayers);
-                sb.Append($"{player.Rank}. <https://fantasy.premierleague.com/entry/{player.Id}/event/{currentGw}|{player.TeamName}> - {player.TotalPoints} {arrow} \n");
+                sb.Append($"{player.Rank}. <https://fantasy.premierleague.com/entry/{player.Id}/event/{currentGw}|{player.EntryName}> - {player.Total} {arrow} \n");
             }
 
             return sb.ToString();
         }
 
-        private static string GetRankChangeEmoji(Player player, int numPlayers)
+        private static string GetRankChangeEmoji(ClassicLeagueEntry player, int numPlayers)
         {
             var rankDiff = player.LastRank - player.Rank;
 
@@ -46,7 +47,7 @@ namespace Smartbot.Utilities.Handlers
 
             if (player.Rank == numPlayers)
             {
-                emojiString.Append(":eyes:");
+                emojiString.Append(":rip:");
             }
 
             return emojiString.ToString();
