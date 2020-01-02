@@ -3,12 +3,15 @@ var configuration = Argument("configuration", "Release");
 var packageName = "Slackbot.Net";
 var proj = $"./source/src/{packageName}/{packageName}.csproj";
 
-var version = "1.0.1-beta008";
+var packageNameRawClient = "Slackbot.Net.SlackClients";
+var projRawClient = $"./source/src/{packageNameRawClient}/{packageNameRawClient}.csproj";
+
+var version = "1.0.1-beta009";
 var outputDir = "./output";
 
 Task("Build")
     .Does(() => {
-        DotNetCoreBuild(proj, new DotNetCoreBuildSettings { Configuration = "Release" });
+        DotNetCoreBuild("./source/Smartbot.sln", new DotNetCoreBuildSettings { Configuration = "Release" });
     });
 
 Task("Test")
@@ -20,17 +23,21 @@ Task("Test")
 Task("Pack")
     .IsDependentOn("Test")
     .Does(() => {
-        var coresettings = new DotNetCorePackSettings
-        {
-            Configuration = "Release",
-            OutputDirectory = outputDir,
-        };
-        coresettings.MSBuildSettings = new DotNetCoreMSBuildSettings()
-                                        .WithProperty("Version", new[] { version });
-
-
-        DotNetCorePack(proj, coresettings);
+        Pack(proj);
+        Pack(projRawClient);
 });
+
+private void Pack(string proj){
+    var coresettings = new DotNetCorePackSettings
+    {
+        Configuration = "Release",
+        OutputDirectory = outputDir,
+    };
+    coresettings.MSBuildSettings = new DotNetCoreMSBuildSettings()
+                                    .WithProperty("Version", new[] { version });
+
+    DotNetCorePack(proj, coresettings);
+}
 
 Task("Publish")
     .IsDependentOn("Pack")
@@ -42,6 +49,7 @@ Task("Publish")
         };
 
         DotNetCoreNuGetPush($"{outputDir}/{packageName}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameRawClient}.{version}.nupkg", settings);
 });
 
 RunTarget(target);
