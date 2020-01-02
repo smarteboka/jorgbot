@@ -8,10 +8,7 @@ A .NET framework for building a Slack bot in a .NET Core host.
 * Not a competitor to [the Microsoft Bot Framework](https://github.com/microsoft/botframework-sdk)
 * Allthough it makes use of one, it's not only a raw C# Slack Client. If you want that, go to [github.com/Inumedia/SlackAPI](https://github.com/Inumedia/SlackAPI).
 
-# Install
-Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.svg)](https://www.nuget.org/packages/slackbot.net/)
 
-`$ dotnet add package slackbot.net`
 
 # Features
 * Workers: 
@@ -20,7 +17,13 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.sv
 * Endpoints:
   - Receive payloads from Slack and execute code.
 
-## Workers hosting
+## Workers 
+
+### Install
+Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.svg)](https://www.nuget.org/packages/slackbot.net/)
+
+`$ dotnet add package slackbot.net`
+
 Wire it up using .NET Core DI:
 ```
 services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  })
@@ -32,7 +35,13 @@ services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  
 })
 ```
 
-## Endpoints hosting
+## Endpoints 
+
+### Install
+Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.endpoints.svg)](https://www.nuget.org/packages/slackbot.net.endpoints/)
+
+`$ dotnet add package slackbot.net.endpoints`
+
 Wire it up using .NET Core DI _and_ the corresponding middleware which executes the handler:
 ```
 services.AddSlackbotEndpoints()
