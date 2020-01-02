@@ -9,9 +9,10 @@ COPY src/samples/Smartbot.Web/Smartbot.Web.csproj ./src/samples/Smartbot.Web/Sma
 COPY src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj ./src/samples/Smartbot.Utilities/Smartbot.Utilities.csproj
 
 COPY src/Slackbot.Net/Slackbot.Net.csproj ./src/Slackbot.Net/Slackbot.Net.csproj
+COPY src/Slackbot.Net.SlackClients/Slackbot.Net.SlackClients.csproj ./src/Slackbot.Net.SlackClients/Slackbot.Net.SlackClients.csproj
 
 COPY test/Smartbot.Tests/Smartbot.Tests.csproj ./test/Smartbot.Tests/Smartbot.Tests.csproj
-COPY test/Slackbot.Net.Tests/Slackbot.Net.Tests.csproj ./test/Slackbot.Net.Tests/Slackbot.Net.Tests.csproj
+COPY test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj ./test/Slackbot.Net.SlackClients.Tests/Slackbot.Net.SlackClients.Tests.csproj
 
 RUN dotnet restore Smartbot.sln
 
