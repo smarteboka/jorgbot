@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.SlackClients;
-using SlackConnector.Models;
 using Smartbot.Utilities.Storage.SlackUrls;
 
 namespace Smartbot.Utilities.Handlers

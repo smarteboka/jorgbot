@@ -18,12 +18,8 @@
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
-
+    
     <ItemGroup>
-      <PackageReference Include="SlackConnector" Version="4.2.74" />
-    </ItemGroup>
-
-     <ItemGroup>
         <None Include="images/slack.png">
             <Pack>True</Pack>
             <PackagePath></PackagePath>

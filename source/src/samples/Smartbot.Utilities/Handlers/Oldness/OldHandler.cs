@@ -8,7 +8,6 @@ using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Models.Responses;
-using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -111,9 +110,6 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldHandle(SlackMessage message)
         {
-            _logger.LogInformation("Received:" + message.RawData);
-
-
             if (message.User.IsBot)
             {
                 LogHandled("BOT");

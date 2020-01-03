@@ -25,7 +25,8 @@ namespace Slackbot.Net.Connections
             var slackConnector = new SlackConnector.SlackConnector();
             var handlerSelector = _services.GetService<HandlerSelector>();
             Connection = await slackConnector.Connect(options.Value.Slackbot_SlackApiKey_BotUser);
-            Connection.OnMessageReceived += handlerSelector.HandleIncomingMessage;
+            Connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
+            
             if (Connection.IsConnected)
                 logger.LogInformation("Connected");
 

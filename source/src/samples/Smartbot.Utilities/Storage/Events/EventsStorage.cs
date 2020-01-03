@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Smartbot.Utilities.Storage.Events
 {
-    public class EventsStorage
+    public class EventsStorage : IEventsStorage
     {
         private readonly CloudTable _eventsTable;
 

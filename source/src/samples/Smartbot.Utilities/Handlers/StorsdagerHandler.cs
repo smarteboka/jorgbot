@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
 using Slackbot.Net.Utilities;
-using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers
 {

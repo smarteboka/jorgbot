@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Fpl.Client.Abstractions;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
-using SlackConnector.Models;
 
 namespace Smartbot.Utilities.Handlers
 {

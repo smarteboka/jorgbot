@@ -14,14 +14,13 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
     public class StorsdagInviter
     {
-
-        private readonly EventsStorage _eventStorage;
-        private readonly InvitationsStorage _inviteStorage;
+        private readonly IEventsStorage _eventStorage;
+        private readonly IInvitationsStorage _inviteStorage;
         private readonly ISlackClient _slackClient;
         private readonly SlackQuestionClient _questioner;
         private readonly ILogger<StorsdagInviter> _logger;
 
-        public StorsdagInviter(EventsStorage eventStorage, InvitationsStorage inviteStorage, ISlackClient slackClient, SlackQuestionClient questioner, ILogger<StorsdagInviter> logger)
+        public StorsdagInviter(IEventsStorage eventStorage, IInvitationsStorage inviteStorage, ISlackClient slackClient, SlackQuestionClient questioner, ILogger<StorsdagInviter> logger)
         {
             _eventStorage = eventStorage;
             _inviteStorage = inviteStorage;

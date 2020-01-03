@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
-using SlackConnector.Models;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot.Utilities.Handlers
@@ -55,7 +54,7 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldHandle(SlackMessage message)
         {
-            return message.ChatHub.Type == SlackChatHubType.DM && message.User.Name == "johnkors" && message.Text == "storsdagreminder";
+            return message.ChatHub.Type == ChatHubTypes.DirectMessage && message.User.Name == "johnkors" && message.Text == "storsdagreminder";
         }
     }
 }

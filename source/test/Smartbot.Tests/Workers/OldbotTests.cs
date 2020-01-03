@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
-using SlackConnector.Models;
 using Smartbot.Utilities;
 using Smartbot.Utilities.Handlers;
 using Xunit;
@@ -20,7 +20,7 @@ namespace Smartbot.Tests.Workers
             var request = new SlackMessage
             {
                 Text = null,
-                User = new SlackUser()
+                User = new User()
             };
 
             var clientMock = A.Fake<ISlackClient>();
@@ -53,7 +53,7 @@ namespace Smartbot.Tests.Workers
             var request = new SlackMessage
             {
                 Text = "OLD! https://www.aftenposten.no/norge/i/L08awV/Haper-pa-mer-enn-ti-tusen-barn-og-unge-i-norske-klimastreiker?utm_source=my-unit-test",
-                User = new SlackUser
+                User = new User
                 {
                     IsBot = true
                 }
@@ -93,12 +93,12 @@ namespace Smartbot.Tests.Workers
             var request = new SlackMessage
             {
                 Text = "Woot, me, U0F3P72QM, is repeating the url http://db.no some time later",
-                User = new SlackUser
+                User = new User
                 {
                     Id = "U0F3P72QM"
                 },
                 Timestamp = 1660000000.000000,
-                ChatHub = new SlackChatHub
+                ChatHub = new ChatHub
                 {
                     Id = "123"
                 }
@@ -171,11 +171,11 @@ namespace Smartbot.Tests.Workers
             var response = await validateOldness.Handle(new SlackMessage
             {
                 Text = slackMessage,
-                User = new SlackUser
+                User = new User
                 {
 
                 },
-                ChatHub = new SlackChatHub
+                ChatHub = new ChatHub
                 {
                     Id = "123"
                 }

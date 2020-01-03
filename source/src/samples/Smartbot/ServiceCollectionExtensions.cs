@@ -24,8 +24,8 @@ namespace Smartbot
             services.AddSingleton<FourSquareService>();
             services.Configure<FourSquareOptions>(configuration);
 
-            services.AddSingleton<EventsStorage>();
-            services.AddSingleton<InvitationsStorage>();
+            services.AddSingleton<IEventsStorage,EventsStorage>();
+            services.AddSingleton<IInvitationsStorage,InvitationsStorage>();
 
             services.AddSingleton<StorsdagInviter>();
             services.AddSingleton<SlackQuestionClient>();

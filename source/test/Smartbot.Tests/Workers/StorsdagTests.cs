@@ -1,11 +1,12 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients;
+using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Models.Responses.UsersList;
 using Slackbot.Net.Utilities;
 using Smartbot.Utilities;
@@ -152,7 +153,6 @@ namespace Smartbot.Tests.Workers
         private StorsdagInviter CreateInviter()
         {
             var inviteLogger = A.Fake<ILogger<StorsdagInviter>>();
-            // var client = GetSlackClient();
             var client = A.Fake<ISlackClient>();
             A.CallTo(() => client.UsersList()).Returns(new UsersListResponse { 
                 Ok = true,
@@ -166,16 +166,14 @@ namespace Smartbot.Tests.Workers
                 }
                 
             });
+            A.CallTo(() => client.ChatPostMessage(A<ChatPostMessageRequest>._)).Returns(new ChatPostMessageResponse() { 
+                Ok = true
+            });
             var questioner = new SlackQuestionClient(client);
-            var eventsStorage = EventsStorage();
-            var invitationsStorage = InvitationsStorage();
+            var eventsStorage = A.Fake<IEventsStorage>();
+            var invitationsStorage = A.Fake<IInvitationsStorage>();
   
             return new StorsdagInviter(eventsStorage, invitationsStorage, client, questioner, inviteLogger);
-        }
-
-        private ISlackClient GetSlackClient()
-        {
-            return new Setup(_output).SlackClient;
         }
 
         [Fact]
