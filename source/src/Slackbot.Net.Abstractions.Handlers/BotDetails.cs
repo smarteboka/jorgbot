@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Connections
+namespace Slackbot.Net.Abstractions.Handlers
 {
     public class BotDetails
     {

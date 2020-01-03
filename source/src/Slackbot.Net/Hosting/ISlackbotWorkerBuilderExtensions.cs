@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using Slackbot.Net;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
@@ -71,7 +72,5 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();
         }
-
-   
     }
 }

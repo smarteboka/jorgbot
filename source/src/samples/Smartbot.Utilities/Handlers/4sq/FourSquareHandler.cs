@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Publishers;
-using Slackbot.Net.Connections;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices.Entities;
 
