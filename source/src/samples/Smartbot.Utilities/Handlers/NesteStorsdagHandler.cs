@@ -12,11 +12,11 @@ namespace Smartbot.Utilities.Handlers
     public class NesteStorsdagHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly EventsStorage _eventStorage;
-        private readonly InvitationsStorage _inviteStorage;
+        private readonly IEventsStorage _eventStorage;
+        private readonly IInvitationsStorage _inviteStorage;
 
 
-        public NesteStorsdagHandler(IEnumerable<IPublisher> publishers, EventsStorage eventStorage, InvitationsStorage inviteStorage)
+        public NesteStorsdagHandler(IEnumerable<IPublisher> publishers, IEventsStorage eventStorage, IInvitationsStorage inviteStorage)
         {
             _publishers = publishers;
             _eventStorage = eventStorage;

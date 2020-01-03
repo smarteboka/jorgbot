@@ -33,8 +33,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddWorkerDependencies(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
         {
-            builder.Services.AddSlackbotClient(configuration);
-            builder.Services.AddSlackbotOauthClient(configuration);
+            var slackOptions = new SlackOptions();
+            configuration.Bind(slackOptions);
+            builder.Services.AddSlackbotClient(o => o.BotToken = slackOptions.Slackbot_SlackApiKey_BotUser);
+            builder.Services.AddSlackbotOauthClient(o => o.OauthToken = slackOptions.Slackbot_SlackApiKey_SlackApp);
             AddWorker(builder);
         }
         

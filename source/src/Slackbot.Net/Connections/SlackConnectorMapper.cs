@@ -15,6 +15,7 @@ namespace Slackbot.Net.Connections
                 RawData = msg.RawData,
                 Timestamp = msg.Timestamp,
                 User = ToUser(msg.User),
+                MentionsBot = msg.MentionsBot,
                 ChatHub = new ChatHub
                 {
                     Id = msg.ChatHub?.Id,
