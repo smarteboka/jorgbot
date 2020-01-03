@@ -15,12 +15,13 @@
       <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-<!--      <PackageReference Include="Slackbot.Net.Endpoints" Version="1.0.1-beta011" />-->
+      <PackageReference Include="Slackbot.Net.Endpoints" Version="1.0.1-beta015" />
+    
     </ItemGroup>
 
     <ItemGroup>
-         <ProjectReference Include="..\..\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />
-         <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />
+<!--         <ProjectReference Include="..\..\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj" />-->
+<!--         <ProjectReference Include="..\..\Slackbot.Net\Slackbot.Net.csproj" />-->
          <ProjectReference Include="..\Smartbot.Utilities\Smartbot.Utilities.csproj" />
     </ItemGroup>
 

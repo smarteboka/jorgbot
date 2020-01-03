@@ -29,11 +29,6 @@ namespace Smartbot
                     services.AddSmartbot(context.Configuration);
 
                     services.AddSlackbotWorker(context.Configuration)
-                    // //(o =>
-                    //     {
-                    //         o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
-                    //         o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
-                    //     })
 
                         .AddPublisher<SlackPublisher>()
                         .AddPublisher<LoggerPublisher>()
@@ -51,7 +46,7 @@ namespace Smartbot
                         .AddHandler<UrlsSaveHandler>()
                         .AddHandler<RandomSmartingHandler>()
                         .AddHandler<RsvpReminder>()
-                        .AddHandler<FplHandler>()
+                        .AddFplBot(context.Configuration.GetSection("smartebokafpl"))
                         .BuildRecurrers();
 
                 })

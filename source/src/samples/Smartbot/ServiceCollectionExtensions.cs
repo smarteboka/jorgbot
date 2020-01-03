@@ -15,7 +15,6 @@ namespace Smartbot
     {
         public static IServiceCollection AddSmartbot(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddFplApiClient(configuration.GetSection("fpl"));
             services.AddSingleton<SlackChannels>();
             services.AddSingleton<Smartinger>();
             services.Configure<SmartStorageOptions>(configuration);
