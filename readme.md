@@ -25,7 +25,7 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.sv
 `$ dotnet add package slackbot.net`
 
 Wire it up using .NET Core DI:
-```
+```csharp
 services.AddSlackbotWorker(o => { o.Slackbot_SlackApiKey_BotUser = "sometoken"  })
     .AddPublisher<SlackPublisher>()
     .AddPublisher<LoggerPublisher>()
@@ -43,7 +43,7 @@ Download it from NuGet:[![NuGet](https://img.shields.io/nuget/dt/slackbot.net.en
 `$ dotnet add package slackbot.net.endpoints`
 
 Wire it up using .NET Core DI _and_ the corresponding middleware which executes the handler:
-```
+```csharp
 services.AddSlackbotEndpoints()
         .AddEndpointHandler<MyHandlerOfIncomingCallbacksFromSlack>();
 [..]        
@@ -60,7 +60,7 @@ If you want to run code given a certain message was posted to Slack, register an
 
 The `IHandleMessages` interface requires that you provide when the handler should execute (`ShouldHandle`), and what code it should run if `ShoulHandle` returns true.
 
-```
+```csharp
 public interface IHandleMessages
 {
       Task<HandleResponse> Handle(SlackMessage message);
@@ -70,7 +70,7 @@ public interface IHandleMessages
 
 Sample implementation:
 
-```
+```csharp
   public async Task<HandleResponse> Handle(SlackMessage message)
   {
       // run any code
@@ -102,7 +102,7 @@ These are available via DI and can be used in any `IHandle` or `RecurringAction`
 
 Sample handler using all `IPublisher`s registered:
 
-```
+```csharp
 public class NotifyAllHandler : IHandleMessages
 {
     private readonly IEnumerable<IPublisher> _publishers;
@@ -133,7 +133,7 @@ public class NotifyAllHandler : IHandleMessages
 }
 ```
 
-```
+```csharp
 public class NotifyOnlyUsingSpecificPublisherHandler : IHandleMessages
 {
     private readonly IPublisher _publisher;
@@ -165,7 +165,7 @@ public class NotifyOnlyUsingSpecificPublisherHandler : IHandleMessages
 
 Similarly in an `RecurringAction`:
 
-```
+```csharp
 public class SampleRecurringAction : RecurringAction
 {
     private readonly IEnumerable<IPublisher> _publishers;
