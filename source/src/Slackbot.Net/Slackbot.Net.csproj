@@ -30,7 +30,6 @@
 
 
       <PackageReference Include="Cronos" Version="0.7.0" />
-      <PackageReference Include="SlackConnector" Version="4.2.74" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,6 +38,7 @@
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Publishers\Slackbot.Net.Abstractions.Publishers.csproj" />
       <ProjectReference Include="..\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
+      <ProjectReference Include="..\SlackConnector\SlackConnector.csproj" />
     </ItemGroup>
 
     <ItemGroup>
