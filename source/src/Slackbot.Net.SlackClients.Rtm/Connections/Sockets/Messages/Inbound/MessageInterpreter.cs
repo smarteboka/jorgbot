@@ -2,7 +2,6 @@
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound.ReactionItem;
 using Slackbot.Net.SlackClients.Rtm.Logging;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
@@ -28,26 +27,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
                     case MessageType.Message:
                         message = GetChatMessage(json);
                         break;
-                    case MessageType.Group_Joined:
-                        message = JsonConvert.DeserializeObject<GroupJoinedMessage>(json);
-                        break;
-                    case MessageType.Channel_Joined:
-                        message = JsonConvert.DeserializeObject<ChannelJoinedMessage>(json);
-                        break;
-                    case MessageType.Team_Join:
-                        message = JsonConvert.DeserializeObject<UserJoinedMessage>(json);
-                        break;
-                    case MessageType.Im_Created:
-                        message = JsonConvert.DeserializeObject<DmChannelJoinedMessage>(json);
-                        break;
                     case MessageType.Pong:
                         message = JsonConvert.DeserializeObject<PongMessage>(json);
-                        break;
-                    case MessageType.Reaction_Added:
-                        message = GetReactionMessage(json);
-                        break;
-                    case MessageType.Channel_Created:
-                        message = JsonConvert.DeserializeObject<ChannelCreatedMessage>(json);
                         break;
                 }
             }
@@ -88,48 +69,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
             }
 
             return message;
-        }
-
-        private static ReactionMessage GetReactionMessage(string json)
-        {
-            var message = JsonConvert.DeserializeObject<ReactionMessage>(json);
-
-            var reactionItemType = ParseReactionItemType(json);
-            switch (reactionItemType)
-            {
-                case ReactionItemType.file:
-                    message.ReactingTo = GenerateReactionItem<FileReaction>(json);
-                    break;
-                case ReactionItemType.file_comment:
-                    message.ReactingTo = GenerateReactionItem<FileCommentReaction>(json);
-                    break;
-                case ReactionItemType.message:
-                    message.ReactingTo = GenerateReactionItem<MessageReaction>(json);
-                    break;
-                default:
-                    message.ReactingTo = GenerateReactionItem<UnknownReaction>(json);
-                    break;
-            }
-
-            return message;
-        }
-
-        private static IReactionItem GenerateReactionItem<T>(string json) where T : IReactionItem
-        {
-            var messageJobject = JObject.Parse(json);
-            return JsonConvert.DeserializeObject<T>(messageJobject["item"].ToString());
-        }
-
-        private static ReactionItemType ParseReactionItemType(string json)
-        {
-            var messageType = ReactionItemType.unknown;
-            if (!string.IsNullOrWhiteSpace(json))
-            {
-                var messageJobject = JObject.Parse(json);
-                Enum.TryParse(messageJobject["item"]["type"].Value<string>(), true, out messageType);
-            }
-
-            return messageType;
         }
     }
 }

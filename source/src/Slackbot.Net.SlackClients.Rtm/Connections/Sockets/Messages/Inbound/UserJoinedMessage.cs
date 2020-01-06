@@ -6,7 +6,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
     {
         public UserJoinedMessage()
         {
-            MessageType = MessageType.Team_Join;
         }
 
         public User User { get; set; }
