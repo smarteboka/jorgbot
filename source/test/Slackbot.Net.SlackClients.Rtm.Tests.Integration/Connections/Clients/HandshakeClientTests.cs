@@ -8,14 +8,14 @@ using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Connections.Clients
 {
-    public class FlurlHandshakeClientTests
+    public class HandshakeClientTests
     {
         [Fact]
-        public async Task should_perform_handshake_with_flurl()
+        public async Task should_perform_handshake()
         {
             // given
             var config = new ConfigReader().GetConfig();
-            var client = new FlurlHandshakeClient(new ResponseVerifier());
+            var client = new HandshakeClient(new ResponseVerifier());
 
             // when
             HandshakeResponse response = await client.FirmShake(config.Slack.ApiToken);

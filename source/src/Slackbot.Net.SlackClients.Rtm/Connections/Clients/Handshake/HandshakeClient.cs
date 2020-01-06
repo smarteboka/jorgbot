@@ -5,12 +5,12 @@ using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake
 {
-    internal class FlurlHandshakeClient : IHandshakeClient
+    internal class HandshakeClient : IHandshakeClient
     {
         private readonly IResponseVerifier _responseVerifier;
         internal const string HANDSHAKE_PATH = "/api/rtm.start";
 
-        public FlurlHandshakeClient(IResponseVerifier responseVerifier)
+        public HandshakeClient(IResponseVerifier responseVerifier)
         {
             _responseVerifier = responseVerifier;
         }
