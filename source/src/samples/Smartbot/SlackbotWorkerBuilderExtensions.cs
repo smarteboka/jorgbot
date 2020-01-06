@@ -16,7 +16,7 @@ using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot
 {
-    public static class ServiceCollectionExtensions
+    public static class SlackbotWorkerBuilderExtensions
     {
         public static ISlackbotWorkerBuilder AddSmartbot(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
         {

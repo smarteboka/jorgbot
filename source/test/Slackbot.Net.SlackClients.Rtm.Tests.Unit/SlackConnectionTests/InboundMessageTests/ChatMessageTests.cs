@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Moq;
 using AutoFixture.Xunit2;
-using SlackConnector.BotHelpers;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Models;
-using SlackConnector.Tests.Unit.TestExtensions;
-using Xunit;
+using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.BotHelpers;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Models;
+using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.SlackConnectionTests.InboundMessageTests
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundMessageTests
 {
     public class ChatMessageTests
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SlackConnector.Models
+namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     public class SlackMessage
     {

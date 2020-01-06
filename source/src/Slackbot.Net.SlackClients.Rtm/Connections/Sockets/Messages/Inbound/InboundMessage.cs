@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using SlackConnector.Serialising;
+using Slackbot.Net.SlackClients.Rtm.Serialising;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
 {
     //TOOD: Turn into interface?
     internal abstract class InboundMessage

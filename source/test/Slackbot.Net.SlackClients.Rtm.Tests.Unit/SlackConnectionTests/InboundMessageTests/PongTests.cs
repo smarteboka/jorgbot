@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Moq;
 using AutoFixture.Xunit2;
-using SlackConnector.Connections.Monitoring;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Models;
-using Xunit;
+using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Models;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.SlackConnectionTests.InboundMessageTests
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundMessageTests
 {
     public class PongTests
     {

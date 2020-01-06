@@ -2,7 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 
-namespace SlackConnector.Tests.Unit
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit
 {
     public class AutoMoqDataAttribute : AutoDataAttribute
     {

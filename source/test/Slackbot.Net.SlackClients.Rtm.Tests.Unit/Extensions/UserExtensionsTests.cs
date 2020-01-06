@@ -1,10 +1,10 @@
 ﻿using AutoFixture;
-using SlackConnector.Connections.Models;
-using SlackConnector.Extensions;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Extensions;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Extensions
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Extensions
 {
     public class UserExtensionsTests
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using SlackConnector.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 
-namespace SlackConnector.Tests.Unit.Stubs
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
 {
     public class TimerStub : ITimer
     {

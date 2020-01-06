@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using Shouldly;
-using SlackConnector.Models;
-using System.Text.RegularExpressions;
+using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.Models
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
 {
     public class SlackAttachmentSerialisationTests
     {

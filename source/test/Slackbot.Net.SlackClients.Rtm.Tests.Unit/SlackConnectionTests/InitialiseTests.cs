@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Moq;
 using AutoFixture.Xunit2;
-using SlackConnector.Connections.Monitoring;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Models;
-using Xunit;
+using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Models;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.SlackConnectionTests
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
 {
     public class given_valid_connection_info
     {

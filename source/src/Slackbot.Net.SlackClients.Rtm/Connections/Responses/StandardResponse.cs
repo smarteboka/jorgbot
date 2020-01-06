@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Connections.Responses
+﻿namespace Slackbot.Net.SlackClients.Rtm.Connections.Responses
 {
     internal class StandardResponse
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector.Tests.Unit.Stubs
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
 {
     internal class SlackConnectionFactoryStub : ISlackConnectionFactory
     {

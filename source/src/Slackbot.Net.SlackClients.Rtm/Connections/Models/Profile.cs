@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Models
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Models
 {
     internal class Profile
     {

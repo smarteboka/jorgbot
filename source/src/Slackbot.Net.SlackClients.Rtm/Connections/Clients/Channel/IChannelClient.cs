@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Connections.Responses;
 
-namespace SlackConnector.Connections.Clients.Channel
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Channel
 {
     internal interface IChannelClient
     {

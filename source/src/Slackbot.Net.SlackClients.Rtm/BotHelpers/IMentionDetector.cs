@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.BotHelpers
+﻿namespace Slackbot.Net.SlackClients.Rtm.BotHelpers
 {
     internal interface IMentionDetector
     {

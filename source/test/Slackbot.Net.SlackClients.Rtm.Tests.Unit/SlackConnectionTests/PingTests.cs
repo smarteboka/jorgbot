@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Moq;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
+using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.SlackConnectionTests
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
 {
     public class PingTests
     {

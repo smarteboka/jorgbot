@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace SlackConnector.Tests.Unit.Resources
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Resources
 {
     public static class ResourceManager
     {

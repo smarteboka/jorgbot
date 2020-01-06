@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SlackConnector.Models
+namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     public partial class SlackAttachment
     {

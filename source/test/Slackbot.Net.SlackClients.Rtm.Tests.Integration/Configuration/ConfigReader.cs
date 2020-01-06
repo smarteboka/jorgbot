@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace SlackConnector.Tests.Integration.Configuration
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration
 {
     public class ConfigReader : IConfigReader
     {

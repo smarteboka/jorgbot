@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector.Extensions
+namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
     internal static class FileExtensions
     {

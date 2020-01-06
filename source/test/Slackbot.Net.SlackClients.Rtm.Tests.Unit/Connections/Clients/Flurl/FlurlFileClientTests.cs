@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http.Testing;
 using Moq;
-using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Clients.File;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Tests.Unit.TestExtensions;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.File;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections.Clients.Flurl
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.Flurl
 {
     public class FlurlFileClientTests : IDisposable
     {

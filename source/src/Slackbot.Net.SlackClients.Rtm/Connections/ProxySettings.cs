@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlackConnector.Connections
+namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     public class ProxySettings
     {

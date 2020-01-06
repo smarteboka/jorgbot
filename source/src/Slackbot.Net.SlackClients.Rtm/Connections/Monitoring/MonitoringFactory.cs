@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Connections.Monitoring
+﻿namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
 {
     internal class MonitoringFactory : IMonitoringFactory
     {

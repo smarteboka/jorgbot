@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlackConnector.Exceptions
+namespace Slackbot.Net.SlackClients.Rtm.Exceptions
 {
     public class MissingChannelException : Exception
     {

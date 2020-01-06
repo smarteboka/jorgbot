@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using SlackConnector.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 
-namespace SlackConnector.Connections.Clients.Handshake
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake
 {
     internal class FlurlHandshakeClient : IHandshakeClient
     {

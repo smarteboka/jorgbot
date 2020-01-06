@@ -1,6 +1,6 @@
 using System;
 
-namespace SlackConnector.Connections.Monitoring
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Monitoring
 {
     public class MonitorAlreadyStartedException : Exception
     { }

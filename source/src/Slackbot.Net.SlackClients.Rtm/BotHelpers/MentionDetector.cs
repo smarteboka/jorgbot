@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SlackConnector.BotHelpers
+namespace Slackbot.Net.SlackClients.Rtm.BotHelpers
 {
     internal class MentionDetector : IMentionDetector
     {

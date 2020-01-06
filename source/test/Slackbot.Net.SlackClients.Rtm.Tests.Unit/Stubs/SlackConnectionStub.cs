@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SlackConnector.EventHandlers;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.EventHandlers;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector.Tests.Unit.Stubs
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
 {
     public class SlackConnectionStub : ISlackConnection
     {

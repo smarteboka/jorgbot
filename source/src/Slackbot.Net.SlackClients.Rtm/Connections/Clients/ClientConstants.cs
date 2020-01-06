@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Connections.Clients
+﻿namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients
 {
     internal static class ClientConstants
     {

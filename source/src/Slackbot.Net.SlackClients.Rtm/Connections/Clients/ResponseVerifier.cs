@@ -1,7 +1,7 @@
-using SlackConnector.Connections.Responses;
-using SlackConnector.Exceptions;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Exceptions;
 
-namespace SlackConnector.Connections.Clients
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients
 {
     internal class ResponseVerifier : IResponseVerifier
     {

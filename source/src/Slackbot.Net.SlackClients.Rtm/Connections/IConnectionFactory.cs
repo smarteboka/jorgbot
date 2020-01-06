@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Connections.Clients.Handshake;
-using SlackConnector.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 
-namespace SlackConnector.Connections
+namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     internal interface IConnectionFactory
     {

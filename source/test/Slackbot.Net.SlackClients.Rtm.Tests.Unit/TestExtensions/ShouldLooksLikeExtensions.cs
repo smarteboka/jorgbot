@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Moq;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.TestExtensions
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions
 {
     public static class ShouldLooksLikeExtensions
     {

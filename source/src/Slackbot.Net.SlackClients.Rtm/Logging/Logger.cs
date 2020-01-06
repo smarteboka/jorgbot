@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlackConnector.Logging
+namespace Slackbot.Net.SlackClients.Rtm.Logging
 {
     public class Logger : ILogger
     {

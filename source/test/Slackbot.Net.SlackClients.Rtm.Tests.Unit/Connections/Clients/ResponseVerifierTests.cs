@@ -1,10 +1,10 @@
-﻿using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Exceptions;
+﻿using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Exceptions;
 using Xunit;
-using Shouldly;
 
-namespace SlackConnector.Tests.Unit.Connections.Clients
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients
 {
     public class ResponseVerifierTests
     {

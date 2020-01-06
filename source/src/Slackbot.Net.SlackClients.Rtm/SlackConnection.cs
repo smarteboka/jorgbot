@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SlackConnector.BotHelpers;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Monitoring;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
-using SlackConnector.EventHandlers;
-using SlackConnector.Extensions;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.BotHelpers;
+using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
+using Slackbot.Net.SlackClients.Rtm.EventHandlers;
+using Slackbot.Net.SlackClients.Rtm.Extensions;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector
+namespace Slackbot.Net.SlackClients.Rtm
 {
     internal class SlackConnection : ISlackConnection
     {

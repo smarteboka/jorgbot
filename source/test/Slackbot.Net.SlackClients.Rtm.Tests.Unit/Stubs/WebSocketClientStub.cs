@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
 
-namespace SlackConnector.Tests.Unit.Stubs
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
 {
     internal class WebSocketClientStub : IWebSocketClient
     {

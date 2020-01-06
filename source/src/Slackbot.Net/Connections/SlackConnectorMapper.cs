@@ -1,13 +1,13 @@
 using System;
 using Slackbot.Net.Abstractions.Handlers;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Models;
 using SlackMessage = Slackbot.Net.Abstractions.Handlers.SlackMessage;
 
 namespace Slackbot.Net.Connections
 {
     public class SlackConnectorMapper
     {
-        public static SlackMessage Map(SlackConnector.Models.SlackMessage msg)
+        public static SlackMessage Map(SlackClients.Rtm.Models.SlackMessage msg)
         {
             var slackMessage = new SlackMessage
             {

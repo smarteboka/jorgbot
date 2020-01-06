@@ -1,22 +1,22 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Moq;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Clients.Handshake;
-using SlackConnector.Connections.Models;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.SlackConnectorTests
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
 {
     public class HubsTests
     {
         private string _webSocketUrl = "some-web-url";
         private readonly Mock<IHandshakeClient> _handshakeClient;
         private readonly Mock<ISlackConnectionFactory> _slackConnectionFactory;
-        private readonly SlackConnector _slackConnector;
+        private readonly Slackbot.Net.SlackClients.Rtm.SlackConnector _slackConnector;
 
         public HubsTests()
         {
@@ -24,7 +24,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectorTests
             var webSocketClient = new Mock<IWebSocketClient>();
             var connectionFactory = new Mock<IConnectionFactory>();
             _slackConnectionFactory = new Mock<ISlackConnectionFactory>();
-            _slackConnector = new SlackConnector(connectionFactory.Object, _slackConnectionFactory.Object);
+            _slackConnector = new Slackbot.Net.SlackClients.Rtm.SlackConnector(connectionFactory.Object, _slackConnectionFactory.Object);
 
             connectionFactory
                 .Setup(x => x.CreateHandshakeClient())

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
-using SlackConnector.Models;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Models;
+using Xunit;
 
-namespace SlackConnector.Tests.Integration
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 {
     public class SlackConnectorTests : IntegrationTest
     {

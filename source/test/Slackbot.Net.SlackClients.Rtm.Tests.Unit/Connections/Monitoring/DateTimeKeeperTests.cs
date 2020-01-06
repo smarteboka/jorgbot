@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
-using SlackConnector.Connections.Monitoring;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections.Monitoring
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
 {
     public class DateTimeKeeperTests
     {

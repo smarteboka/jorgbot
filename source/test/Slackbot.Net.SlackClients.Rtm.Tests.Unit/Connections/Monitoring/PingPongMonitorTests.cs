@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
 using AutoFixture.Xunit2;
-using SlackConnector.Connections.Monitoring;
-using SlackConnector.Tests.Unit.Stubs;
-using Xunit;
+using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections.Monitoring
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
 {
     public class PingPongMonitorTests
     {

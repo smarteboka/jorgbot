@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Models;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Exceptions;
-using SlackConnector.Extensions;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Exceptions;
+using Slackbot.Net.SlackClients.Rtm.Extensions;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector
+namespace Slackbot.Net.SlackClients.Rtm
 {
     public class SlackConnector : ISlackConnector
     {

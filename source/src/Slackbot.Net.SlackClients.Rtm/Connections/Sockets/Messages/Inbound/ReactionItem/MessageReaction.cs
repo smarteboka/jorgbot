@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound.ReactionItem
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound.ReactionItem
 {
     internal class MessageReaction : IReactionItem
     {
