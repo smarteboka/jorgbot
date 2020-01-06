@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddSingleton(s => s.GetService<SlackConnectionSetup>().GetBotDetails());
  
             builder.Services.AddSingleton<HandlerSelector>();
-            builder.Services.AddHostedService<SlackConnectorHostedService>();
+            builder.Services.AddHostedService<SlackRtmConnectionHostedService>();
         }
     }
 }

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -25,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SlackConnector\SlackConnector.csproj" />
+    <ProjectReference Include="..\..\src\Slackbot.Net.SlackClients.Rtm\Slackbot.Net.SlackClients.Rtm.csproj" />
   </ItemGroup>
 
 </Project>

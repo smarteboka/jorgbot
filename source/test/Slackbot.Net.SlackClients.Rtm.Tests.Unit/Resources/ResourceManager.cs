@@ -18,7 +18,7 @@ namespace SlackConnector.Tests.Unit.Resources
         private static string ReadResource(string path)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = "SlackConnector.Tests.Unit.Resources." + path;
+            string resourceName = "Slackbot.Net.SlackClients.Rtm.Tests.Unit.Resources." + path;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {

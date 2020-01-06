@@ -11,7 +11,7 @@ namespace SlackConnector.Connections
 {
     internal class ConnectionFactory : IConnectionFactory
     {
-        public async Task<IWebSocketClient> CreateWebSocketClient(string url, ProxySettings proxySettings)
+        public async Task<IWebSocketClient> CreateWebSocketClient(string url)
         {
             var socket = new WebSocketClientLite(new MessageInterpreter(new Logger()));
             await socket.Connect(url);

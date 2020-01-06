@@ -6,12 +6,12 @@ using Slackbot.Net.Connections;
 
 namespace Slackbot.Net
 {
-    internal class SlackConnectorHostedService : BackgroundService
+    internal class SlackRtmConnectionHostedService : BackgroundService
     {
         private readonly SlackConnectionSetup _setup;
-        private readonly ILogger<SlackConnectorHostedService> _logger;
+        private readonly ILogger<SlackRtmConnectionHostedService> _logger;
 
-        public SlackConnectorHostedService(SlackConnectionSetup setup, ILogger<SlackConnectorHostedService> logger)
+        public SlackRtmConnectionHostedService(SlackConnectionSetup setup, ILogger<SlackRtmConnectionHostedService> logger)
         {
             _setup = setup;
             _logger = logger;
