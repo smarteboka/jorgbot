@@ -10,19 +10,19 @@ using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
 
-namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.Flurl
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
 {
-    public class FlurlHandshakeClientTests : IDisposable
+    public class HandshakeClientTests : IDisposable
     {
         private readonly HttpTest _httpTest;
         private readonly Mock<IResponseVerifier> _responseVerifierMock;
-        private readonly FlurlHandshakeClient _handshakeClient;
+        private readonly HandshakeClient _handshakeClient;
         
-        public FlurlHandshakeClientTests()
+        public HandshakeClientTests()
         {
             _httpTest = new HttpTest();
             _responseVerifierMock = new Mock<IResponseVerifier>();
-            _handshakeClient = new FlurlHandshakeClient(_responseVerifierMock.Object);
+            _handshakeClient = new HandshakeClient(_responseVerifierMock.Object);
         }
         
         public void Dispose()
@@ -49,7 +49,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.Flurl
             // then
             _responseVerifierMock.Verify(x => x.VerifyResponse(Looks.Like(expectedResponse)));
             _httpTest
-                .ShouldHaveCalled(ClientConstants.SlackApiHost.AppendPathSegment(FlurlHandshakeClient.HANDSHAKE_PATH))
+                .ShouldHaveCalled(ClientConstants.SlackApiHost.AppendPathSegment(HandshakeClient.HANDSHAKE_PATH))
                 .WithQueryParamValue("token", slackKey)
                 .Times(1);
 

@@ -18,7 +18,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 
         public IHandshakeClient CreateHandshakeClient()
         {
-            return new FlurlHandshakeClient(new ResponseVerifier());
+            return new HandshakeClient(new ResponseVerifier());
         }
     }
 }
