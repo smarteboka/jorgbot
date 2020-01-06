@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
@@ -15,7 +16,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Connections.Clients
         {
             // given
             var config = new ConfigReader().GetConfig();
-            var client = new HandshakeClient(new ResponseVerifier());
+            var client = new HandshakeClient(new HttpClient(), new ResponseVerifier());
 
             // when
             HandshakeResponse response = await client.FirmShake(config.Slack.ApiToken);

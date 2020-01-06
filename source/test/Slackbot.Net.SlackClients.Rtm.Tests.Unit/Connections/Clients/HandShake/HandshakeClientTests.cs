@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ExpectedObjects;
-using Flurl;
-using Flurl.Http.Testing;
 using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
@@ -12,22 +15,17 @@ using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
 {
-    public class HandshakeClientTests : IDisposable
+    public class HandshakeClientTests
     {
-        private readonly HttpTest _httpTest;
         private readonly Mock<IResponseVerifier> _responseVerifierMock;
         private readonly HandshakeClient _handshakeClient;
-        
+        private readonly Mock<HttpMessageHandler> _handlerMock;
+
         public HandshakeClientTests()
         {
-            _httpTest = new HttpTest();
             _responseVerifierMock = new Mock<IResponseVerifier>();
-            _handshakeClient = new HandshakeClient(_responseVerifierMock.Object);
-        }
-        
-        public void Dispose()
-        {
-            _httpTest.Dispose();
+            _handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            _handshakeClient = new HandshakeClient(new HttpClient(_handlerMock.Object), _responseVerifierMock.Object);
         }
 
         [Fact]
@@ -41,19 +39,44 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
                 Ok = true,
                 WebSocketUrl = "some-url"
             };
-            _httpTest.RespondWithJson(expectedResponse);
-
+           
+            Setup(expectedResponse);
             // when
             var result = await _handshakeClient.FirmShake(slackKey);
 
             // then
             _responseVerifierMock.Verify(x => x.VerifyResponse(Looks.Like(expectedResponse)));
-            _httpTest
-                .ShouldHaveCalled(ClientConstants.SlackApiHost.AppendPathSegment(HandshakeClient.HANDSHAKE_PATH))
-                .WithQueryParamValue("token", slackKey)
-                .Times(1);
+            var expectedUri = new Uri($"https://slack.com//api/rtm.start?token={slackKey}");
+            
+            _handlerMock.Protected().Verify(
+                "SendAsync",
+                Times.Exactly(1), 
+                ItExpr.Is<HttpRequestMessage>(req =>
+                        req.Method == HttpMethod.Get  
+                        && req.RequestUri == expectedUri 
+                ),
+                ItExpr.IsAny<CancellationToken>()
+            );
+
 
             result.ToExpectedObject().ShouldEqual(expectedResponse);
+        }
+
+        private void Setup(HandshakeResponse expectedResponse)
+        {
+            _handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(expectedResponse)),
+                })
+                .Verifiable();
         }
     }
 }
