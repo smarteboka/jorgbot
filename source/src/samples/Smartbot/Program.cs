@@ -26,28 +26,8 @@ namespace Smartbot
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSmartbot(context.Configuration);
-
                     services.AddSlackbotWorker(context.Configuration)
-
-                        .AddPublisher<SlackPublisher>()
-                        .AddPublisher<LoggerPublisher>()
-
-                        .AddRecurring<HerokuFreeTierKeepAlive>()
-                        .AddRecurring<Jorger>()
-                        .AddRecurring<HappyBirthday>()
-                        .AddRecurring<StorsdagMention>()
-                        .AddRecurring<StorsdagInvitationRecurrer>()
-
-                        .AddHandler<NesteStorsdagHandler>()
-                        .AddHandler<StorsdagerHandler>()
-                        .AddHandler<FourSquareHandler>()
-                        .AddHandler<OldHandler>()
-                        .AddHandler<UrlsSaveHandler>()
-                        .AddHandler<RandomSmartingHandler>()
-                        .AddHandler<RsvpReminder>()
-                        // .AddFplBot(context.Configuration.GetSection("smartebokafpl"))
-                        .BuildRecurrers();
+                        .AddSmartbot(context.Configuration);
 
                 })
                 .ConfigureLogging((context, configLogging) =>

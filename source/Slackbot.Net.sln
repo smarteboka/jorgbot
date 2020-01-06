@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Utilities", "src\s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net", "src\Slackbot.Net\Slackbot.Net.csproj", "{6F703D22-475E-430A-B7D8-B1ECCAB868E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Tests", "test\Slackbot.Net.SlackClients.Tests\Slackbot.Net.SlackClients.Tests.csproj", "{E844F8E7-7D8B-4147-AED6-85EDF30717A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Http.Tests", "test\Slackbot.Net.SlackClients.Http.Tests\Slackbot.Net.SlackClients.Http.Tests.csproj", "{E844F8E7-7D8B-4147-AED6-85EDF30717A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{2248E64E-0CE2-4766-892C-98A5CA366480}"
 EndProject
