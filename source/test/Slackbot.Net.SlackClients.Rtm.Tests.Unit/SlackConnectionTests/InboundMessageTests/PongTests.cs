@@ -23,7 +23,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             await slackConnection.Initialise(connectionInfo);
 
             DateTime lastTimestamp = DateTime.MinValue;
-
+            
+            slackConnection.OnPong += timestamp =>
+            {
+                lastTimestamp = timestamp;
+                return Task.CompletedTask;
+            };
+            
             var inboundMessage = new PongMessage
             {
                 Timestamp = DateTime.Now

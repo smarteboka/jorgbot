@@ -42,20 +42,24 @@ namespace Slackbot.Net.SlackClients.Rtm
             SlackKey = connectionInformation.SlackKey;
             Team = connectionInformation.Team;
             Self = connectionInformation.Self;
-         
+            _userCache = connectionInformation.Users;
             _connectedHubs = connectionInformation.SlackChatHubs;
 
             _webSocketClient = connectionInformation.WebSocket;
             _webSocketClient.OnClose += (sender, args) =>
             {
+                ConnectedSince = null;
                 RaiseOnDisconnect();
             };
+            ConnectedSince = DateTime.Now;
 
             _webSocketClient.OnMessage += async (sender, message) => await ListenTo(message);
 
             _pingPongMonitor = _monitoringFactory.CreatePingPongMonitor();
             await _pingPongMonitor.StartMonitor(Ping, Reconnect, TimeSpan.FromMinutes(2));
         }
+
+        public DateTime? ConnectedSince { get; private set; }
 
         public string SlackKey { get; private set; }
 
@@ -123,14 +127,19 @@ namespace Slackbot.Net.SlackClients.Rtm
             return RaisePong(inboundMessage.Timestamp);
         }
 
+        private Dictionary<string, SlackUser> _userCache { get; set; }
+        public IReadOnlyDictionary<string, SlackUser> UserCache => _userCache;
+
+        
         private SlackUser GetMessageUser(string userId)
         {
             if (string.IsNullOrEmpty(userId))
             {
                 return null;
             }
-
-            return new SlackUser { Id = userId, Name = string.Empty };
+            return UserCache.ContainsKey(userId)
+                ? UserCache[userId]
+                : new SlackUser { Id = userId, Name = string.Empty };
         }
 
         public async Task Close()
@@ -140,9 +149,6 @@ namespace Slackbot.Net.SlackClients.Rtm
                 await _webSocketClient.Close();
             }
         }
-
-        //TODO: Cache newly created channel, and return if already exists
-
         public event DisconnectEventHandler OnDisconnect;
         private void RaiseOnDisconnect()
         {
@@ -200,8 +206,6 @@ namespace Slackbot.Net.SlackClients.Rtm
             }
         }
 
-      
-        
         public async Task Ping()
         {
             await _webSocketClient.SendMessage(new PingMessage());
