@@ -59,15 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void AddWorker(ISlackbotWorkerBuilder builder)
         {
             builder.Services.AddSingleton<SlackConnectionSetup>();
-            builder.Services.AddSingleton(s =>
-            {
-                var connection = s.GetService<SlackConnectionSetup>().Connection.Self;
-                return new BotDetails
-                {
-                    Id = connection.Id,
-                    Name = connection.Name
-                };
-            });
+            builder.Services.AddSingleton(s => s.GetService<SlackConnectionSetup>().GetBotDetails());
  
             builder.Services.AddSingleton<HandlerSelector>();
             builder.Services.AddHostedService<SlackConnectorHostedService>();

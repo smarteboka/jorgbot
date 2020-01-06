@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Handlers;
+
 using SlackConnector;
 
 namespace Slackbot.Net.Connections
@@ -32,6 +34,15 @@ namespace Slackbot.Net.Connections
 
         }
 
-        public ISlackConnection Connection { get; private set; }
+        private ISlackConnection Connection { get; set; }
+
+        public BotDetails GetBotDetails()
+        {
+            return new BotDetails
+            {
+                Id = Connection.Self.Id,
+                Name = Connection.Self.Name
+            };
+        }
     }
 }
