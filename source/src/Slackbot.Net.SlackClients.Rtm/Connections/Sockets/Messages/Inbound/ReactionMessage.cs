@@ -7,7 +7,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
     {
         public ReactionMessage()
         {
-            MessageType = MessageType.Reaction_Added;
         }
         
         [JsonProperty("user")]
