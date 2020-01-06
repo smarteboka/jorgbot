@@ -16,17 +16,5 @@
         public bool IsGuest { get; set; }
         public string StatusText { get; set; }
         public bool IsAdmin { get; set; }
-
-        public string FormattedUserId
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Id))
-                {
-                    return "<@" + Id + ">";
-                }
-                return string.Empty;
-            }
-        }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
-using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Channel;
-using Slackbot.Net.SlackClients.Rtm.Connections.Clients.File;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
@@ -21,16 +19,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
         public IHandshakeClient CreateHandshakeClient()
         {
             return new FlurlHandshakeClient(new ResponseVerifier());
-        }
-
-        public IFileClient CreateFileClient()
-        {
-            return new FlurlFileClient(new ResponseVerifier());
-        }
-
-        public IChannelClient CreateChannelClient()
-        {
-            return new FlurlChannelClient(new ResponseVerifier());
         }
     }
 }
