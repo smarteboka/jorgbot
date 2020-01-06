@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{2248
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Web", "src\samples\Smartbot.Web\Smartbot.Web.csproj", "{AF54F49F-AFDD-4E46-A557-317C0577CE1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients", "src\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj", "{D6C3CE02-3D77-4313-AC43-1A8E990DCB9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Http", "src\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj", "{D6C3CE02-3D77-4313-AC43-1A8E990DCB9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Endpoints", "src\Slackbot.Net.Endpoints\Slackbot.Net.Endpoints.csproj", "{0B4A58E9-FF02-4942-9345-D9E255C5C87D}"
 EndProject
@@ -34,11 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Pub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Web.Tests", "test\Smartbot.Web.Tests\Smartbot.Web.Tests.csproj", "{82E7BAD8-F069-47EB-9068-9037BF11F4E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackConnector", "src\SlackConnector\SlackConnector.csproj", "{47C65357-CD26-4FC3-A423-A3BB9D41A607}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Rtm", "src\Slackbot.Net.SlackClients.Rtm\Slackbot.Net.SlackClients.Rtm.csproj", "{47C65357-CD26-4FC3-A423-A3BB9D41A607}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackConnector.Tests.Unit", "test\SlackConnector.Tests.Unit\SlackConnector.Tests.Unit.csproj", "{20B32636-F907-4961-9C8A-DFB5DC2BFA87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Rtm.Tests.Unit", "test\Slackbot.Net.SlackClients.Rtm.Tests.Unit\Slackbot.Net.SlackClients.Rtm.Tests.Unit.csproj", "{20B32636-F907-4961-9C8A-DFB5DC2BFA87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackConnector.Tests.Integration", "test\SlackConnector.Tests.Integration\SlackConnector.Tests.Integration.csproj", "{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.SlackClients.Rtm.Tests.Integration", "test\Slackbot.Net.SlackClients.Rtm.Tests.Integration\Slackbot.Net.SlackClients.Rtm.Tests.Integration.csproj", "{C2FB5B9F-0626-4A16-B3D4-F99AE5F957AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

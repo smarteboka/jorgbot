@@ -35,14 +35,14 @@ namespace SlackConnector
             }
 
             var handshakeClient = _connectionFactory.CreateHandshakeClient();
-            HandshakeResponse handshakeResponse = await handshakeClient.FirmShake(slackKey);
+            var handshakeResponse = await handshakeClient.FirmShake(slackKey);
 
             if (!handshakeResponse.Ok)
             {
                 throw new HandshakeException(handshakeResponse.Error);
             }
 
-            Dictionary<string, SlackUser> users = GenerateUsers(handshakeResponse.Users);
+            var users = GenerateUsers(handshakeResponse.Users);
 
             var connectionInfo = new ConnectionInformation
             {
@@ -51,7 +51,7 @@ namespace SlackConnector
                 Team = new ContactDetails { Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name },
                 Users = users,
                 SlackChatHubs = GetChatHubs(handshakeResponse, users.Values.ToArray()),
-                WebSocket = await _connectionFactory.CreateWebSocketClient(handshakeResponse.WebSocketUrl, null)
+                WebSocket = await _connectionFactory.CreateWebSocketClient(handshakeResponse.WebSocketUrl)
             };
 
             var connection = await _slackConnectionFactory.Create(connectionInfo);

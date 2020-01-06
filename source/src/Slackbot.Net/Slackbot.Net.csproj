@@ -36,15 +36,14 @@
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Handlers\Slackbot.Net.Abstractions.Handlers.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Publishers\Slackbot.Net.Abstractions.Publishers.csproj" />
-      <ProjectReference Include="..\Slackbot.Net.SlackClients\Slackbot.Net.SlackClients.csproj" />
+      <ProjectReference Include="..\Slackbot.Net.SlackClients.Http\Slackbot.Net.SlackClients.Http.csproj" />
+      <ProjectReference Include="..\Slackbot.Net.SlackClients.Rtm\Slackbot.Net.SlackClients.Rtm.csproj" />
       <ProjectReference Include="..\Slackbot.Net.Abstractions.Hosting\Slackbot.Net.Abstractions.Hosting.csproj" />
-      <ProjectReference Include="..\SlackConnector\SlackConnector.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <None Include="images/slack.png">
             <Pack>True</Pack>
-            <PackagePath></PackagePath>
         </None>
     </ItemGroup>
 
