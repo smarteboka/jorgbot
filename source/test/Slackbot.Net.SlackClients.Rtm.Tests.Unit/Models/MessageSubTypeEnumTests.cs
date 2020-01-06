@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Shouldly;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.Models
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
 {
     public class MessageSubTypeEnumTests
     {

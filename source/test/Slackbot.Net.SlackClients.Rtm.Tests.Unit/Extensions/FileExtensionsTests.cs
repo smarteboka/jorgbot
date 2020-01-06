@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using AutoFixture;
 using Shouldly;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Extensions;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Extensions;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.Extensions
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Extensions
 {
     public class FileExtensionsTests
     {

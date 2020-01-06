@@ -4,13 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Extensions.Publishers.Logger;
-using Slackbot.Net.Extensions.Publishers.Slack;
-using Smartbot.Utilities.RecurringActions;
-using Smartbot.Utilities.Handlers;
-using Smartbot.Utilities.Handlers._4sq;
-using Smartbot.Utilities.Storsdager.RecurringActions;
 
 namespace Smartbot
 {

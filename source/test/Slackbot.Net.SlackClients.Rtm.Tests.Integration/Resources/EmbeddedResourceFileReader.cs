@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace SlackConnector.Tests.Integration.Resources
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Resources
 {
     public static class EmbeddedResourceFileReader
     {

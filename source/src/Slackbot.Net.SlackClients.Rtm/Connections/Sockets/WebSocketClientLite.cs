@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using IWebsocketClientLite.PCL;
 using Newtonsoft.Json;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
 using WebsocketClientLite.PCL;
 
-namespace SlackConnector.Connections.Sockets
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
 {
     internal class WebSocketClientLite : IWebSocketClient
     {

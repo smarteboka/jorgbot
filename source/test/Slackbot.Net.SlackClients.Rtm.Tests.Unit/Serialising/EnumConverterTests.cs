@@ -1,11 +1,11 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using Moq;
 using Newtonsoft.Json;
-using AutoFixture.Xunit2;
-using SlackConnector.Serialising;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Serialising;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Serialising
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Serialising
 {
     public class EnumConverterTests
     {

@@ -1,8 +1,8 @@
-﻿using SlackConnector.BotHelpers;
+﻿using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.BotHelpers;
 using Xunit;
-using Shouldly;
 
-namespace SlackConnector.Tests.Unit.BotHelpers
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.BotHelpers
 {
     public class MentionDetectorTests
     {

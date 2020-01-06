@@ -33,7 +33,7 @@ namespace Slackbot.Net.Tests
             var botFound = response.Members.Where(u => u.Is_Bot);
             var bots = botFound.Select(c => c.Name);
             var names = string.Join(" ", bots);
-            Assert.True(names.Contains("oldbot"));
+            Assert.Contains("oldbot", bots);
         }
     }
 }

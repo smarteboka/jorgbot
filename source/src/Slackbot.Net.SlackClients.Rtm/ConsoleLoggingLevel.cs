@@ -1,4 +1,4 @@
-﻿namespace SlackConnector
+﻿namespace Slackbot.Net.SlackClients.Rtm
 {
     public enum ConsoleLoggingLevel
     {

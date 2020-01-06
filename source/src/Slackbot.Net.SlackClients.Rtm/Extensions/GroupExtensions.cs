@@ -1,7 +1,7 @@
-﻿using SlackConnector.Connections.Models;
-using SlackConnector.Models;
+﻿using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector.Extensions
+namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
     internal static class GroupExtensions
     {

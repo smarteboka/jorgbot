@@ -1,14 +1,14 @@
-﻿using Moq;
-using AutoFixture.Xunit2;
-using SlackConnector.Connections.Models;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Logging;
-using SlackConnector.Tests.Unit.TestExtensions;
-using Xunit;
+﻿using AutoFixture.Xunit2;
+using Moq;
 using Shouldly;
-using SlackConnector.Connections.Sockets.Messages.Inbound.ReactionItem;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound.ReactionItem;
+using Slackbot.Net.SlackClients.Rtm.Logging;
+using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Sockets.Messages
 {
     public class MessageInterpreterTests
     {
@@ -354,7 +354,7 @@ namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
         private void shouldnt_log_when_logging_level_is_non([Frozen]Mock<ILogger> logger, MessageInterpreter interpreter)
         {
             // given
-            SlackConnector.LoggingLevel = ConsoleLoggingLevel.None;
+            Slackbot.Net.SlackClients.Rtm.SlackConnector.LoggingLevel = ConsoleLoggingLevel.None;
 
             // when
             var result = interpreter.InterpretMessage(null);
@@ -368,7 +368,7 @@ namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
         private void should_log_when_logging_level_is_all([Frozen]Mock<ILogger> logger, MessageInterpreter interpreter)
         {
             // given
-            SlackConnector.LoggingLevel = ConsoleLoggingLevel.All;
+            Slackbot.Net.SlackClients.Rtm.SlackConnector.LoggingLevel = ConsoleLoggingLevel.All;
 
             // when
             var result = interpreter.InterpretMessage(@"{ 'something': 'no end tag'");

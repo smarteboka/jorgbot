@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Clients.Channel;
-using SlackConnector.Connections.Clients.File;
-using SlackConnector.Connections.Clients.Handshake;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Logging;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Channel;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.File;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Logging;
 
-namespace SlackConnector.Connections
+namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     internal class ConnectionFactory : IConnectionFactory
     {

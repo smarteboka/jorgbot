@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SlackConnector.Connections.Sockets;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 
-namespace SlackConnector.Models
+namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     internal class ConnectionInformation
     {

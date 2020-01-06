@@ -2,7 +2,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace SlackConnector.Serialising
+namespace Slackbot.Net.SlackClients.Rtm.Serialising
 {
     internal class EnumConverter : JsonConverter
     {

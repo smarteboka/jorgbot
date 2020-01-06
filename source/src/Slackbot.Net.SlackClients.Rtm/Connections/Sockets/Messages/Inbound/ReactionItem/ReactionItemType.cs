@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Connections.Sockets.Messages.Inbound.ReactionItem
+﻿namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound.ReactionItem
 {
     internal enum ReactionItemType
     {

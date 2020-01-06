@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Tests.Integration.Configuration
+﻿namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration
 {
     public class SlackConfig
     {

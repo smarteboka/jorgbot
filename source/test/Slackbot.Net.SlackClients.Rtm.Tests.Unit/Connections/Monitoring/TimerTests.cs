@@ -3,9 +3,9 @@ using System.Threading;
 using Shouldly;
 using Xunit;
 using Xunit.Abstractions;
-using Timer = SlackConnector.Connections.Monitoring.Timer;
+using Timer = Slackbot.Net.SlackClients.Rtm.Connections.Monitoring.Timer;
 
-namespace SlackConnector.Tests.Unit.Connections.Monitoring
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Monitoring
 {
     public class TimerTests : IDisposable
     {

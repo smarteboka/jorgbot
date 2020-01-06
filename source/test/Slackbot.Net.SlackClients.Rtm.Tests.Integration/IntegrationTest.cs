@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SlackConnector.Tests.Integration.Configuration;
+using Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration;
 
-namespace SlackConnector.Tests.Integration
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 {
     public abstract class IntegrationTest : IDisposable
     {

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
-namespace SlackConnector.Exceptions
+namespace Slackbot.Net.SlackClients.Rtm.Exceptions
 {
     public class HandshakeException : Exception
     {

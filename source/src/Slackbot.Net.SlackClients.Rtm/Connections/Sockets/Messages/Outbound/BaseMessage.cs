@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Sockets.Messages.Outbound
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound
 {
     internal abstract class BaseMessage
     {

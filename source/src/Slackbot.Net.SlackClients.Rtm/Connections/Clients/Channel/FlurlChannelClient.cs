@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using SlackConnector.Connections.Models;
-using SlackConnector.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 
-namespace SlackConnector.Connections.Clients.Channel
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Channel
 {
     internal class FlurlChannelClient : IChannelClient
     {

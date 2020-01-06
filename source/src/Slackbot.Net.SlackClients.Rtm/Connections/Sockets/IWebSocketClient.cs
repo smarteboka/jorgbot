@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Outbound;
 
-namespace SlackConnector.Connections.Sockets
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
 {
     internal interface IWebSocketClient
     {

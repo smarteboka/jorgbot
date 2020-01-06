@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Runtime.Serialization;
 
-namespace SlackConnector.Models
+namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum SlackAttachmentActionStyle

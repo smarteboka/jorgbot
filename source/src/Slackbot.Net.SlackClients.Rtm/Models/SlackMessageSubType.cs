@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Models
+﻿namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     public enum SlackMessageSubType
     {

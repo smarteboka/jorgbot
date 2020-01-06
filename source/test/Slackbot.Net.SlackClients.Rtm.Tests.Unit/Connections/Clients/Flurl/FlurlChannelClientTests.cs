@@ -4,15 +4,14 @@ using ExpectedObjects;
 using Flurl;
 using Flurl.Http.Testing;
 using Moq;
-using Shouldly;
-using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Clients.Channel;
-using SlackConnector.Connections.Models;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Tests.Unit.TestExtensions;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Channel;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections.Clients.Flurl
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.Flurl
 {
     public class FlurlChannelClientTests : IDisposable
     {

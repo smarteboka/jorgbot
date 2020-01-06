@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Clients.Handshake;
-using SlackConnector.Connections.Responses;
-using SlackConnector.Tests.Integration.Configuration;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration;
+using Xunit;
 
-namespace SlackConnector.Tests.Integration.Connections.Clients
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration.Connections.Clients
 {
     public class FlurlHandshakeClientTests
     {

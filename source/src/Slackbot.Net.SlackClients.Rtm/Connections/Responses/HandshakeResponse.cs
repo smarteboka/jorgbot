@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SlackConnector.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Models;
 
-namespace SlackConnector.Connections.Responses
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Responses
 {
     internal class HandshakeResponse : StandardResponse
     {

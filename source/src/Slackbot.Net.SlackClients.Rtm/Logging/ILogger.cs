@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Logging
+﻿namespace Slackbot.Net.SlackClients.Rtm.Logging
 {
     public interface ILogger
     {

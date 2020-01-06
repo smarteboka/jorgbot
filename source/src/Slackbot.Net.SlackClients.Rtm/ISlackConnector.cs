@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SlackConnector
+namespace Slackbot.Net.SlackClients.Rtm
 {
     public interface ISlackConnector
     {

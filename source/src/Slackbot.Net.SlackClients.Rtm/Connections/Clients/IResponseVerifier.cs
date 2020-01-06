@@ -1,6 +1,6 @@
-﻿using SlackConnector.Connections.Responses;
+﻿using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 
-namespace SlackConnector.Connections.Clients
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients
 {
     internal interface IResponseVerifier
     {

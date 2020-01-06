@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
 {
     internal class File
     {

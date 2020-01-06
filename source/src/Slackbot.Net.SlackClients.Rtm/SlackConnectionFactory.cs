@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.BotHelpers;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Monitoring;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.BotHelpers;
+using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector
+namespace Slackbot.Net.SlackClients.Rtm
 {
     internal class SlackConnectionFactory : ISlackConnectionFactory
     {

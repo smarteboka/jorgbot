@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using ExpectedObjects;
 using Moq;
 
-namespace SlackConnector.Tests.Unit.TestExtensions
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions
 {
     public static class Looks
     {

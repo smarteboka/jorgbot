@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json;
-using SlackConnector.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 
-namespace SlackConnector.Connections.Clients.File
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.File
 {
     internal class FlurlFileClient : IFileClient
     {

@@ -1,9 +1,9 @@
 ﻿using System;
-using SlackConnector.Connections;
-using Xunit;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections;
+using Xunit;
 
-namespace SlackConnector.Tests.Unit.Connections
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections
 {
     public class ProxySettingsTests
     {

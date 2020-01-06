@@ -1,6 +1,6 @@
 ﻿using ExpectedObjects;
 
-namespace SlackConnector.Tests.Unit.TestExtensions
+namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions
 {
     public static class ExpectedObjectExtensions
     {

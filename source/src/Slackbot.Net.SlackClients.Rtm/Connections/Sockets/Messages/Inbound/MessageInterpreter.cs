@@ -2,10 +2,10 @@
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SlackConnector.Logging;
-using SlackConnector.Connections.Sockets.Messages.Inbound.ReactionItem;
+using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound.ReactionItem;
+using Slackbot.Net.SlackClients.Rtm.Logging;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound
+namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
 {
     internal class MessageInterpreter : IMessageInterpreter
     {

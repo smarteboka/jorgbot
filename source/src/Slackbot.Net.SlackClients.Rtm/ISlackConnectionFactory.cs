@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SlackConnector.Models;
+using Slackbot.Net.SlackClients.Rtm.Models;
 
-namespace SlackConnector
+namespace Slackbot.Net.SlackClients.Rtm
 {
     internal interface ISlackConnectionFactory
     {

@@ -1,4 +1,4 @@
-﻿namespace SlackConnector.Models
+﻿namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     /// <summary>
     /// This represents a place in Slack where people can chat - typically a channel, group, or DM.
