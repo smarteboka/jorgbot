@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -18,7 +19,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 
         public IHandshakeClient CreateHandshakeClient()
         {
-            return new HandshakeClient(new ResponseVerifier());
+            return new HandshakeClient(new HttpClient(),new ResponseVerifier());
         }
     }
 }
