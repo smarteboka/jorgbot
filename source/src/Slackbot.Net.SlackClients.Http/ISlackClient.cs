@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
-using Slackbot.Net.SlackClients.Models.Responses;
-using Slackbot.Net.SlackClients.Models.Responses.ChatGetPermalink;
-using Slackbot.Net.SlackClients.Models.Responses.ChatPostMessage;
-using Slackbot.Net.SlackClients.Models.Responses.UsersList;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
-namespace Slackbot.Net.SlackClients
+namespace Slackbot.Net.SlackClients.Http
 {
     /// <summary>
     /// A slack client for endpoints that require a bot token (no human credentials)

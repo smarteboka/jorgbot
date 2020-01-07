@@ -1,6 +1,6 @@
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage.Blocks;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks;
 
-namespace Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage
+namespace Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage
 {
     public class ChatPostMessageRequest
     {

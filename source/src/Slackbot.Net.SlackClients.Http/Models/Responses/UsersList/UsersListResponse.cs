@@ -1,6 +1,4 @@
-using System;
-
-namespace Slackbot.Net.SlackClients.Models.Responses.UsersList
+namespace Slackbot.Net.SlackClients.Http.Models.Responses.UsersList
 {
     public class UsersListResponse : Response
     {

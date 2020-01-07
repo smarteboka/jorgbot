@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Exceptions;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Exceptions;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Xunit;
 using Xunit.Abstractions;
 

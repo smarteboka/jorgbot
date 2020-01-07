@@ -1,6 +1,6 @@
 using System;
 
-namespace Slackbot.Net.SlackClients.Exceptions
+namespace Slackbot.Net.SlackClients.Http.Exceptions
 {
     public class SlackApiException : Exception
     {

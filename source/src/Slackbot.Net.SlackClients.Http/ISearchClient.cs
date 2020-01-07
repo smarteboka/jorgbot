@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
+using Slackbot.Net.SlackClients.Http.Models.Responses.SearchMessages;
 
-namespace Slackbot.Net.SlackClients
+namespace Slackbot.Net.SlackClients.Http
 {
     /// <summary>
     /// A slack client for endpoints that require a OAuth token (a human user credentials)

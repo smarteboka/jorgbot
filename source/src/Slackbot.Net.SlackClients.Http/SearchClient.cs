@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Extensions;
-using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
+using Slackbot.Net.SlackClients.Http.Extensions;
+using Slackbot.Net.SlackClients.Http.Models.Responses.SearchMessages;
 
-namespace Slackbot.Net.SlackClients
+namespace Slackbot.Net.SlackClients.Http
 {
     /// <inheritdoc/>
 

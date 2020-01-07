@@ -1,4 +1,4 @@
-namespace Slackbot.Net.SlackClients.Models.Responses.SearchMessages
+namespace Slackbot.Net.SlackClients.Http.Models.Responses.SearchMessages
 {
     public class SearchMessagesResponse : Response
     {

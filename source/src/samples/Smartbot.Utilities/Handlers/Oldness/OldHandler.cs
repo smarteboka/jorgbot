@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
-using Slackbot.Net.SlackClients.Models.Responses;
+using Slackbot.Net.SlackClients.Http;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses;
 
 namespace Smartbot.Utilities.Handlers
 {
