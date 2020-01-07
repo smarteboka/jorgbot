@@ -7,10 +7,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     internal interface IServiceLocator
     {
-        IWebSocketClient CreateConnectedWebSocketClient();
-        IHandshakeClient CreateHandshakeClient();
-        IPingPongMonitor CreatePingPongMonitor();
-        SlackConnection CreateConnection(IWebSocketClient websocket, IMentionDetector mentionDetector = null, IPingPongMonitor pingPongMonitor = null);
+        SlackConnection CreateConnection(IWebSocketClient websocket, IHandshakeClient handshakeClient, IMentionDetector mentionDetector = null, IPingPongMonitor pingPongMonitor = null);
 
     }
 }

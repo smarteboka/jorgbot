@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.BotHelpers;
 using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Models;
@@ -38,10 +40,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         [Theory, AutoMoqData]
         private void should_be_connected_if_websocket_is_alive(
             Mock<IWebSocketClient> webSocketClient, 
+            Mock<IHandshakeClient> handShakeClient,
+            Mock<IPingPongMonitor> pingPongMinotor,
+            Mock<IMentionDetector> mentionDetector,
             ServiceLocator serviceLocator)
         {
             // given
-            var connection = serviceLocator.CreateConnection(webSocketClient.Object);
+            var connection = serviceLocator.CreateConnection(webSocketClient.Object, handShakeClient.Object, mentionDetector.Object, pingPongMinotor.Object);
             var info = new ConnectionInformation();
 
             webSocketClient
@@ -57,22 +62,20 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
 
         [Theory, AutoMoqData]
         private async Task should_initialise_ping_pong_monitor(
-            [Frozen]Mock<IServiceLocator> monitoringFactory, 
             Mock<IPingPongMonitor> pingPongMonitor, 
+            Mock<IHandshakeClient> handShakeClient,
             Mock<IWebSocketClient> webSocketClient,
             ServiceLocator serviceLocator)
         {
             // given
-            var connection = serviceLocator.CreateConnection(webSocketClient.Object, null, pingPongMonitor.Object);
+            var connection = serviceLocator.CreateConnection(webSocketClient.Object, handShakeClient.Object, null, pingPongMonitor.Object);
             var info = new ConnectionInformation();
 
             pingPongMonitor
                 .Setup(x => x.StartMonitor(It.IsAny<Func<Task>>(), It.IsAny<Func<Task>>(), It.IsAny<TimeSpan>()))
                 .Returns(Task.CompletedTask);
 
-            monitoringFactory
-                .Setup(x => x.CreatePingPongMonitor())
-                .Returns(pingPongMonitor.Object);
+           
 
             // when
             await connection.Initialise(info);

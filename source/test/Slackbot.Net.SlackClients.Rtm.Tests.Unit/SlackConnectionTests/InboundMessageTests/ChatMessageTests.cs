@@ -6,6 +6,8 @@ using Moq;
 using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.BotHelpers;
 using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Models;
@@ -18,10 +20,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
     {
         [Theory, AutoMoqData]
         private async Task should_raise_event(
-            Mock<IWebSocketClient> webSocket, Mock<IMentionDetector> mentionDetector)
+            Mock<IWebSocketClient> webSocket, 
+            Mock<IMentionDetector> mentionDetector,
+            Mock<IPingPongMonitor> pingPongMonitor,
+            Mock<IHandshakeClient> handShakeClient)
         {
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+
 
             // given
             var connectionInfo = new ConnectionInformation
@@ -63,12 +69,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_raise_event_given_user_information_is_missing_from_cache(
             Mock<IWebSocketClient> webSocket, 
-            Mock<IMentionDetector> mentionDetector)
+            Mock<IMentionDetector> mentionDetector,
+            Mock<IHandshakeClient> handShakeClient,
+            Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
             
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
 
             var connectionInfo = new ConnectionInformation();
             
@@ -149,12 +157,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_return_expected_channel_info(
             Mock<IWebSocketClient> webSocket, 
-            Mock<IMentionDetector> mentionDetector)
+            Mock<IMentionDetector> mentionDetector,
+            Mock<IHandshakeClient> handShakeClient,
+            Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
             
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
 
             var connectionInfo = new ConnectionInformation
             {
@@ -187,10 +197,12 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_detect_bot_is_mentioned_in_message(
             [Frozen]Mock<IMentionDetector> mentionDetector, 
-            Mock<IWebSocketClient> webSocket)
+            Mock<IWebSocketClient> webSocket,
+            Mock<IHandshakeClient> handShakeClient,
+            Mock<IPingPongMonitor> pingPongMonitor)
         {
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
             // given
             var connectionInfo = new ConnectionInformation
             {
