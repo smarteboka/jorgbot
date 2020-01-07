@@ -15,15 +15,15 @@ namespace Slackbot.Net.SlackClients.Rtm
     {
         public static ConsoleLoggingLevel LoggingLevel = ConsoleLoggingLevel.None;
 
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IServiceLocator _serviceLocator;
         private readonly ISlackConnectionFactory _slackConnectionFactory;
 
-        public SlackConnector() : this(new ConnectionFactory(), new SlackConnectionFactory())
+        public SlackConnector() : this(new ServiceLocator(), new SlackConnectionFactory())
         { }
 
-        internal SlackConnector(IConnectionFactory connectionFactory, ISlackConnectionFactory slackConnectionFactory)
+        internal SlackConnector(IServiceLocator serviceLocator, ISlackConnectionFactory slackConnectionFactory)
         {
-            _connectionFactory = connectionFactory;
+            _serviceLocator = serviceLocator;
             _slackConnectionFactory = slackConnectionFactory;
         }
 
@@ -34,7 +34,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 throw new ArgumentNullException(nameof(slackKey));
             }
 
-            var handshakeClient = _connectionFactory.CreateHandshakeClient();
+            var handshakeClient = _serviceLocator.CreateHandshakeClient();
             var handshakeResponse = await handshakeClient.FirmShake(slackKey);
 
             if (!handshakeResponse.Ok)
@@ -43,7 +43,9 @@ namespace Slackbot.Net.SlackClients.Rtm
             }
 
             var users = GenerateUsers(handshakeResponse.Users);
-
+            var websocket = _serviceLocator.CreateConnectedWebSocketClient();
+            await websocket.Connect(handshakeResponse.WebSocketUrl);
+            
             var connectionInfo = new ConnectionInformation
             {
                 SlackKey = slackKey,
@@ -51,7 +53,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 Team = new ContactDetails { Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name },
                 Users = users,
                 SlackChatHubs = GetChatHubs(handshakeResponse, users.Values.ToArray()),
-                WebSocket = await _connectionFactory.CreateConnectedWebSocketClient(handshakeResponse.WebSocketUrl)
+                WebSocket = websocket
             };
 
             var connection = await _slackConnectionFactory.Create(connectionInfo);

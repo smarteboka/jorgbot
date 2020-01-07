@@ -22,7 +22,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
         {
             _handshakeClient = new Mock<IHandshakeClient>();
             var webSocketClient = new Mock<IWebSocketClient>();
-            var connectionFactory = new Mock<IConnectionFactory>();
+            var connectionFactory = new Mock<IServiceLocator>();
             _slackConnectionFactory = new Mock<ISlackConnectionFactory>();
             _slackConnector = new SlackConnector(connectionFactory.Object, _slackConnectionFactory.Object);
 
@@ -31,8 +31,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
                 .Returns(_handshakeClient.Object);
 
             connectionFactory
-                .Setup(x => x.CreateConnectedWebSocketClient(_webSocketUrl))
-                .ReturnsAsync(webSocketClient.Object);
+                .Setup(x => x.CreateConnectedWebSocketClient())
+                .Returns(webSocketClient.Object);
         }
 
         [Fact]

@@ -1,25 +1,27 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Logging;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
-    internal class ConnectionFactory : IConnectionFactory
+    internal class ServiceLocator : IServiceLocator
     {
-        public async Task<IWebSocketClient> CreateConnectedWebSocketClient(string url)
+        public IWebSocketClient CreateConnectedWebSocketClient()
         {
-            var socket = new WebSocketClientLite(new MessageInterpreter(new Logger()));
-            await socket.Connect(url);
-            return socket;
+            return new WebSocketClientLite(new MessageInterpreter(new Logger()));
         }
 
         public IHandshakeClient CreateHandshakeClient()
         {
             return new HandshakeClient(new HttpClient());
+        }
+
+        public IPingPongMonitor CreatePingPongMonitor()
+        {
+            return new PingPongMonitor(new Timer(), new DateTimeKeeper());
         }
     }
 }
