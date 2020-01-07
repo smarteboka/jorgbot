@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         {
             
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
 
             // given
             bool connectionChangedValue = false;

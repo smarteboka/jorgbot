@@ -2,7 +2,7 @@
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public class SlackFile
+    public class File
     {
         public string Id { get; }
         public int Created { get; }
@@ -30,9 +30,9 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public Uri DeanimateGif { get; }
         public Uri Permalink { get; }
         public Uri PermalinkPublic { get; }
-        public SlackThumbnail Thumbnail { get; }
+        public Thumbnail Thumbnail { get; }
 
-        public SlackFile(
+        public File(
             string id,
             int created,
             int timestamp,
@@ -59,7 +59,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
             Uri deanimateGif,
             Uri permalink,
             Uri permalinkPublic,
-            SlackThumbnail thumbnail)
+            Thumbnail thumbnail)
         {
             Id = id;
             Created = created;

@@ -25,7 +25,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         public ContactDetails Team { get; private set; }
         public ContactDetails Self { get; private set; }
         
-        public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs { get; private set; }
+        public IReadOnlyDictionary<string, ChatHub> ConnectedHubs { get; private set; }
         public DateTime? ConnectedSince { get; private set; }
 
         public string SlackKey { get; private set; }
@@ -96,7 +96,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 return Task.CompletedTask;
 
 
-            var message = new SlackMessage
+            var message = new Message
             {
                 User = GetMessageUser(inboundMessage.User),
                 Timestamp = inboundMessage.Timestamp,
@@ -111,7 +111,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             return RaiseMessageReceived(message);
         }
         
-        private SlackChatHub GetChatHub(string channel)
+        private ChatHub GetChatHub(string channel)
         {
             return channel != null && ConnectedHubs.ContainsKey(channel)
                 ? ConnectedHubs[channel]
@@ -124,11 +124,11 @@ namespace Slackbot.Net.SlackClients.Rtm
             return RaisePong(inboundMessage.Timestamp);
         }
 
-        private Dictionary<string, SlackUser> _userCache { get; set; }
-        public IReadOnlyDictionary<string, SlackUser> UserCache => _userCache;
+        private Dictionary<string, User> _userCache { get; set; }
+        public IReadOnlyDictionary<string, User> UserCache => _userCache;
 
         
-        private SlackUser GetMessageUser(string userId)
+        private User GetMessageUser(string userId)
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -136,7 +136,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             }
             return UserCache.ContainsKey(userId)
                 ? UserCache[userId]
-                : new SlackUser { Id = userId, Name = string.Empty };
+                : new User { Id = userId, Name = string.Empty };
         }
 
         public async Task Close()
@@ -187,7 +187,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         }
 
         public event MessageReceivedEventHandler OnMessageReceived;
-        private async Task RaiseMessageReceived(SlackMessage message)
+        private async Task RaiseMessageReceived(Message message)
         {
             var e = OnMessageReceived;
             if (e != null)

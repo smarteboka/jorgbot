@@ -1,13 +1,14 @@
 ﻿using Slackbot.Net.SlackClients.Rtm.Connections.Models;
 using Slackbot.Net.SlackClients.Rtm.Models;
+using User = Slackbot.Net.SlackClients.Rtm.Models.User;
 
 namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
     internal static class UserExtensions
     {
-        public static SlackUser ToSlackUser(this User user)
+        public static User ToSlackUser(this Connections.Models.User user)
         {
-            var slackUser = new SlackUser
+            var slackUser = new User
             {
                 Id = user.Id,
                 Name = user.Name,

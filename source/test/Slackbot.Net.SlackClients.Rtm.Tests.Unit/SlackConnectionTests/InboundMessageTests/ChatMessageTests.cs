@@ -13,6 +13,8 @@ using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
+using File = Slackbot.Net.SlackClients.Rtm.Models.File;
+using MessageSubType = Slackbot.Net.SlackClients.Rtm.Models.MessageSubType;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundMessageTests
 {
@@ -26,13 +28,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IHandshakeClient> handShakeClient)
         {
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
 
 
             // given
             var connectionInfo = new ConnectionInformation
             {
-                Users = { { "userABC", new SlackUser { Id = "userABC", Name = "i-have-a-name" } } },
+                Users = { { "userABC", new User { Id = "userABC", Name = "i-have-a-name" } } },
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -42,10 +44,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 MessageType = MessageType.Message,
                 Text = "amazing-text",
                 RawData = "I am raw data yo",
-                MessageSubType = MessageSubType.bot_message
+                MessageSubType = Rtm.Connections.Sockets.Messages.Inbound.MessageSubType.bot_message
             };
 
-            SlackMessage receivedMessage = null;
+            Message receivedMessage = null;
             slackConnection.OnMessageReceived += message =>
             {
                 receivedMessage = message;
@@ -56,13 +58,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             webSocket.Raise(x => x.OnMessage += null, null, inboundMessage);
 
             // then
-            receivedMessage.ShouldLookLike(new SlackMessage
+            receivedMessage.ShouldLookLike(new Message
             {
                 Text = "amazing-text",
-                User = new SlackUser { Id = "userABC", Name = "i-have-a-name" },
+                User = new User { Id = "userABC", Name = "i-have-a-name" },
                 RawData = inboundMessage.RawData,
-                MessageSubType = SlackMessageSubType.BotMessage,
-                Files = Enumerable.Empty<SlackFile>()
+                MessageSubType = MessageSubType.BotMessage,
+                Files = Enumerable.Empty<File>()
         });
         }
 
@@ -76,7 +78,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             // given
             
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation();
             
@@ -88,7 +90,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 MessageType = MessageType.Message
             };
 
-            SlackMessage receivedMessage = null;
+            Message receivedMessage = null;
             slackConnection.OnMessageReceived += message =>
             {
                 receivedMessage = message;
@@ -99,10 +101,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             webSocket.Raise(x => x.OnMessage += null, null, inboundMessage);
 
             // then
-            receivedMessage.ShouldLookLike(new SlackMessage
+            receivedMessage.ShouldLookLike(new Message
             {
-                User = new SlackUser { Id = "userABC", Name = string.Empty },
-                Files = Enumerable.Empty<SlackFile>()
+                User = new User { Id = "userABC", Name = string.Empty },
+                Files = Enumerable.Empty<File>()
         });
         }
 
@@ -164,11 +166,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             // given
             
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation
             {
-                SlackChatHubs = { { "channelId", new SlackChatHub { Id = "channelId", Name = "NaMe23" } } },
+                SlackChatHubs = { { "channelId", new ChatHub { Id = "channelId", Name = "NaMe23" } } },
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -179,7 +181,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 User = "irmBrady"
             };
 
-            SlackMessage receivedMessage = null;
+            Message receivedMessage = null;
             slackConnection.OnMessageReceived += message =>
             {
                 receivedMessage = message;
@@ -190,7 +192,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             webSocket.Raise(x => x.OnMessage += null, null, inboundMessage);
 
             // then
-            SlackChatHub expected = connectionInfo.SlackChatHubs.First().Value;
+            ChatHub expected = connectionInfo.SlackChatHubs.First().Value;
             receivedMessage.ChatHub.ShouldBe(expected);
         }
 
@@ -202,7 +204,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IPingPongMonitor> pingPongMonitor)
         {
             var serviceLocator = new ServiceLocator();
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
             // given
             var connectionInfo = new ConnectionInformation
             {
@@ -221,7 +223,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 .Setup(x => x.WasBotMentioned(connectionInfo.Self.Name, connectionInfo.Self.Id, inboundMessage.Text))
                 .Returns(true);
 
-            SlackMessage receivedMessage = null;
+            Message receivedMessage = null;
             slackConnection.OnMessageReceived += message => { receivedMessage = message; return Task.CompletedTask; };
 
             // when

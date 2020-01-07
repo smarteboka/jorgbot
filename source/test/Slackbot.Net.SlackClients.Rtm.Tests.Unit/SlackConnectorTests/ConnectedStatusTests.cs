@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Moq;
 using Shouldly;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
@@ -22,9 +21,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
         {
             _handshakeClient = new Mock<IHandshakeClient>();
             var webSocketClient = new Mock<IWebSocketClient>();
-            var serviceLocator = new Mock<IServiceLocator>();
             var pingPong = new Mock<IPingPongMonitor>();
-            _slackConnector = new SlackConnector(serviceLocator.Object, _handshakeClient.Object, webSocketClient.Object, pingPong.Object);
+            _slackConnector = new SlackConnector(_handshakeClient.Object, webSocketClient.Object, pingPong.Object);
         }
 
         [Fact]

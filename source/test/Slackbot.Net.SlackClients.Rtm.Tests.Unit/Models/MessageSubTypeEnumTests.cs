@@ -6,6 +6,7 @@ using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
+using MessageSubType = Slackbot.Net.SlackClients.Rtm.Models.MessageSubType;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
 {
@@ -15,8 +16,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
         public void should_have_same_number_of_enum_values_as_internal_enum_type()
         {
             // given 
-            int numberOfInternalEnumNames = Enum.GetNames(typeof(MessageSubType)).Length;
-            int numberOfPublicEnumNames = Enum.GetNames(typeof(SlackMessageSubType)).Length;
+            int numberOfInternalEnumNames = Enum.GetNames(typeof(Rtm.Connections.Sockets.Messages.Inbound.MessageSubType)).Length;
+            int numberOfPublicEnumNames = Enum.GetNames(typeof(MessageSubType)).Length;
 
             // then
             numberOfPublicEnumNames.ShouldBe(numberOfInternalEnumNames);
@@ -26,10 +27,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
         public void should_have_same_message_types_as_internal_models()
         {
             // given 
-            var internalEnumNames = Enum.GetNames(typeof(MessageSubType))
+            var internalEnumNames = Enum.GetNames(typeof(Rtm.Connections.Sockets.Messages.Inbound.MessageSubType))
                 .Select(x => x.Replace("_", string.Empty))
                 .Select(x => x.ToLower());
-            var publicEnumNames = Enum.GetNames(typeof(SlackMessageSubType))
+            var publicEnumNames = Enum.GetNames(typeof(MessageSubType))
                 .Select(x => x.ToLower());
 
             // then
@@ -40,8 +41,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
         public void should_have_same_message_type_values_as_internal_models()
         {
             // given 
-            var internalEnumValues = GetEnumValues<MessageSubType>();
-            var publicEnumValues = GetEnumValues<SlackMessageSubType>();
+            var internalEnumValues = GetEnumValues<Rtm.Connections.Sockets.Messages.Inbound.MessageSubType>();
+            var publicEnumValues = GetEnumValues<MessageSubType>();
 
             // then
             foreach (var publicEnumName in publicEnumValues.Keys)

@@ -33,7 +33,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 
         }
 
-        private Task SlackConnectorOnMessageReceived(SlackMessage message)
+        private Task SlackConnectorOnMessageReceived(Message message)
         {
             Debug.WriteLine(message.Text);
             Console.WriteLine(message.Text);

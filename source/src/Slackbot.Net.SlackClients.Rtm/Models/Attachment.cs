@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public partial class SlackAttachment
+    public class Attachment
     {
         [JsonProperty(PropertyName = "fallback")]
         public string Fallback { get; set; }
@@ -33,13 +33,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public string Text { get; set; }
 
         [JsonProperty(PropertyName = "fields")]
-        public IList<SlackAttachmentField> Fields { get; set; }
+        public IList<AttachmentField> Fields { get; set; }
 
         [JsonProperty(PropertyName = "callback_id")]
         public string CallbackId { get; set; }
 
         [JsonProperty(PropertyName = "actions")]
-        public IList<SlackAttachmentAction> Actions { get; set; }
+        public IList<AttachmentAction> Actions { get; set; }
 
         [JsonProperty(PropertyName = "image_url")]
         public string ImageUrl { get; set; }
@@ -56,9 +56,23 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         [JsonProperty(PropertyName = "mrkdwn_in")]
         public List<string> MarkdownIn { get; set; }
 
-        public SlackAttachment()
+        public Attachment()
         {
-            Fields = new List<SlackAttachmentField>();
+            Fields = new List<AttachmentField>();
+        }
+        
+        public const string MARKDOWN_IN_PRETEXT = "pretext";
+        public const string MARKDOWN_IN_TEXT = "text";
+        public const string MARKDOWN_IN_FIELDS = "fields";
+
+        public static List<string> GetAllMarkdownInTypes()
+        {
+            return new List<string>
+            {
+                MARKDOWN_IN_FIELDS,
+                MARKDOWN_IN_PRETEXT,
+                MARKDOWN_IN_TEXT
+            };
         }
     }
 }

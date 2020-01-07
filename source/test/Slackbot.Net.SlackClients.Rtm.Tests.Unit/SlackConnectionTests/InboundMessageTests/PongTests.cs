@@ -21,11 +21,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IWebSocketClient> webSocket, 
             Mock<IHandshakeClient> handShakeClient,
             Mock<IMentionDetector> mentionDetector,
-            Mock<IPingPongMonitor> pingPongMonitor,
-            ServiceLocator serviceLocator)
+            Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, mentionDetector.Object, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
@@ -54,11 +53,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         private async Task should_pong_monitor( 
             Mock<IPingPongMonitor> pingPongMonitor,
             Mock<IWebSocketClient> webSocket, 
-            Mock<IHandshakeClient> handShakeClient,
-            ServiceLocator serviceLocator)
+            Mock<IHandshakeClient> handShakeClient)
         {
             // given
-            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, handShakeClient.Object, null, pingPongMonitor.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, null, webSocket.Object);
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 

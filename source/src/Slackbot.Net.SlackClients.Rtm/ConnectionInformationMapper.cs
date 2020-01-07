@@ -4,6 +4,7 @@ using Slackbot.Net.SlackClients.Rtm.Connections.Models;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Extensions;
 using Slackbot.Net.SlackClients.Rtm.Models;
+using User = Slackbot.Net.SlackClients.Rtm.Models.User;
 
 namespace Slackbot.Net.SlackClients.Rtm
 {
@@ -24,14 +25,14 @@ namespace Slackbot.Net.SlackClients.Rtm
             return connectionInfo;
         }
 
-        private static Dictionary<string, SlackUser> GenerateUsers(User[] users)
+        private static Dictionary<string, User> GenerateUsers(Connections.Models.User[] users)
         {
             return users.ToDictionary(user => user.Id, user => user.ToSlackUser());
         }
 
-        private static Dictionary<string, SlackChatHub> GetChatHubs(HandshakeResponse handshakeResponse, SlackUser[] users)
+        private static Dictionary<string, ChatHub> GetChatHubs(HandshakeResponse handshakeResponse, User[] users)
         {
-            var hubs = new Dictionary<string, SlackChatHub>();
+            var hubs = new Dictionary<string, ChatHub>();
 
             foreach (Channel channel in handshakeResponse.Channels.Where(x => !x.IsArchived))
             {

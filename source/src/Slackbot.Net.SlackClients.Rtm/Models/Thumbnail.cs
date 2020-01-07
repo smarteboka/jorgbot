@@ -2,7 +2,7 @@
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public class SlackThumbnail
+    public class Thumbnail
     {
         public Uri Thumb64 { get; }
         public Uri Thumb80 { get; }
@@ -12,7 +12,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public Uri Thumb160 { get; }
         public Uri Thumb360Gif { get; }
 
-        public SlackThumbnail(
+        public Thumbnail(
             Uri thumb64,
             Uri thumb80,
             Uri thumb360,
