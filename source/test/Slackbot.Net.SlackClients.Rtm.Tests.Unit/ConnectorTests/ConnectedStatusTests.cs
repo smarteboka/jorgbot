@@ -15,14 +15,15 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
     {
         private string _slackKey = "slacKing-off-ey?";
         private readonly Mock<IHandshakeClient> _handshakeClient;
-        private readonly SlackConnector _slackConnector;
+        private readonly Mock<IWebSocketClient> _webSocketClient;
+        private readonly Mock<IPingPongMonitor> _pingPong;
 
         public ConnectedStatusTests()
         {
             _handshakeClient = new Mock<IHandshakeClient>();
-            var webSocketClient = new Mock<IWebSocketClient>();
-            var pingPong = new Mock<IPingPongMonitor>();
-            _slackConnector = new SlackConnector(_handshakeClient.Object, webSocketClient.Object, pingPong.Object);
+            _webSocketClient = new Mock<IWebSocketClient>();
+            _pingPong = new Mock<IPingPongMonitor>();
+            
         }
 
         [Fact]
@@ -38,9 +39,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             _handshakeClient
                 .Setup(x => x.FirmShake(_slackKey))
                 .ReturnsAsync(handshakeResponse);
+            
+            var slackConnector = new Connector(_handshakeClient.Object, _webSocketClient.Object, _pingPong.Object, _slackKey);
 
             // when
-            var exception = await Assert.ThrowsAsync<HandshakeException>(() => _slackConnector.Connect(_slackKey));
+            var exception = await Assert.ThrowsAsync<HandshakeException>(() => slackConnector.Connect());
 
             // then
             exception.Message.ShouldBe(handshakeResponse.Error);
@@ -52,9 +55,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
         public async Task should_throw_exception_given_empty_api_key(string slackKey)
         {
             // given
-            
+            var slackConnector = new Connector(_handshakeClient.Object, _webSocketClient.Object, _pingPong.Object, slackKey);
+
             // when
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _slackConnector.Connect(slackKey));
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => slackConnector.Connect());
 
             // then
             exception.Message.ShouldContain("slackKey");

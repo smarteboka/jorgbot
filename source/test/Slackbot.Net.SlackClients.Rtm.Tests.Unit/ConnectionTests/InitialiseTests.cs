@@ -14,7 +14,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
     public class given_valid_connection_info
     {
         [Theory, AutoMoqData]
-        private void should_initialise_slack_connection(SlackConnection connection)
+        private void should_initialise_slack_connection(Connection connection)
         {
             // given
             var info = new ConnectionInformation
@@ -41,7 +41,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             Mock<IPingPongMonitor> pingPongMinotor)
         {
             // given
-            var connection = new SlackConnection(pingPongMinotor.Object, handShakeClient.Object,webSocketClient.Object);
+            var connection = new Connection(pingPongMinotor.Object, handShakeClient.Object,webSocketClient.Object);
             var info = new ConnectionInformation();
 
             webSocketClient
@@ -62,7 +62,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             Mock<IWebSocketClient> webSocketClient)
         {
             // given
-            var connection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocketClient.Object);
+            var connection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocketClient.Object);
             var info = new ConnectionInformation();
 
             pingPongMonitor

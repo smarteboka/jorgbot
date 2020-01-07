@@ -19,7 +19,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         {
             // given
             
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             const string slackKey = "key-yay";
 

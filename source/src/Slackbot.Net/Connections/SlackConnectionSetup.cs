@@ -7,6 +7,7 @@ using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.SlackClients.Rtm;
+using Slackbot.Net.SlackClients.Rtm.Configurations;
 
 namespace Slackbot.Net.Connections
 {
@@ -22,10 +23,14 @@ namespace Slackbot.Net.Connections
         public async Task Connect()
         {
             var options = _services.GetService<IOptions<SlackOptions>>();
-            var logger = _services.GetService<ILogger<SlackConnector>>();
-            var slackConnector = new SlackConnector();
+            var logger = _services.GetService<ILogger<Connector>>();
+            var slackConnector = new Connector(new RtmOptions
+            {
+                ApiKey = options.Value.Slackbot_SlackApiKey_BotUser
+            });
+            
             var handlerSelector = _services.GetService<HandlerSelector>();
-            Connection = await slackConnector.Connect(options.Value.Slackbot_SlackApiKey_BotUser);
+            Connection = await slackConnector.Connect();
             Connection.OnMessageReceived += msg => handlerSelector.HandleIncomingMessage(SlackConnectorMapper.Map(msg));
             
             if (Connection.IsConnected)
@@ -33,7 +38,7 @@ namespace Slackbot.Net.Connections
 
         }
 
-        private ISlackConnection Connection { get; set; }
+        private IConnection Connection { get; set; }
 
         public BotDetails GetBotDetails()
         {

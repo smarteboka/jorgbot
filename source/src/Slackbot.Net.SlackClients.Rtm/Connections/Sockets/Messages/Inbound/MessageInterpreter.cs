@@ -2,17 +2,14 @@
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Slackbot.Net.SlackClients.Rtm.Logging;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
 {
     internal class MessageInterpreter : IMessageInterpreter
     {
-        private readonly ILogger _logger;
 
-        public MessageInterpreter(ILogger logger)
+        public MessageInterpreter()
         {
-            _logger = logger;
         }
 
         public InboundMessage InterpretMessage(string json)
@@ -32,13 +29,9 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (SlackConnector.LoggingLevel > ConsoleLoggingLevel.None)
-                {
-                    _logger.LogError($"Unable to parse message: '{json}'");
-                    _logger.LogError(ex.ToString());
-                }
+               
             }
 
             message.RawData = json;

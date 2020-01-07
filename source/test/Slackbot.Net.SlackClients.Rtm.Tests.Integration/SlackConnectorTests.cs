@@ -15,25 +15,25 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
             // given
 
             // when
-            SlackConnection.OnDisconnect += SlackConnector_OnDisconnect;
-            SlackConnection.OnMessageReceived += SlackConnectorOnMessageReceived;
+            Connection.OnDisconnect += ConnectorOnDisconnect;
+            Connection.OnMessageReceived += ConnectorOnMessageReceived;
 
             // then
-            SlackConnection.IsConnected.ShouldBeTrue();
+            Connection.IsConnected.ShouldBeTrue();
             //Thread.Sleep(TimeSpan.FromMinutes(5));
 
             // when
-            await SlackConnection.Close();
+            await Connection.Close();
 
-            SlackConnection.IsConnected.ShouldBeFalse();
+            Connection.IsConnected.ShouldBeFalse();
         }
 
-        private void SlackConnector_OnDisconnect()
+        private void ConnectorOnDisconnect()
         {
 
         }
 
-        private Task SlackConnectorOnMessageReceived(Message message)
+        private Task ConnectorOnMessageReceived(Message message)
         {
             Debug.WriteLine(message.Text);
             Console.WriteLine(message.Text);

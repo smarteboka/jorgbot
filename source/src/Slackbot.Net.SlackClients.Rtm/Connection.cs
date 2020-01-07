@@ -13,7 +13,7 @@ using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.SlackClients.Rtm
 {
-    internal class SlackConnection : ISlackConnection
+    internal class Connection : IConnection
     {
         private readonly IWebSocketClient _webSocketClient;
         private readonly IPingPongMonitor _pingPongMonitor;
@@ -29,7 +29,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         public string SlackKey { get; private set; }
 
-        public SlackConnection(IPingPongMonitor pingPongMonitor, 
+        public Connection(IPingPongMonitor pingPongMonitor, 
             IHandshakeClient handshakeClient,
             IWebSocketClient webSocketClient)
         {
