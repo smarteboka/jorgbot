@@ -4,7 +4,8 @@ var configuration = Argument("configuration", "Release");
 var packageNameWorker = "Slackbot.Net";
 var packageNameEndpoints = "Slackbot.Net.Endpoints";
 
-var packageNameRawClient = "Slackbot.Net.SlackClients";
+var packageNameHttpClient = "Slackbot.Net.SlackClients.Http";
+var packageNameRtmClient = "Slackbot.Net.SlackClients.Http";
 
 var packageNameAbstractionsHandlers = "Slackbot.Net.Abstractions.Handlers";
 var packageNameAbstractionsHosting = "Slackbot.Net.Abstractions.Hosting";
@@ -13,11 +14,12 @@ var packageNameAbstractionsPublishers = "Slackbot.Net.Abstractions.Publishers";
 var packageNamePublishersLogger = "Slackbot.Net.Extensions.Publishers.Logger";
 var packageNamePublishersSlack = "Slackbot.Net.Extensions.Publishers.Slack";
 
+
 private string ProjectPath(string name){
     return $"./source/src/{name}/{name}.csproj";
 }
 
-var version = "1.0.1-beta015";
+var version = "1.0.1-beta016";
 var outputDir = "./output";
 
 Task("Build")
@@ -37,7 +39,8 @@ Task("Pack")
         Pack(packageNameWorker);        
         Pack(packageNameEndpoints);
 
-        Pack(packageNameRawClient);
+        Pack(packageNameHttpClient);
+        Pack(packageNameRtmClient);
         
         Pack(packageNameAbstractionsHandlers);
         Pack(packageNameAbstractionsHosting);
@@ -71,7 +74,9 @@ Task("Publish")
         DotNetCoreNuGetPush($"{outputDir}/{packageNameWorker}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameEndpoints}.{version}.nupkg", settings);
 
-        DotNetCoreNuGetPush($"{outputDir}/{packageNameRawClient}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameHttpClient}.{version}.nupkg", settings);
+        DotNetCoreNuGetPush($"{outputDir}/{packageNameRtmClient}.{version}.nupkg", settings);
+
 
         DotNetCoreNuGetPush($"{outputDir}/{packageNameAbstractionsHandlers}.{version}.nupkg", settings);
         DotNetCoreNuGetPush($"{outputDir}/{packageNameAbstractionsHosting}.{version}.nupkg", settings);

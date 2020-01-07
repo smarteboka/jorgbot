@@ -11,17 +11,15 @@
         
         <PackageTags>slack dotnetcore</PackageTags>
         <PackageProjectUrl>https://github.com/smarteboka/slackbot.net</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/smarteboka/slackbot.net/blob/master/LICENSE</PackageLicenseUrl>
+        <License>https://github.com/smarteboka/slackbot.net/blob/master/LICENSE</License>
         <RepositoryUrl>https://github.com/smarteboka/slackbot.net</RepositoryUrl>
         <PackageIconUrl>images/slack.png</PackageIconUrl>
         <PackageIcon>slack.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <None Include="images/slack.png">
-            <Pack>True</Pack>
-        </None>
+        <None Include="images/slack.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>
