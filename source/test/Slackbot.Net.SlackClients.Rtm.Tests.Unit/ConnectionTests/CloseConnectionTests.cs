@@ -13,7 +13,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         [Theory, AutoMoqData]
         private async Task should_close_websocket_when_websocket_is_connected(
             [Frozen]Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             webSocket
@@ -21,10 +21,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
                 .Returns(true);
 
             var info = GetDummyConnectionInformation(webSocket);
-            await slackConnection.Initialise(info);
+            await connection.Initialise(info);
 
             // when
-            await slackConnection.Close();
+            await connection.Close();
 
             // then
             webSocket.Verify(x => x.Close(), Times.Once);
@@ -33,7 +33,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         [Theory, AutoMoqData]
         private async Task should_not_close_websocket_when_websocket_is_disconnected(
             [Frozen]Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             webSocket
@@ -41,10 +41,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
                 .Returns(false);
 
             var info = GetDummyConnectionInformation(webSocket);
-            await slackConnection.Initialise(info);
+            await connection.Initialise(info);
 
             // when
-            await slackConnection.Close();
+            await connection.Close();
 
             // then
             webSocket.Verify(x => x.Close(), Times.Never);

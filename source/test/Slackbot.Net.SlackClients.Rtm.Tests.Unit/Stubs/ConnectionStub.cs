@@ -6,7 +6,7 @@ using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
 {
-    public class SlackConnectionStub : ISlackConnection
+    public class ConnectionStub : IConnection
     {
         public string[] Aliases { get; set; }
         public IEnumerable<ChatHub> ConnectedDMs { get; }

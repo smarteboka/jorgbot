@@ -20,7 +20,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
@@ -52,7 +52,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IHandshakeClient> handShakeClient)
         {
             // given
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 

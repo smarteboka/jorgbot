@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
 {
-    public class SlackAttachmentSerialisationTests
+    public class AttachmentSerialisationTests
     {
         [Fact]
         public void should_return_expected_json_when_serialised()

@@ -1,5 +1,4 @@
 using System;
-using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using ChatHub = Slackbot.Net.SlackClients.Rtm.Models.ChatHub;
@@ -10,7 +9,7 @@ namespace Slackbot.Net.Connections
 {
     public class SlackConnectorMapper
     {
-        public static SlackMessage Map(SlackClients.Rtm.Models.Message msg)
+        public static SlackMessage Map(Message msg)
         {
             var slackMessage = new SlackMessage
             {

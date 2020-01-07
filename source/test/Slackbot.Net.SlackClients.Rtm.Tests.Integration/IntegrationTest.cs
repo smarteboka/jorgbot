@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Slackbot.Net.SlackClients.Rtm.Configurations;
 using Slackbot.Net.SlackClients.Rtm.Tests.Integration.Configuration;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Integration
 {
     public abstract class IntegrationTest : IDisposable
     {
-        protected ISlackConnection SlackConnection;
+        protected IConnection Connection;
         protected Config Config;
 
         protected IntegrationTest()
         {
             Config = new ConfigReader().GetConfig();
 
-            var slackConnector = new SlackConnector();
-            SlackConnection = Task.Run(() => slackConnector.Connect(Config.Slack.ApiToken))
+            var slackConnector = new Connector(new RtmOptions { ApiKey = Config.Slack.ApiToken});
+            Connection = Task.Run(() => slackConnector.Connect())
                     .GetAwaiter()
                     .GetResult();
         }
         
         public virtual void Dispose()
         {
-            Task.Run(() => SlackConnection.Close())
+            Task.Run(() => Connection.Close())
                 .GetAwaiter()
                 .GetResult();
         }

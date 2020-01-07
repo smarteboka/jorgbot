@@ -24,7 +24,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IPingPongMonitor> pingPongMonitor,
             Mock<IHandshakeClient> handShakeClient)
         {
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
 
             // given
@@ -75,7 +75,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         {
             // given
             
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation();
             
@@ -108,16 +108,16 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_not_raise_message_event_given_incorrect_message_type(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             var connectionInfo = new ConnectionInformation();
-            await slackConnection.Initialise(connectionInfo);
+            await connection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage { MessageType = MessageType.Unknown };
 
             bool messageRaised = false;
-            slackConnection.OnMessageReceived += message =>
+            connection.OnMessageReceived += message =>
             {
                 messageRaised = true;
                 return Task.CompletedTask;
@@ -133,14 +133,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_not_raise_message_event_given_null_message(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             var connectionInfo = new ConnectionInformation();
-            await slackConnection.Initialise(connectionInfo);
+            await connection.Initialise(connectionInfo);
 
             bool messageRaised = false;
-            slackConnection.OnMessageReceived += message =>
+            connection.OnMessageReceived += message =>
             {
                 messageRaised = true;
                 return Task.CompletedTask;
@@ -161,7 +161,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         {
             // given
             
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation
             {
@@ -197,7 +197,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IHandshakeClient> handShakeClient,
             Mock<IPingPongMonitor> pingPongMonitor)
         {
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
             // given
             var connectionInfo = new ConnectionInformation
             {
@@ -225,14 +225,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_not_raise_message_event_given_message_from_self(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             var connectionInfo = new ConnectionInformation
             {
                 Self = new ContactDetails { Id = "self-id", Name = "self-name" },
             };
-            await slackConnection.Initialise(connectionInfo);
+            await connection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage
             {
@@ -241,7 +241,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             };
 
             bool messageRaised = false;
-            slackConnection.OnMessageReceived += message =>
+            connection.OnMessageReceived += message =>
             {
                 messageRaised = true;
                 return Task.CompletedTask;
@@ -257,11 +257,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_not_raise_event_given_message_is_missing_user_information(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             var connectionInfo = new ConnectionInformation();
-            await slackConnection.Initialise(connectionInfo);
+            await connection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage
             {
@@ -270,7 +270,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             };
 
             bool messageRaised = false;
-            slackConnection.OnMessageReceived += message =>
+            connection.OnMessageReceived += message =>
             {
                 messageRaised = true;
                 return Task.CompletedTask;
@@ -286,11 +286,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_not_raise_exception(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Connection connection)
         {
             // given
             var connectionInfo = new ConnectionInformation();
-            await slackConnection.Initialise(connectionInfo);
+            await connection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage
             {
@@ -298,7 +298,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
                 User = "lalala"
             };
 
-            slackConnection.OnMessageReceived += message => throw new Exception("EMPORER OF THE WORLD");
+            connection.OnMessageReceived += message => throw new Exception("EMPORER OF THE WORLD");
 
             // when & then (does not throw)
             webSocket.Raise(x => x.OnMessage += null, null, inboundMessage);

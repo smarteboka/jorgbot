@@ -19,7 +19,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             Mock<IHandshakeClient> handShakeClient)
         {
             
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
+            var slackConnection = new Connection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             // given
             bool connectionChangedValue = false;

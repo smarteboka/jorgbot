@@ -1,8 +1,5 @@
-﻿using AutoFixture.Xunit2;
-using Moq;
-using Shouldly;
+﻿using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
-using Slackbot.Net.SlackClients.Rtm.Logging;
 using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
 
@@ -203,34 +200,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Sockets.Messages
             };
 
             result.ShouldLookLike(expected);
-        }
-
-        [Theory, AutoMoqData]
-        private void shouldnt_log_when_logging_level_is_non([Frozen]Mock<ILogger> logger, MessageInterpreter interpreter)
-        {
-            // given
-            Slackbot.Net.SlackClients.Rtm.SlackConnector.LoggingLevel = ConsoleLoggingLevel.None;
-
-            // when
-            var result = interpreter.InterpretMessage(null);
-
-            // then
-            result.ShouldBeOfType<UnknownMessage>();
-            logger.Verify(x => x.LogError(It.IsAny<string>()), Times.Never);
-        }
-
-        [Theory, AutoMoqData]
-        private void should_log_when_logging_level_is_all([Frozen]Mock<ILogger> logger, MessageInterpreter interpreter)
-        {
-            // given
-            SlackConnector.LoggingLevel = ConsoleLoggingLevel.All;
-
-            // when
-            var result = interpreter.InterpretMessage(@"{ 'something': 'no end tag'");
-
-            // then
-            result.ShouldBeOfType<UnknownMessage>();
-            logger.Verify(x => x.LogError(It.IsAny<string>()), Times.AtLeastOnce);
         }
 
         [Theory, AutoMoqData]

@@ -4,7 +4,7 @@ using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.SlackClients.Rtm
 {
-    public interface ISlackConnection
+    public interface IConnection
     {
         /// <summary>
         /// Is the RealTimeConnection currently open?

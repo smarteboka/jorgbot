@@ -1,6 +1,4 @@
-﻿using Slackbot.Net.SlackClients.Rtm.Connections.Models;
-using Slackbot.Net.SlackClients.Rtm.Models;
-using User = Slackbot.Net.SlackClients.Rtm.Models.User;
+﻿using User = Slackbot.Net.SlackClients.Rtm.Models.User;
 
 namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
