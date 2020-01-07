@@ -1,4 +1,4 @@
-namespace Slackbot.Net.SlackClients.Configurations
+namespace Slackbot.Net.SlackClients.Http.Configurations.Options
 {
     public class BotTokenClientOptions
     {

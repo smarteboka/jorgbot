@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Publishers;
 using Slackbot.Net.SlackClients;
+using Slackbot.Net.SlackClients.Http;
 
 namespace Slackbot.Net.Extensions.Publishers.Slack
 {

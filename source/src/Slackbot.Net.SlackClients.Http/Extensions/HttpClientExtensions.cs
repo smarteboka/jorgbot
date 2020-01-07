@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Slackbot.Net.SlackClients.Exceptions;
-using Slackbot.Net.SlackClients.Models.Responses;
+using Slackbot.Net.SlackClients.Http.Exceptions;
+using Slackbot.Net.SlackClients.Http.Models.Responses;
 
-namespace Slackbot.Net.SlackClients.Extensions
+namespace Slackbot.Net.SlackClients.Http.Extensions
 {
     internal static class HttpClientExtensions
     {

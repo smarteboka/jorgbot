@@ -1,9 +1,10 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Slackbot.Net.SlackClients.Configurations;
+using Slackbot.Net.SlackClients.Http.Configurations;
+using Slackbot.Net.SlackClients.Http.Configurations.Options;
 
-namespace Slackbot.Net.SlackClients.Extensions
+namespace Slackbot.Net.SlackClients.Http.Extensions
 {
     public static class ServiceCollectionExtensions
     {

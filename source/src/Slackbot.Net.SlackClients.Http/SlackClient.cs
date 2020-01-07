@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.SlackClients.Extensions;
-using Slackbot.Net.SlackClients.Models.Requests.ChatPostMessage;
-using Slackbot.Net.SlackClients.Models.Responses;
-using Slackbot.Net.SlackClients.Models.Responses.ChatGetPermalink;
-using Slackbot.Net.SlackClients.Models.Responses.ChatPostMessage;
-using Slackbot.Net.SlackClients.Models.Responses.UsersList;
+using Slackbot.Net.SlackClients.Http.Extensions;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ChatGetPermalink;
+using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 
-namespace Slackbot.Net.SlackClients
+namespace Slackbot.Net.SlackClients.Http
 {
     /// <inheritdoc/>
     internal class SlackClient : ISlackClient

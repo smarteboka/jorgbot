@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients;
+using Slackbot.Net.SlackClients.Http;
 using Smartbot.Utilities.Storage.SlackUrls;
 
 namespace Smartbot.Utilities.Handlers

@@ -2,7 +2,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.SlackClients;
-using Slackbot.Net.SlackClients.Extensions;
+using Slackbot.Net.SlackClients.Http;
+using Slackbot.Net.SlackClients.Http.Extensions;
 using Xunit.Abstractions;
 
 namespace Slackbot.Net.Tests

@@ -7,7 +7,7 @@ using Slackbot.Net.Configuration;
 using Slackbot.Net.Connections;
 using Slackbot.Net.Handlers;
 using Slackbot.Net.Hosting;
-using Slackbot.Net.SlackClients.Extensions;
+using Slackbot.Net.SlackClients.Http.Extensions;
 using Slackbot.Net.Validations;
 
 // namespace on purpose:

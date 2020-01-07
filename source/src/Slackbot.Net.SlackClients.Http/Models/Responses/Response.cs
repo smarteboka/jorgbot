@@ -1,4 +1,4 @@
-namespace Slackbot.Net.SlackClients.Models.Responses
+namespace Slackbot.Net.SlackClients.Http.Models.Responses
 {
     public class Response
     {
