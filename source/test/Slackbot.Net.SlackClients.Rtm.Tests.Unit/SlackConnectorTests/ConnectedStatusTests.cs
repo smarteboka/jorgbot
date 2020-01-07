@@ -19,15 +19,15 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
         private string _webSocketUrl = "https://some-web-url";
         private readonly Mock<IHandshakeClient> _handshakeClient;
         private readonly Mock<IWebSocketClient> _webSocketClient;
-        private readonly Mock<IConnectionFactory> _connectionFactory;
+        private readonly Mock<IServiceLocator> _connectionFactory;
         private readonly Mock<ISlackConnectionFactory> _slackConnectionFactory;
-        private readonly Slackbot.Net.SlackClients.Rtm.SlackConnector _slackConnector;
+        private readonly SlackConnector _slackConnector;
 
         public ConnectedStatusTests()
         {
             _handshakeClient = new Mock<IHandshakeClient>();
             _webSocketClient = new Mock<IWebSocketClient>();
-            _connectionFactory = new Mock<IConnectionFactory>();
+            _connectionFactory = new Mock<IServiceLocator>();
             _slackConnectionFactory = new Mock<ISlackConnectionFactory>();
             _slackConnector = new Slackbot.Net.SlackClients.Rtm.SlackConnector(_connectionFactory.Object, _slackConnectionFactory.Object);
 
@@ -36,8 +36,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
                 .Returns(_handshakeClient.Object);
 
             _connectionFactory
-                .Setup(x => x.CreateConnectedWebSocketClient(_webSocketUrl))
-                .ReturnsAsync(_webSocketClient.Object);
+                .Setup(x => x.CreateConnectedWebSocketClient())
+                .Returns(_webSocketClient.Object);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
 
             _slackConnectionFactory
                 .Verify(x => x.Create(It.Is((ConnectionInformation p) => p.WebSocket == _webSocketClient.Object)), Times.Once);
-            _connectionFactory.Verify(x => x.CreateConnectedWebSocketClient(_webSocketUrl));
+            _connectionFactory.Verify(x => x.CreateConnectedWebSocketClient());
         }
 
         [Fact]

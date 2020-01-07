@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
@@ -44,7 +45,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
 
         [Theory, AutoMoqData]
         private async Task should_pong_monitor(
-            [Frozen]Mock<IMonitoringFactory> monitoringFactory, 
+            [Frozen]Mock<IServiceLocator> monitoringFactory, 
             Mock<IPingPongMonitor> pingPongMonitor,
             Mock<IWebSocketClient> webSocket, 
             SlackConnection slackConnection)

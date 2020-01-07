@@ -15,9 +15,8 @@ namespace Slackbot.Net.SlackClients.Rtm
 {
     internal class SlackConnection : ISlackConnection
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IServiceLocator _serviceLocator;
         private readonly IMentionDetector _mentionDetector;
-        private readonly IMonitoringFactory _monitoringFactory;
         private IWebSocketClient _webSocketClient;
         private IPingPongMonitor _pingPongMonitor;
 
@@ -31,11 +30,10 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         public string SlackKey { get; private set; }
 
-        public SlackConnection(IConnectionFactory connectionFactory, IMentionDetector mentionDetector, IMonitoringFactory monitoringFactory)
+        public SlackConnection(IServiceLocator serviceLocator, IMentionDetector mentionDetector)
         {
-            _connectionFactory = connectionFactory;
+            _serviceLocator = serviceLocator;
             _mentionDetector = mentionDetector;
-            _monitoringFactory = monitoringFactory;
         }
 
         public async Task Initialise(ConnectionInformation connectionInformation)
@@ -56,7 +54,7 @@ namespace Slackbot.Net.SlackClients.Rtm
 
             _webSocketClient.OnMessage += async (sender, message) => await ListenTo(message);
 
-            _pingPongMonitor = _monitoringFactory.CreatePingPongMonitor();
+            _pingPongMonitor = _serviceLocator.CreatePingPongMonitor();
             await _pingPongMonitor.StartMonitor(Ping, Reconnect, TimeSpan.FromMinutes(2));
         }
 
@@ -66,7 +64,7 @@ namespace Slackbot.Net.SlackClients.Rtm
         {
             var reconnectingEvent = RaiseOnReconnecting();
 
-            var handshakeClient = _connectionFactory.CreateHandshakeClient();
+            var handshakeClient = _serviceLocator.CreateHandshakeClient();
             var handshake = await handshakeClient.FirmShake(SlackKey);
             await _webSocketClient.Connect(handshake.WebSocketUrl);
 

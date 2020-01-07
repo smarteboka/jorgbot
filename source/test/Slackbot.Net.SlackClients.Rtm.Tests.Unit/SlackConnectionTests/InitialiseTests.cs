@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Models;
@@ -59,7 +60,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
 
         [Theory, AutoMoqData]
         private async Task should_initialise_ping_pong_monitor(
-            [Frozen]Mock<IMonitoringFactory> monitoringFactory, 
+            [Frozen]Mock<IServiceLocator> monitoringFactory, 
             Mock<IPingPongMonitor> pingPongMonitor, 
             SlackConnection connection)
         {

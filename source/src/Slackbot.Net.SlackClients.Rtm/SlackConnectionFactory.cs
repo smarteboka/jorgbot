@@ -10,7 +10,7 @@ namespace Slackbot.Net.SlackClients.Rtm
     {
         public async Task<ISlackConnection> Create(ConnectionInformation connectionInformation)
         {
-            var slackConnection = new SlackConnection(new ConnectionFactory(), new MentionDetector(), new MonitoringFactory());
+            var slackConnection = new SlackConnection(new ServiceLocator(), new MentionDetector());
             await slackConnection.Initialise(connectionInformation);
             return slackConnection;
         }

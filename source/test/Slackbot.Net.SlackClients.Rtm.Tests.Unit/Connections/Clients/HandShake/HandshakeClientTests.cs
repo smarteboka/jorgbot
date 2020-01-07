@@ -38,7 +38,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
             Setup(expectedResponse);
             var result = await _handshakeClient.FirmShake(slackKey);
 
-            var expectedUri = new Uri($"https://slack.com//api/rtm.start?token={slackKey}");
+            var expectedUri = new Uri($"https://slack.com/api/rtm.start?token={slackKey}");
             
             _handlerMock.Protected().Verify(
                 "SendAsync",
