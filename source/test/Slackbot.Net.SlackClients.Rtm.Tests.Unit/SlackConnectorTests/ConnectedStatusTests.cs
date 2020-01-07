@@ -4,11 +4,10 @@ using Moq;
 using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
-using Slackbot.Net.SlackClients.Rtm.Connections.Models;
+using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Exceptions;
-using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
@@ -16,26 +15,16 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
     public class ConnectedStatusTests
     {
         private string _slackKey = "slacKing-off-ey?";
-        private string _webSocketUrl = "https://some-web-url";
         private readonly Mock<IHandshakeClient> _handshakeClient;
-        private readonly Mock<IWebSocketClient> _webSocketClient;
-        private readonly Mock<IServiceLocator> _serviceLocator;
         private readonly SlackConnector _slackConnector;
 
         public ConnectedStatusTests()
         {
             _handshakeClient = new Mock<IHandshakeClient>();
-            _webSocketClient = new Mock<IWebSocketClient>();
-            _serviceLocator = new Mock<IServiceLocator>();
-            _slackConnector = new SlackConnector(_serviceLocator.Object);
-
-            _serviceLocator
-                .Setup(x => x.CreateHandshakeClient())
-                .Returns(_handshakeClient.Object);
-
-            _serviceLocator
-                .Setup(x => x.CreateConnectedWebSocketClient())
-                .Returns(_webSocketClient.Object);
+            var webSocketClient = new Mock<IWebSocketClient>();
+            var serviceLocator = new Mock<IServiceLocator>();
+            var pingPong = new Mock<IPingPongMonitor>();
+            _slackConnector = new SlackConnector(serviceLocator.Object, _handshakeClient.Object, webSocketClient.Object, pingPong.Object);
         }
 
         [Fact]

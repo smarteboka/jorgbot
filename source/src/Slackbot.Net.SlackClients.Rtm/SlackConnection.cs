@@ -16,9 +16,9 @@ namespace Slackbot.Net.SlackClients.Rtm
     internal class SlackConnection : ISlackConnection
     {
         private readonly IMentionDetector _mentionDetector;
-        private IWebSocketClient _webSocketClient;
-        private IPingPongMonitor _pingPongMonitor;
-        private IHandshakeClient _handshakeClient;
+        private readonly IWebSocketClient _webSocketClient;
+        private readonly IPingPongMonitor _pingPongMonitor;
+        private readonly IHandshakeClient _handshakeClient;
 
         public bool IsConnected => _webSocketClient?.IsAlive ?? false;
 
@@ -30,7 +30,10 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         public string SlackKey { get; private set; }
 
-        public SlackConnection(IPingPongMonitor pingPongMonitor, IHandshakeClient handshakeClient, IMentionDetector mentionDetector, IWebSocketClient webSocketClient)
+        public SlackConnection(IPingPongMonitor pingPongMonitor, 
+            IHandshakeClient handshakeClient, 
+            IMentionDetector mentionDetector, 
+            IWebSocketClient webSocketClient)
         {
             _mentionDetector = mentionDetector;
             _webSocketClient = webSocketClient;
