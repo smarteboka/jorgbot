@@ -10,7 +10,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     internal class ConnectionFactory : IConnectionFactory
     {
-        public async Task<IWebSocketClient> CreateWebSocketClient(string url)
+        public async Task<IWebSocketClient> CreateConnectedWebSocketClient(string url)
         {
             var socket = new WebSocketClientLite(new MessageInterpreter(new Logger()));
             await socket.Connect(url);
@@ -19,7 +19,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 
         public IHandshakeClient CreateHandshakeClient()
         {
-            return new HandshakeClient(new HttpClient(),new ResponseVerifier());
+            return new HandshakeClient(new HttpClient());
         }
     }
 }

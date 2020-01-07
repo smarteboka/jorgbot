@@ -6,7 +6,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections
 {
     internal interface IConnectionFactory
     {
-        Task<IWebSocketClient> CreateWebSocketClient(string url);
+        Task<IWebSocketClient> CreateConnectedWebSocketClient(string url);
         IHandshakeClient CreateHandshakeClient();
     }
 }

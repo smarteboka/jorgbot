@@ -36,7 +36,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
                 .Returns(_handshakeClient.Object);
 
             _connectionFactory
-                .Setup(x => x.CreateWebSocketClient(_webSocketUrl))
+                .Setup(x => x.CreateConnectedWebSocketClient(_webSocketUrl))
                 .ReturnsAsync(_webSocketClient.Object);
         }
 
@@ -67,7 +67,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
 
             _slackConnectionFactory
                 .Verify(x => x.Create(It.Is((ConnectionInformation p) => p.WebSocket == _webSocketClient.Object)), Times.Once);
-            _connectionFactory.Verify(x => x.CreateWebSocketClient(_webSocketUrl));
+            _connectionFactory.Verify(x => x.CreateConnectedWebSocketClient(_webSocketUrl));
         }
 
         [Fact]

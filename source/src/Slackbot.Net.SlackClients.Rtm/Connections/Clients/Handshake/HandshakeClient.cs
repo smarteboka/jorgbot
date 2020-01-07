@@ -2,28 +2,29 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
+using Slackbot.Net.SlackClients.Rtm.Exceptions;
 
 namespace Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake
 {
     internal class HandshakeClient : IHandshakeClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IResponseVerifier _responseVerifier;
-        internal const string HANDSHAKE_PATH = "/api/rtm.start";
 
-        public HandshakeClient(HttpClient httpClient, IResponseVerifier responseVerifier)
+        public HandshakeClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _responseVerifier = responseVerifier;
         }
 
         public async Task<HandshakeResponse> FirmShake(string slackKey)
         {
-            var uri = $"{ClientConstants.SlackApiHost}/{HANDSHAKE_PATH}?token={slackKey}";
+            var uri = $"https://slack.com/api/rtm.start?token={slackKey}";
             var httpResponse = await _httpClient.GetAsync(uri);
             var content = await httpResponse.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<HandshakeResponse>(content);
-            _responseVerifier.VerifyResponse(response);
+            if (!response.Ok)
+            {
+                throw new CommunicationException($"Error occured while posting message '{response.Error}'");
+            }
             return response;
         }
     }

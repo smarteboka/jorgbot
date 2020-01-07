@@ -7,31 +7,26 @@ using ExpectedObjects;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
-using Slackbot.Net.SlackClients.Rtm.Connections.Clients;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
-using Slackbot.Net.SlackClients.Rtm.Tests.Unit.TestExtensions;
 using Xunit;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
 {
     public class HandshakeClientTests
     {
-        private readonly Mock<IResponseVerifier> _responseVerifierMock;
         private readonly HandshakeClient _handshakeClient;
         private readonly Mock<HttpMessageHandler> _handlerMock;
 
         public HandshakeClientTests()
         {
-            _responseVerifierMock = new Mock<IResponseVerifier>();
             _handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            _handshakeClient = new HandshakeClient(new HttpClient(_handlerMock.Object), _responseVerifierMock.Object);
+            _handshakeClient = new HandshakeClient(new HttpClient(_handlerMock.Object));
         }
 
         [Fact]
         public async Task should_call_expected_url_with_given_slack_key()
         {
-            // given
             const string slackKey = "I-is-da-key-yeah";
 
             var expectedResponse = new HandshakeResponse
@@ -41,11 +36,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Connections.Clients.HandShake
             };
            
             Setup(expectedResponse);
-            // when
             var result = await _handshakeClient.FirmShake(slackKey);
 
-            // then
-            _responseVerifierMock.Verify(x => x.VerifyResponse(Looks.Like(expectedResponse)));
             var expectedUri = new Uri($"https://slack.com//api/rtm.start?token={slackKey}");
             
             _handlerMock.Protected().Verify(
