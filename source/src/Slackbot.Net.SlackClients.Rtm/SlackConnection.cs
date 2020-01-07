@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
+using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
@@ -15,10 +15,10 @@ namespace Slackbot.Net.SlackClients.Rtm
 {
     internal class SlackConnection : ISlackConnection
     {
-        private readonly IServiceLocator _serviceLocator;
         private readonly IMentionDetector _mentionDetector;
         private IWebSocketClient _webSocketClient;
         private IPingPongMonitor _pingPongMonitor;
+        private IHandshakeClient _handshakeClient;
 
         public bool IsConnected => _webSocketClient?.IsAlive ?? false;
 
@@ -30,13 +30,15 @@ namespace Slackbot.Net.SlackClients.Rtm
 
         public string SlackKey { get; private set; }
 
-        public SlackConnection(IServiceLocator serviceLocator, IMentionDetector mentionDetector)
+        public SlackConnection(IPingPongMonitor pingPongMonitor, IHandshakeClient handshakeClient, IMentionDetector mentionDetector, IWebSocketClient webSocketClient)
         {
-            _serviceLocator = serviceLocator;
             _mentionDetector = mentionDetector;
+            _webSocketClient = webSocketClient;
+            _pingPongMonitor = pingPongMonitor;
+            _handshakeClient = handshakeClient;
         }
 
-        public async Task Initialise(ConnectionInformation connectionInformation)
+        internal async Task Initialise(ConnectionInformation connectionInformation)
         {
             SlackKey = connectionInformation.SlackKey;
             Team = connectionInformation.Team;
@@ -44,7 +46,6 @@ namespace Slackbot.Net.SlackClients.Rtm
             _userCache = connectionInformation.Users;
             ConnectedHubs = connectionInformation.SlackChatHubs;
 
-            _webSocketClient = connectionInformation.WebSocket;
             _webSocketClient.OnClose += (sender, args) =>
             {
                 ConnectedSince = null;
@@ -54,18 +55,14 @@ namespace Slackbot.Net.SlackClients.Rtm
 
             _webSocketClient.OnMessage += async (sender, message) => await ListenTo(message);
 
-            _pingPongMonitor = _serviceLocator.CreatePingPongMonitor();
             await _pingPongMonitor.StartMonitor(Ping, Reconnect, TimeSpan.FromMinutes(2));
         }
-
-     
 
         private async Task Reconnect()
         {
             var reconnectingEvent = RaiseOnReconnecting();
 
-            var handshakeClient = _serviceLocator.CreateHandshakeClient();
-            var handshake = await handshakeClient.FirmShake(SlackKey);
+            var handshake = await _handshakeClient.FirmShake(SlackKey);
             await _webSocketClient.Connect(handshake.WebSocketUrl);
 
             await Task.WhenAll(reconnectingEvent, RaiseOnReconnect());

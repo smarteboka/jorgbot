@@ -58,7 +58,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
                 Team = new ContactDetails { Id = "team-id" },
                 Users = new Dictionary<string, SlackUser> { { "userid", new SlackUser() { Name = "userName" } } },
                 SlackChatHubs = new Dictionary<string, SlackChatHub> { { "some-hub", new SlackChatHub() } },
-                WebSocket = webSocket.Object
             };
             return info;
         }

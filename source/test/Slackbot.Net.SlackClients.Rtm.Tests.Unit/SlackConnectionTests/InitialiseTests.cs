@@ -24,7 +24,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
                 Team = new ContactDetails { Id = "team-id" },
                 Users = new Dictionary<string, SlackUser> { { "userid", new SlackUser() { Name = "userName" } } },
                 SlackChatHubs = new Dictionary<string, SlackChatHub> { { "some-hub", new SlackChatHub() } },
-                WebSocket = new Mock<IWebSocketClient>().Object
             };
 
             // when
@@ -39,13 +38,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         [Theory, AutoMoqData]
         private void should_be_connected_if_websocket_is_alive(
             Mock<IWebSocketClient> webSocketClient, 
-            SlackConnection connection)
+            ServiceLocator serviceLocator)
         {
             // given
-            var info = new ConnectionInformation
-            {
-                WebSocket = webSocketClient.Object
-            };
+            var connection = serviceLocator.CreateConnection(webSocketClient.Object);
+            var info = new ConnectionInformation();
 
             webSocketClient
                 .Setup(x => x.IsAlive)
@@ -62,13 +59,12 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         private async Task should_initialise_ping_pong_monitor(
             [Frozen]Mock<IServiceLocator> monitoringFactory, 
             Mock<IPingPongMonitor> pingPongMonitor, 
-            SlackConnection connection)
+            Mock<IWebSocketClient> webSocketClient,
+            ServiceLocator serviceLocator)
         {
             // given
-            var info = new ConnectionInformation
-            {
-                WebSocket = new Mock<IWebSocketClient>().Object
-            };
+            var connection = serviceLocator.CreateConnection(webSocketClient.Object, null, pingPongMonitor.Object);
+            var info = new ConnectionInformation();
 
             pingPongMonitor
                 .Setup(x => x.StartMonitor(It.IsAny<Func<Task>>(), It.IsAny<Func<Task>>(), It.IsAny<TimeSpan>()))

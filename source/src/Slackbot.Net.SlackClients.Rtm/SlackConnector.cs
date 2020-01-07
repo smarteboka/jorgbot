@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Slackbot.Net.SlackClients.Rtm.Connections;
-using Slackbot.Net.SlackClients.Rtm.Connections.Models;
-using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Exceptions;
-using Slackbot.Net.SlackClients.Rtm.Extensions;
-using Slackbot.Net.SlackClients.Rtm.Models;
 
 namespace Slackbot.Net.SlackClients.Rtm
 {
@@ -16,15 +10,13 @@ namespace Slackbot.Net.SlackClients.Rtm
         public static ConsoleLoggingLevel LoggingLevel = ConsoleLoggingLevel.None;
 
         private readonly IServiceLocator _serviceLocator;
-        private readonly ISlackConnectionFactory _slackConnectionFactory;
 
-        public SlackConnector() : this(new ServiceLocator(), new SlackConnectionFactory())
+        public SlackConnector() : this(new ServiceLocator())
         { }
 
-        internal SlackConnector(IServiceLocator serviceLocator, ISlackConnectionFactory slackConnectionFactory)
+        internal SlackConnector(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _slackConnectionFactory = slackConnectionFactory;
         }
 
         public async Task<ISlackConnection> Connect(string slackKey)
@@ -42,57 +34,17 @@ namespace Slackbot.Net.SlackClients.Rtm
                 throw new HandshakeException(handshakeResponse.Error);
             }
 
-            var users = GenerateUsers(handshakeResponse.Users);
             var websocket = _serviceLocator.CreateConnectedWebSocketClient();
             await websocket.Connect(handshakeResponse.WebSocketUrl);
             
-            var connectionInfo = new ConnectionInformation
-            {
-                SlackKey = slackKey,
-                Self = new ContactDetails { Id = handshakeResponse.Self.Id, Name = handshakeResponse.Self.Name },
-                Team = new ContactDetails { Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name },
-                Users = users,
-                SlackChatHubs = GetChatHubs(handshakeResponse, users.Values.ToArray()),
-                WebSocket = websocket
-            };
+            var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(slackKey, handshakeResponse);
 
-            var connection = await _slackConnectionFactory.Create(connectionInfo);
+            var connection =  _serviceLocator.CreateConnection(websocket);
+            await connection.Initialise(connectionInfo);
+            
             return connection;
         }
 
-        private Dictionary<string, SlackUser> GenerateUsers(User[] users)
-        {
-            return users.ToDictionary(user => user.Id, user => user.ToSlackUser());
-        }
-
-        private Dictionary<string, SlackChatHub> GetChatHubs(HandshakeResponse handshakeResponse, SlackUser[] users)
-        {
-            var hubs = new Dictionary<string, SlackChatHub>();
-
-            foreach (Channel channel in handshakeResponse.Channels.Where(x => !x.IsArchived))
-            {
-                if (channel.IsMember)
-                {
-                    var newChannel = channel.ToChatHub();
-                    hubs.Add(channel.Id, newChannel);
-                }
-            }
-
-            foreach (Group group in handshakeResponse.Groups.Where(x => !x.IsArchived))
-            {
-                if ((group.Members ?? new string[0]).Any(x => x == handshakeResponse.Self.Id))
-                {
-                    var newGroup = group.ToChatHub();
-                    hubs.Add(group.Id, newGroup);
-                }
-            }
-
-            foreach (Im im in handshakeResponse.Ims)
-            {
-                hubs.Add(im.Id, im.ToChatHub(users));
-            }
-
-            return hubs;
-        }
+      
     }
 }
