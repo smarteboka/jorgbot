@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\samples\Smartbot.Web\Smartbot.Web.csproj" />
+      <ProjectReference Include="..\..\src\Smartbot.Web\Smartbot.Web.csproj" />
     </ItemGroup>
 
 </Project>
