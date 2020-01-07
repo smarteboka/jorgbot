@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -41,11 +38,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         private void should_be_connected_if_websocket_is_alive(
             Mock<IWebSocketClient> webSocketClient, 
             Mock<IHandshakeClient> handShakeClient,
-            Mock<IPingPongMonitor> pingPongMinotor,
-            Mock<IMentionDetector> mentionDetector)
+            Mock<IPingPongMonitor> pingPongMinotor)
         {
             // given
-            var connection = new SlackConnection(pingPongMinotor.Object, handShakeClient.Object, mentionDetector.Object, webSocketClient.Object);
+            var connection = new SlackConnection(pingPongMinotor.Object, handShakeClient.Object,webSocketClient.Object);
             var info = new ConnectionInformation();
 
             webSocketClient
@@ -66,7 +62,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             Mock<IWebSocketClient> webSocketClient)
         {
             // given
-            var connection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, null, webSocketClient.Object);
+            var connection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocketClient.Object);
             var info = new ConnectionInformation();
 
             pingPongMonitor

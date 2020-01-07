@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Moq;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -17,13 +15,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         private async Task should_send_ping(
             Mock<IWebSocketClient> webSocket, 
             Mock<IHandshakeClient> handShakeClient,
-            Mock<IPingPongMonitor> pingPongMonitor,
-            Mock<IMentionDetector> mentionDetector)
+            Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
             
-            var serviceLocator = new ServiceLocator();
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             const string slackKey = "key-yay";
 

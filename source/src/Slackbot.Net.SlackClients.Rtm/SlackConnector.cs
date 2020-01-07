@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -19,7 +17,6 @@ namespace Slackbot.Net.SlackClients.Rtm
         private readonly IHandshakeClient _handshakeClient;
         private readonly IWebSocketClient _webSocket;
         private readonly IPingPongMonitor _pingPongMonitor;
-        private readonly IMentionDetector _mentionDetector;
 
         public SlackConnector() : this(new HandshakeClient(new HttpClient()),
             new WebSocketClientLite(new MessageInterpreter(new Logger())),
@@ -34,7 +31,6 @@ namespace Slackbot.Net.SlackClients.Rtm
             _handshakeClient = handshakeClient;
             _webSocket = webSocket;
             _pingPongMonitor = pingPongMonitor;
-            _mentionDetector = new MentionDetector();
         }
 
         public async Task<ISlackConnection> Connect(string slackKey)
@@ -55,7 +51,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             
             var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(slackKey, handshakeResponse);
 
-            var connection =  new SlackConnection(_pingPongMonitor, _handshakeClient, _mentionDetector, _webSocket);
+            var connection =  new SlackConnection(_pingPongMonitor, _handshakeClient, _webSocket);
             await connection.Initialise(connectionInfo);
             
             return connection;
