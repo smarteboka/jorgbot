@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Moq;
 using Shouldly;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -18,12 +16,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         private async Task should_detect_disconnect(
             Mock<IWebSocketClient> webSocket,
             Mock<IPingPongMonitor> pingPongMonitor,
-            Mock<IMentionDetector> mentionDetector,
             Mock<IHandshakeClient> handShakeClient)
         {
             
-            var serviceLocator = new ServiceLocator();
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             // given
             bool connectionChangedValue = false;

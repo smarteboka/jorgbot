@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -15,7 +15,6 @@ namespace Slackbot.Net.SlackClients.Rtm
 {
     internal class SlackConnection : ISlackConnection
     {
-        private readonly IMentionDetector _mentionDetector;
         private readonly IWebSocketClient _webSocketClient;
         private readonly IPingPongMonitor _pingPongMonitor;
         private readonly IHandshakeClient _handshakeClient;
@@ -31,11 +30,9 @@ namespace Slackbot.Net.SlackClients.Rtm
         public string SlackKey { get; private set; }
 
         public SlackConnection(IPingPongMonitor pingPongMonitor, 
-            IHandshakeClient handshakeClient, 
-            IMentionDetector mentionDetector, 
+            IHandshakeClient handshakeClient,
             IWebSocketClient webSocketClient)
         {
-            _mentionDetector = mentionDetector;
             _webSocketClient = webSocketClient;
             _pingPongMonitor = pingPongMonitor;
             _handshakeClient = handshakeClient;
@@ -95,7 +92,6 @@ namespace Slackbot.Net.SlackClients.Rtm
             if (!string.IsNullOrEmpty(Self.Id) && inboundMessage.User == Self.Id)
                 return Task.CompletedTask;
 
-
             var message = new Message
             {
                 User = GetMessageUser(inboundMessage.User),
@@ -103,7 +99,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 Text = inboundMessage.Text,
                 ChatHub = GetChatHub(inboundMessage.Channel),
                 RawData = inboundMessage.RawData,
-                MentionsBot = _mentionDetector.WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text),
+                MentionsBot = WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text),
                 MessageSubType = inboundMessage.MessageSubType.ToSlackMessageSubType(),
                 Files = inboundMessage.Files.ToSlackFiles()
             };
@@ -222,6 +218,19 @@ namespace Slackbot.Net.SlackClients.Rtm
                 {
                 }
             }
+        }
+        
+        public bool WasBotMentioned(string username, string userId, string messageText)
+        {
+            bool mentioned = false;
+
+            if (!string.IsNullOrEmpty(messageText) && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(userId))
+            {
+                string regexText = $"<@{userId}>|{username}";
+                mentioned = Regex.IsMatch(messageText, regexText, RegexOptions.IgnoreCase);
+            }
+
+            return mentioned;
         }
     }
 }

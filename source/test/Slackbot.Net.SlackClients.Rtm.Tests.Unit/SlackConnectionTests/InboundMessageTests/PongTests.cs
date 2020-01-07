@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
-using Slackbot.Net.SlackClients.Rtm.BotHelpers;
-using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Clients.Handshake;
 using Slackbot.Net.SlackClients.Rtm.Connections.Monitoring;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
@@ -20,11 +17,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         private async Task should_raise_event(
             Mock<IWebSocketClient> webSocket, 
             Mock<IHandshakeClient> handShakeClient,
-            Mock<IMentionDetector> mentionDetector,
             Mock<IPingPongMonitor> pingPongMonitor)
         {
             // given
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, mentionDetector.Object, webSocket.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
 
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
@@ -56,7 +52,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             Mock<IHandshakeClient> handShakeClient)
         {
             // given
-            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, null, webSocket.Object);
+            var slackConnection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, webSocket.Object);
             var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
