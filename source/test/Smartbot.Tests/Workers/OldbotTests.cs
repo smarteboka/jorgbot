@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Models.Responses.SearchMessages;
 using Smartbot.Utilities;
