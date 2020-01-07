@@ -51,7 +51,7 @@ namespace Slackbot.Net.SlackClients.Rtm
                 Team = new ContactDetails { Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name },
                 Users = users,
                 SlackChatHubs = GetChatHubs(handshakeResponse, users.Values.ToArray()),
-                WebSocket = await _connectionFactory.CreateWebSocketClient(handshakeResponse.WebSocketUrl)
+                WebSocket = await _connectionFactory.CreateConnectedWebSocketClient(handshakeResponse.WebSocketUrl)
             };
 
             var connection = await _slackConnectionFactory.Create(connectionInfo);

@@ -20,15 +20,16 @@ namespace Slackbot.Net.SlackClients.Rtm
         private readonly IMonitoringFactory _monitoringFactory;
         private IWebSocketClient _webSocketClient;
         private IPingPongMonitor _pingPongMonitor;
-        private Dictionary<string, SlackChatHub> _connectedHubs { get; set; }
 
         public bool IsConnected => _webSocketClient?.IsAlive ?? false;
 
         public ContactDetails Team { get; private set; }
         public ContactDetails Self { get; private set; }
         
-        public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs => _connectedHubs;
+        public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs { get; private set; }
+        public DateTime? ConnectedSince { get; private set; }
 
+        public string SlackKey { get; private set; }
 
         public SlackConnection(IConnectionFactory connectionFactory, IMentionDetector mentionDetector, IMonitoringFactory monitoringFactory)
         {
@@ -43,7 +44,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             Team = connectionInformation.Team;
             Self = connectionInformation.Self;
             _userCache = connectionInformation.Users;
-            _connectedHubs = connectionInformation.SlackChatHubs;
+            ConnectedHubs = connectionInformation.SlackChatHubs;
 
             _webSocketClient = connectionInformation.WebSocket;
             _webSocketClient.OnClose += (sender, args) =>
@@ -59,9 +60,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             await _pingPongMonitor.StartMonitor(Ping, Reconnect, TimeSpan.FromMinutes(2));
         }
 
-        public DateTime? ConnectedSince { get; private set; }
-
-        public string SlackKey { get; private set; }
+     
 
         private async Task Reconnect()
         {
@@ -116,8 +115,8 @@ namespace Slackbot.Net.SlackClients.Rtm
         
         private SlackChatHub GetChatHub(string channel)
         {
-            return channel != null && _connectedHubs.ContainsKey(channel)
-                ? _connectedHubs[channel]
+            return channel != null && ConnectedHubs.ContainsKey(channel)
+                ? ConnectedHubs[channel]
                 : null;
         }
 

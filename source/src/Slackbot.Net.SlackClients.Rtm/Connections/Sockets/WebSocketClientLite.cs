@@ -42,7 +42,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Connections.Sockets
         {
             System.Threading.Interlocked.Increment(ref _currentMessageId);
             message.Id = _currentMessageId;
-            string json = JsonConvert.SerializeObject(message);
+            var json = JsonConvert.SerializeObject(message);
 
             await _webSocket.SendTextAsync(json);
         }

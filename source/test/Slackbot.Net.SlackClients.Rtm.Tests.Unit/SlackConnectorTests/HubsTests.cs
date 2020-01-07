@@ -24,14 +24,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             var webSocketClient = new Mock<IWebSocketClient>();
             var connectionFactory = new Mock<IConnectionFactory>();
             _slackConnectionFactory = new Mock<ISlackConnectionFactory>();
-            _slackConnector = new Slackbot.Net.SlackClients.Rtm.SlackConnector(connectionFactory.Object, _slackConnectionFactory.Object);
+            _slackConnector = new SlackConnector(connectionFactory.Object, _slackConnectionFactory.Object);
 
             connectionFactory
                 .Setup(x => x.CreateHandshakeClient())
                 .Returns(_handshakeClient.Object);
 
             connectionFactory
-                .Setup(x => x.CreateWebSocketClient(_webSocketUrl))
+                .Setup(x => x.CreateConnectedWebSocketClient(_webSocketUrl))
                 .ReturnsAsync(webSocketClient.Object);
         }
 
