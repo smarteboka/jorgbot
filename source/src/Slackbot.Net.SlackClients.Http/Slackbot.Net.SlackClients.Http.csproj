@@ -28,7 +28,6 @@
     <ItemGroup>
         <None Include="images/slack.png">
             <Pack>True</Pack>
-            <PackagePath></PackagePath>
         </None>
     </ItemGroup>
 
