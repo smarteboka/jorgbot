@@ -1,4 +1,4 @@
-namespace Slackbot.Net.Abstractions.Handlers
+namespace Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived
 {
     public class SlackMessage
     {

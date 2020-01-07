@@ -1,7 +1,8 @@
 using System;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients.Rtm.Models;
-using SlackMessage = Slackbot.Net.Abstractions.Handlers.SlackMessage;
+using SlackMessage = Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived.SlackMessage;
 
 namespace Slackbot.Net.Connections
 {

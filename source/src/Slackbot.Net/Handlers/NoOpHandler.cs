@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Slackbot.Net.Abstractions.Handlers;
+using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 
 namespace Slackbot.Net.Handlers
 {
