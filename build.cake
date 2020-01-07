@@ -5,7 +5,7 @@ var packageNameWorker = "Slackbot.Net";
 var packageNameEndpoints = "Slackbot.Net.Endpoints";
 
 var packageNameHttpClient = "Slackbot.Net.SlackClients.Http";
-var packageNameRtmClient = "Slackbot.Net.SlackClients.Http";
+var packageNameRtmClient = "Slackbot.Net.SlackClients.Rtm";
 
 var packageNameAbstractionsHandlers = "Slackbot.Net.Abstractions.Handlers";
 var packageNameAbstractionsHosting = "Slackbot.Net.Abstractions.Hosting";
