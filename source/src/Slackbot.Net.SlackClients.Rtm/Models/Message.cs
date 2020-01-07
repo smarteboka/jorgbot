@@ -2,15 +2,15 @@
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public class SlackMessage
+    public class Message
     {
-        public SlackChatHub ChatHub { get; set; }
+        public ChatHub ChatHub { get; set; }
         public bool MentionsBot { get; set; }
         public string RawData { get; set; }
         public string Text { get; set; }
-        public SlackUser User { get; set; }
+        public User User { get; set; }
         public double Timestamp { get; set; }
-        public SlackMessageSubType MessageSubType { get; set; }
-        public IEnumerable<SlackFile> Files { get; set; }
+        public MessageSubType MessageSubType { get; set; }
+        public IEnumerable<File> Files { get; set; }
     }
 }

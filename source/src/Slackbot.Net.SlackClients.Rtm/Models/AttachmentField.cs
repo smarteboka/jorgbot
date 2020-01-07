@@ -2,7 +2,7 @@
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public class SlackAttachmentField
+    public class AttachmentField
     {
         [JsonProperty(PropertyName = "short")]
         public bool IsShort { get; set; }

@@ -16,24 +16,21 @@ namespace Slackbot.Net.SlackClients.Rtm
     {
         public static ConsoleLoggingLevel LoggingLevel = ConsoleLoggingLevel.None;
 
-        private readonly IServiceLocator _serviceLocator;
         private readonly IHandshakeClient _handshakeClient;
         private readonly IWebSocketClient _webSocket;
         private readonly IPingPongMonitor _pingPongMonitor;
         private readonly IMentionDetector _mentionDetector;
 
-        public SlackConnector() : this(new ServiceLocator(), 
-            new HandshakeClient(new HttpClient()),
+        public SlackConnector() : this(new HandshakeClient(new HttpClient()),
             new WebSocketClientLite(new MessageInterpreter(new Logger())),
             new PingPongMonitor(new Timer(), new DateTimeKeeper()))
         { }
 
-        internal SlackConnector(IServiceLocator serviceLocator, 
+        internal SlackConnector(
             IHandshakeClient handshakeClient, 
             IWebSocketClient webSocket,
             IPingPongMonitor pingPongMonitor)
         {
-            _serviceLocator = serviceLocator;
             _handshakeClient = handshakeClient;
             _webSocket = webSocket;
             _pingPongMonitor = pingPongMonitor;
@@ -58,7 +55,7 @@ namespace Slackbot.Net.SlackClients.Rtm
             
             var connectionInfo = ConnectionInformationMapper.CreateConnectionInformation(slackKey, handshakeResponse);
 
-            var connection =  _serviceLocator.CreateConnection(_webSocket, _handshakeClient, _mentionDetector, _pingPongMonitor);
+            var connection =  new SlackConnection(_pingPongMonitor, _handshakeClient, _mentionDetector, _webSocket);
             await connection.Initialise(connectionInfo);
             
             return connection;

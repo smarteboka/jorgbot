@@ -2,13 +2,15 @@ using System;
 using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.SlackClients.Rtm.Models;
+using ChatHub = Slackbot.Net.SlackClients.Rtm.Models.ChatHub;
 using SlackMessage = Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived.SlackMessage;
+using User = Slackbot.Net.SlackClients.Rtm.Models.User;
 
 namespace Slackbot.Net.Connections
 {
     public class SlackConnectorMapper
     {
-        public static SlackMessage Map(SlackClients.Rtm.Models.SlackMessage msg)
+        public static SlackMessage Map(SlackClients.Rtm.Models.Message msg)
         {
             var slackMessage = new SlackMessage
             {
@@ -17,7 +19,7 @@ namespace Slackbot.Net.Connections
                 Timestamp = msg.Timestamp,
                 User = ToUser(msg.User),
                 MentionsBot = msg.MentionsBot,
-                ChatHub = new ChatHub
+                ChatHub = new Abstractions.Handlers.Models.Rtm.MessageReceived.ChatHub
                 {
                     Id = msg.ChatHub?.Id,
                     Name = msg.ChatHub?.Name,
@@ -27,9 +29,9 @@ namespace Slackbot.Net.Connections
             return slackMessage;
         }
 
-        private static User ToUser(SlackUser messageUser)
+        private static Abstractions.Handlers.Models.Rtm.MessageReceived.User ToUser(User messageUser)
         {
-            return new User
+            return new Abstractions.Handlers.Models.Rtm.MessageReceived.User
             {
                 Id = messageUser.Id,
                 Email = messageUser.Email,
@@ -42,18 +44,18 @@ namespace Slackbot.Net.Connections
 
         }
 
-        private static string EnumToString(SlackChatHub chatHubType)
+        private static string EnumToString(ChatHub chatHubType)
         {
             if (chatHubType == null)
                 return "Unknown";
             
             switch (chatHubType.Type)
             {
-                case SlackChatHubType.DM:
+                case ChatHubType.DM:
                     return ChatHubTypes.DirectMessage;
-                case SlackChatHubType.Channel:
+                case ChatHubType.Channel:
                     return ChatHubTypes.Channel;
-                case SlackChatHubType.Group:
+                case ChatHubType.Group:
                     return ChatHubTypes.Group;
                 default:
                     throw new ArgumentOutOfRangeException();

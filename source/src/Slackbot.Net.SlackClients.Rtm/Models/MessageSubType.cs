@@ -1,6 +1,6 @@
 ﻿namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public enum SlackMessageSubType
+    public enum MessageSubType
     {
         Unknown = 0,
         BotMessage

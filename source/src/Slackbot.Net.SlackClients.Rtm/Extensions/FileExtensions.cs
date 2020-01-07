@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Models;
+using File = Slackbot.Net.SlackClients.Rtm.Models.File;
 
 namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
     internal static class FileExtensions
     {
-        public static IEnumerable<SlackFile> ToSlackFiles(this IEnumerable<File> file)
+        public static IEnumerable<File> ToSlackFiles(this IEnumerable<Connections.Sockets.Messages.Inbound.File> file)
         {
             if (file == null)
             {
-                return Enumerable.Empty<SlackFile>();
+                return Enumerable.Empty<File>();
             }
 
             return file.Select(ToSlackFile);
         }
 
-        private static SlackFile ToSlackFile(this File file)
+        private static File ToSlackFile(this Connections.Sockets.Messages.Inbound.File file)
         {
             if (file == null)
                 return null;
 
-            return new SlackFile(
+            return new File(
                 file.Id,
                 file.Created,
                 file.Timestamp,
@@ -50,7 +51,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Extensions
                 CreateUri(file.DeanimateGif),
                 CreateUri(file.Permalink),
                 CreateUri(file.PermalinkPublic),
-                new SlackThumbnail(
+                new Thumbnail(
                     CreateUri(file.Thumb64),
                     CreateUri(file.Thumb80),
                     CreateUri(file.Thumb360),

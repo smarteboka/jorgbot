@@ -4,6 +4,7 @@ using Slackbot.Net.SlackClients.Rtm.Connections.Models;
 using Slackbot.Net.SlackClients.Rtm.Connections.Responses;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
+using User = Slackbot.Net.SlackClients.Rtm.Connections.Models.User;
 
 namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
 {
@@ -64,7 +65,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             connInfo.SlackChatHubs.Count.ShouldBe(1);
             connInfo.SlackChatHubs["i-am-a-channel"].Id.ShouldBe("i-am-a-channel");
             connInfo.SlackChatHubs["i-am-a-channel"].Name.ShouldBe("#channel-name");
-            connInfo.SlackChatHubs["i-am-a-channel"].Type.ShouldBe(SlackChatHubType.Channel);
+            connInfo.SlackChatHubs["i-am-a-channel"].Type.ShouldBe(ChatHubType.Channel);
             connInfo.SlackChatHubs["i-am-a-channel"].Members.ShouldBe(handshakeResponse.Channels[0].Members);
         }
         
@@ -89,7 +90,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             connInfo.SlackChatHubs.Count.ShouldBe(1);
             connInfo.SlackChatHubs["i-am-a-group"].Id.ShouldBe("i-am-a-group");
             connInfo.SlackChatHubs["i-am-a-group"].Name.ShouldBe("#group-name");
-            connInfo.SlackChatHubs["i-am-a-group"].Type.ShouldBe(SlackChatHubType.Group);
+            connInfo.SlackChatHubs["i-am-a-group"].Type.ShouldBe(ChatHubType.Group);
             connInfo.SlackChatHubs["i-am-a-group"].Members.ShouldBe(handshakeResponse.Groups[0].Members);
         }
         
@@ -117,10 +118,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectorTests
             connInfo.SlackChatHubs.Count.ShouldBe(2);
             connInfo.SlackChatHubs["i-am-a-im"].Id.ShouldBe("i-am-a-im");
             connInfo.SlackChatHubs["i-am-a-im"].Name.ShouldBe("@user-i-am_yup");
-            connInfo.SlackChatHubs["i-am-a-im"].Type.ShouldBe(SlackChatHubType.DM);
+            connInfo.SlackChatHubs["i-am-a-im"].Type.ShouldBe(ChatHubType.DM);
             connInfo.SlackChatHubs["user-with-name"].Id.ShouldBe("user-with-name");
             connInfo.SlackChatHubs["user-with-name"].Name.ShouldBe("@expected-name");
-            connInfo.SlackChatHubs["user-with-name"].Type.ShouldBe(SlackChatHubType.DM);
+            connInfo.SlackChatHubs["user-with-name"].Type.ShouldBe(ChatHubType.DM);
         }
         
         [Fact]

@@ -1,6 +1,6 @@
 ﻿namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public enum SlackChatHubType
+    public enum ChatHubType
     {
         DM,
         Channel,

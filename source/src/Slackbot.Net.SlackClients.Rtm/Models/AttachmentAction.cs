@@ -2,7 +2,7 @@
 
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
-    public class SlackAttachmentAction
+    public class AttachmentAction
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -11,7 +11,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public string Text { get; set; }
 
         [JsonProperty(PropertyName = "style", NullValueHandling = NullValueHandling.Ignore)]
-        public SlackAttachmentActionStyle? Style { get; set; }
+        public AttachmentActionStyle? Style { get; set; }
 
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
@@ -23,7 +23,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Models
         public string Url { get; set; }
 
 
-        public SlackAttachmentAction()
+        public AttachmentAction()
         {
             Type = "button";
         }

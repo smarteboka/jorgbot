@@ -24,8 +24,8 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             {
                 Self = new ContactDetails { Id = "self-id" },
                 Team = new ContactDetails { Id = "team-id" },
-                Users = new Dictionary<string, SlackUser> { { "userid", new SlackUser() { Name = "userName" } } },
-                SlackChatHubs = new Dictionary<string, SlackChatHub> { { "some-hub", new SlackChatHub() } },
+                Users = new Dictionary<string, User> { { "userid", new User() { Name = "userName" } } },
+                SlackChatHubs = new Dictionary<string, ChatHub> { { "some-hub", new ChatHub() } },
             };
 
             // when
@@ -42,11 +42,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
             Mock<IWebSocketClient> webSocketClient, 
             Mock<IHandshakeClient> handShakeClient,
             Mock<IPingPongMonitor> pingPongMinotor,
-            Mock<IMentionDetector> mentionDetector,
-            ServiceLocator serviceLocator)
+            Mock<IMentionDetector> mentionDetector)
         {
             // given
-            var connection = serviceLocator.CreateConnection(webSocketClient.Object, handShakeClient.Object, mentionDetector.Object, pingPongMinotor.Object);
+            var connection = new SlackConnection(pingPongMinotor.Object, handShakeClient.Object, mentionDetector.Object, webSocketClient.Object);
             var info = new ConnectionInformation();
 
             webSocketClient
@@ -64,11 +63,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
         private async Task should_initialise_ping_pong_monitor(
             Mock<IPingPongMonitor> pingPongMonitor, 
             Mock<IHandshakeClient> handShakeClient,
-            Mock<IWebSocketClient> webSocketClient,
-            ServiceLocator serviceLocator)
+            Mock<IWebSocketClient> webSocketClient)
         {
             // given
-            var connection = serviceLocator.CreateConnection(webSocketClient.Object, handShakeClient.Object, null, pingPongMonitor.Object);
+            var connection = new SlackConnection(pingPongMonitor.Object, handShakeClient.Object, null, webSocketClient.Object);
             var info = new ConnectionInformation();
 
             pingPongMonitor

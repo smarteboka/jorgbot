@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace Slackbot.Net.SlackClients.Rtm.Models
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum SlackAttachmentActionStyle
+    public enum AttachmentActionStyle
     {
         [EnumMember(Value = "default")]
         Default,

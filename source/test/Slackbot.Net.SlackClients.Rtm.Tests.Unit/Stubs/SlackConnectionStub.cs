@@ -9,10 +9,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Stubs
     public class SlackConnectionStub : ISlackConnection
     {
         public string[] Aliases { get; set; }
-        public IEnumerable<SlackChatHub> ConnectedDMs { get; }
-        public IEnumerable<SlackChatHub> ConnectedChannels { get; }
-        public IEnumerable<SlackChatHub> ConnectedGroups { get; }
-        public IReadOnlyDictionary<string, SlackUser> UserNameCache { get; }
+        public IEnumerable<ChatHub> ConnectedDMs { get; }
+        public IEnumerable<ChatHub> ConnectedChannels { get; }
+        public IEnumerable<ChatHub> ConnectedGroups { get; }
+        public IReadOnlyDictionary<string, User> UserNameCache { get; }
         public bool IsConnected { get; }
         public ContactDetails Team { get; }
         public ContactDetails Self { get; }

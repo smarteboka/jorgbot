@@ -16,7 +16,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
             expectedJson = RemoveLinesAndStuffFromJson(expectedJson);
 
             var attachment =
-                new SlackAttachment
+                new Attachment
                 {
                     Fallback = "Required plain-text summary of the attachment.",
                     ColorHex = "#36a64f",
@@ -28,10 +28,10 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
                     TitleLink = "https://api.slack.com/",
                     Text = "Optional text that appears within the attachment",
                     CallbackId = "mycallbackid",
-                    MarkdownIn = SlackAttachment.GetAllMarkdownInTypes(),
+                    MarkdownIn = Attachment.GetAllMarkdownInTypes(),
                     Fields = new[]
                     {
-                        new SlackAttachmentField
+                        new AttachmentField
                         {
                             IsShort = true,
                             Title = "Priority",
@@ -40,20 +40,20 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.Models
                     },
                     Actions = new[]
                     {
-                        new SlackAttachmentAction
+                        new AttachmentAction
                         {
                             Name = "yes",
                             Value = "yep",
                             Text = "Yes",
-                            Style = SlackAttachmentActionStyle.Primary
+                            Style = AttachmentActionStyle.Primary
                         },
-                        new SlackAttachmentAction
+                        new AttachmentAction
                         {
                             Name = "no",
                             Value = "nop",
                             Text = "No"
                         },
-                        new SlackAttachmentAction
+                        new AttachmentAction
                         {
                             Url = "https://test.com/",
                             Text = "LinkButton"

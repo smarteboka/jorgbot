@@ -5,13 +5,13 @@ namespace Slackbot.Net.SlackClients.Rtm.Extensions
 {
     internal static class GroupExtensions
     {
-        public static SlackChatHub ToChatHub(this Group group)
+        public static ChatHub ToChatHub(this Group group)
         {
-            var newGroup = new SlackChatHub
+            var newGroup = new ChatHub
             {
                 Id = group.Id,
                 Name = "#" + group.Name,
-                Type = SlackChatHubType.Group,
+                Type = ChatHubType.Group,
                 Members = group.Members
             };
 
