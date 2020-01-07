@@ -5,6 +5,7 @@ using AutoFixture.Xunit2;
 using Moq;
 using Shouldly;
 using Slackbot.Net.SlackClients.Rtm.BotHelpers;
+using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets.Messages.Inbound;
 using Slackbot.Net.SlackClients.Rtm.Models;
@@ -17,14 +18,15 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
     {
         [Theory, AutoMoqData]
         private async Task should_raise_event(
-            Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Mock<IWebSocketClient> webSocket, Mock<IMentionDetector> mentionDetector)
         {
+            var serviceLocator = new ServiceLocator();
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+
             // given
             var connectionInfo = new ConnectionInformation
             {
                 Users = { { "userABC", new SlackUser { Id = "userABC", Name = "i-have-a-name" } } },
-                WebSocket = webSocket.Object
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -61,13 +63,15 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_raise_event_given_user_information_is_missing_from_cache(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Mock<IMentionDetector> mentionDetector)
         {
             // given
-            var connectionInfo = new ConnectionInformation
-            {
-                WebSocket = webSocket.Object
-            };
+            
+            var serviceLocator = new ServiceLocator();
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+
+            var connectionInfo = new ConnectionInformation();
+            
             await slackConnection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage
@@ -100,10 +104,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             SlackConnection slackConnection)
         {
             // given
-            var connectionInfo = new ConnectionInformation
-            {
-                WebSocket = webSocket.Object
-            };
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage { MessageType = MessageType.Unknown };
@@ -128,10 +129,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             SlackConnection slackConnection)
         {
             // given
-            var connectionInfo = new ConnectionInformation
-            {
-                WebSocket = webSocket.Object
-            };
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             bool messageRaised = false;
@@ -151,13 +149,16 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_return_expected_channel_info(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Mock<IMentionDetector> mentionDetector)
         {
             // given
+            
+            var serviceLocator = new ServiceLocator();
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
+
             var connectionInfo = new ConnectionInformation
             {
                 SlackChatHubs = { { "channelId", new SlackChatHub { Id = "channelId", Name = "NaMe23" } } },
-                WebSocket = webSocket.Object
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -186,14 +187,14 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_detect_bot_is_mentioned_in_message(
             [Frozen]Mock<IMentionDetector> mentionDetector, 
-            Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Mock<IWebSocketClient> webSocket)
         {
+            var serviceLocator = new ServiceLocator();
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, mentionDetector.Object);
             // given
             var connectionInfo = new ConnectionInformation
             {
                 Self = new ContactDetails { Id = "self-id", Name = "self-name" },
-                WebSocket = webSocket.Object
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -227,7 +228,6 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             var connectionInfo = new ConnectionInformation
             {
                 Self = new ContactDetails { Id = "self-id", Name = "self-name" },
-                WebSocket = webSocket.Object
             };
             await slackConnection.Initialise(connectionInfo);
 
@@ -257,10 +257,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             SlackConnection slackConnection)
         {
             // given
-            var connectionInfo = new ConnectionInformation
-            {
-                WebSocket = webSocket.Object
-            };
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage
@@ -289,10 +286,7 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             SlackConnection slackConnection)
         {
             // given
-            var connectionInfo = new ConnectionInformation
-            {
-                WebSocket = webSocket.Object
-            };
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             var inboundMessage = new ChatMessage

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using Shouldly;
+using Slackbot.Net.SlackClients.Rtm.Connections;
 using Slackbot.Net.SlackClients.Rtm.Connections.Sockets;
 using Slackbot.Net.SlackClients.Rtm.Models;
 using Xunit;
@@ -12,14 +13,17 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests
     {
         [Theory, AutoMoqData]
         private async Task should_detect_disconnect(
-            Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            Mock<IWebSocketClient> webSocket)
         {
+            
+            var serviceLocator = new ServiceLocator();
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object);
+
             // given
             bool connectionChangedValue = false;
             slackConnection.OnDisconnect += () => connectionChangedValue = true;
 
-            var info = new ConnectionInformation { WebSocket = webSocket.Object };
+            var info = new ConnectionInformation();
             await slackConnection.Initialise(info);
 
             // when

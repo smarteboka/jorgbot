@@ -17,10 +17,12 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
         [Theory, AutoMoqData]
         private async Task should_raise_event(
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            ServiceLocator serviceLocator)
         {
             // given
-            var connectionInfo = new ConnectionInformation { WebSocket = webSocket.Object };
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object);
+
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             DateTime lastTimestamp = DateTime.MinValue;
@@ -48,14 +50,11 @@ namespace Slackbot.Net.SlackClients.Rtm.Tests.Unit.SlackConnectionTests.InboundM
             [Frozen]Mock<IServiceLocator> monitoringFactory, 
             Mock<IPingPongMonitor> pingPongMonitor,
             Mock<IWebSocketClient> webSocket, 
-            SlackConnection slackConnection)
+            ServiceLocator serviceLocator)
         {
             // given
-            monitoringFactory
-                .Setup(x => x.CreatePingPongMonitor())
-                .Returns(pingPongMonitor.Object);
-
-            var connectionInfo = new ConnectionInformation { WebSocket = webSocket.Object };
+            var slackConnection = serviceLocator.CreateConnection(webSocket.Object, null, pingPongMonitor.Object);
+            var connectionInfo = new ConnectionInformation();
             await slackConnection.Initialise(connectionInfo);
 
             var inboundMessage = new PongMessage
