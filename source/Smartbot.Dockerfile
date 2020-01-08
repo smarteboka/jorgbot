@@ -19,7 +19,7 @@ RUN dotnet publish src/Smartbot/Smartbot.csproj -c Release -o /app/out/smartbot
 RUN dotnet publish src/Smartbot.Web/Smartbot.Web.csproj -c Release -o /app/out/smartbot.web
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /smartbot
 COPY --from=build-env /app/out/smartbot .
 WORKDIR /smartbot.web
