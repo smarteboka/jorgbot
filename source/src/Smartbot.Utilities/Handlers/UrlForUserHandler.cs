@@ -43,19 +43,32 @@ namespace Smartbot.Utilities.Handlers
                     var actual = await _storage.GetUniqueUsersForUrls();
                     text += $"Fant ikke {smarting}. Prøv med en av {string.Join(',', actual)}";
                 }
-            
-                if (domains.Count() == 1)
-                {
-                    text += $"{domains.First().Key} - {domains.First().Count()}";
-                }
 
-                domains = domains.Where(o => o.Count() > 1).OrderByDescending(o => o.Count());
+                domains = domains.Where(o => o.Count() > 1).OrderByDescending(o => o.Count()).Take(5);
+
+                if (!domains.Any())
+                {
+                    text += "Har ikke delt NOE fra samme domene 2 ganger! Jikes.";
+                }
                 
                 foreach (var domain in domains)
                 {
                     text += $"\n•_{domain.Key}_ - {domain.Count()}";
                 }
             
+                foreach (var publisher in _publishers)
+                {
+                    await publisher.Publish(new Notification
+                    {
+                        Recipient = message.ChatHub.Id,
+                        Msg = text
+                    });
+                }
+            }
+            else
+            {
+                var actual = await _storage.GetUniqueUsersForUrls();
+                var text = $"Mangla litt input. Prøv `linkstats` og en av disse som input: {string.Join(',', actual)}";
                 foreach (var publisher in _publishers)
                 {
                     await publisher.Publish(new Notification
