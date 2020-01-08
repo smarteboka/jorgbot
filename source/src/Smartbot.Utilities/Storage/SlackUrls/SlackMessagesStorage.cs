@@ -160,5 +160,14 @@ namespace Smartbot.Utilities.Storage.SlackUrls
             var tableResult = await _slackUrlsTable.ExecuteQuerySegmentedAsync(query, null);
             return tableResult.Results.Select(u => u.User).Distinct();
         }
+
+        public async Task<IEnumerable<string>> GetLatestUrls(int? count = null)
+        {
+            var query = new TableQuery<SlackUrlEntity>()
+                .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SlackUrlEntity.EntityPartitionKey));
+
+            var tableResult = await _slackUrlsTable.ExecuteQuerySegmentedAsync(query, null);
+            return tableResult.Results.OrderByDescending(c => c.Timestamp).Select(u => u.Url).Take(count?? 5); 
+        }
     }
 }

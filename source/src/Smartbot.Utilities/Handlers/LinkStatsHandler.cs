@@ -9,12 +9,12 @@ using Smartbot.Utilities.Storage.SlackUrls;
 
 namespace Smartbot.Utilities.Handlers
 {
-    public class UrlForUserHandler : IHandleMessages
+    public class LinkStatsHandler : IHandleMessages
     {
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackMessagesStorage _storage;
 
-        public UrlForUserHandler(IEnumerable<IPublisher> publishers, SlackMessagesStorage storage)
+        public LinkStatsHandler(IEnumerable<IPublisher> publishers, SlackMessagesStorage storage)
         {
             _publishers = publishers;
             _storage = storage;
