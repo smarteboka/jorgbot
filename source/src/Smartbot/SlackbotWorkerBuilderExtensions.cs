@@ -50,6 +50,7 @@ namespace Smartbot
                 .AddHandler<UrlsSaveHandler>()
                 .AddHandler<RandomSmartingHandler>()
                 .AddHandler<RsvpReminder>()
+                .AddHandler<UrlForUserHandler>()
                 .AddFplBot(configuration.GetSection("smartebokafpl"))
                 .BuildRecurrers();
             return builder;
