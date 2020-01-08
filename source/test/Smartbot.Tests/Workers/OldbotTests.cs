@@ -129,6 +129,16 @@ namespace Smartbot.Tests.Workers
             AssertUrlRegex("https://www.vg.no/nyheter/innenriks/i/1nWAVB/forsvarskjempe-har-blitt-mdg-medlem-klimaendringene-kan-splitte-nato?fbclid=IwAR09_Mu0NW8-S7Qse3SR8aNkhQznXefV_SJAf0_Mhbk5HbXrYL5aNJvGX_s","https://www.vg.no/nyheter/innenriks/i/1nWAVB/forsvarskjempe-har-blitt-mdg-medlem-klimaendringene-kan-splitte-nato?fbclid=IwAR09_Mu0NW8-S7Qse3SR8aNkhQznXefV_SJAf0_Mhbk5HbXrYL5aNJvGX_s");
         }
 
+        [Fact]
+        public void TestUniqueUrlFinder()
+        {
+            var urls = RegexHelper.FindUrls("<https://twitter.com/johnkors|https://twitter.com/johnkors>");
+            Assert.Equal(2, urls.Count());
+            
+            var urlsUnique = RegexHelper.FindUniqueUrls("<https://twitter.com/johnkors|https://twitter.com/johnkors>");
+            Assert.Single(urlsUnique);
+        }
+
         private static void AssertChannelRegex(string expected, string input)
         {
             Assert.Equal(expected, RegexHelper.FindChannelName(input));

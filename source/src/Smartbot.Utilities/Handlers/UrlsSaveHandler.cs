@@ -29,7 +29,7 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var urls = RegexHelper.FindUrls(message.Text);
+            var urls = RegexHelper.FindUniqueUrls(message.Text);
             var permalink = await _client.ChatGetPermalink(message.ChatHub.Id, message.Timestamp.ToString("N6"));
 
             foreach (var url in urls)

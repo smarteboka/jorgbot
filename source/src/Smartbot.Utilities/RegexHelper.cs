@@ -44,5 +44,12 @@ namespace Smartbot.Utilities
         {
             return UserRegex.Replace(messageText, "");
         }
+
+        public static IEnumerable<string> FindUniqueUrls(string messageText)
+        {
+            var allUrls = FindUrls(messageText);
+            var enumerable = allUrls as string[] ?? allUrls.ToArray();
+            return enumerable.Any() ? enumerable.Distinct() : Enumerable.Empty<string>();
+        }
     }
 }
