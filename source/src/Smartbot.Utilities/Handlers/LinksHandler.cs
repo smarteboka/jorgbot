@@ -59,7 +59,8 @@ namespace Smartbot.Utilities.Handlers
         public bool ShouldHandle(SlackMessage message)
         {
             var sharedUrls = message.Text.Contains("links", StringComparison.InvariantCultureIgnoreCase);
-            return message.MentionsBot && sharedUrls;        
+            var linkStats = message.Text.Contains("linkstats", StringComparison.InvariantCultureIgnoreCase);
+            return message.MentionsBot && sharedUrls && !linkStats;        
         }
     }
 }

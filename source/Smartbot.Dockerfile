@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
@@ -19,7 +19,7 @@ RUN dotnet publish src/Smartbot/Smartbot.csproj -c Release -o /app/out/smartbot
 RUN dotnet publish src/Smartbot.Web/Smartbot.Web.csproj -c Release -o /app/out/smartbot.web
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 WORKDIR /smartbot
 COPY --from=build-env /app/out/smartbot .
 WORKDIR /smartbot.web

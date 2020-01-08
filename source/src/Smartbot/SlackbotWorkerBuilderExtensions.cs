@@ -52,6 +52,7 @@ namespace Smartbot
                 .AddHandler<RsvpReminder>()
                 .AddHandler<LinkStatsHandler>()
                 .AddHandler<LinksHandler>()
+                .AddHandler<TellHandler>()
                 .AddFplBot(configuration.GetSection("smartebokafpl"))
                 .BuildRecurrers();
             return builder;
