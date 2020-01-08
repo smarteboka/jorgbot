@@ -68,7 +68,7 @@ namespace Smartbot.Utilities.Storage.SlackUrls
                             TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SlackUrlEntity.EntityPartitionKey),
                             TableOperators.And,
                             TableQuery.GenerateFilterCondition(nameof(SlackUrlEntity.User), QueryComparisons.Equal, user)
-                        ));
+                        )).OrderByDesc(nameof(SlackUrlEntity.Timestamp));
 
                 result = await _slackUrlsTable.ExecuteQuerySegmentedAsync(query, null);
             }
@@ -143,6 +143,22 @@ namespace Smartbot.Utilities.Storage.SlackUrls
             }
 
             return result.All(r => r.HttpStatusCode == 204);        
+        }
+
+        public async Task<bool> DeleteMessage(SlackUrlEntity entity)
+        {
+            var res = await _slackUrlsTable.ExecuteAsync(TableOperation.Delete(entity));
+            return res.HttpStatusCode == 204;
+        }
+
+        public async Task<IEnumerable<string>> GetUniqueUsersForUrls()
+        {
+            var query = new TableQuery<SlackUrlEntity>()
+                .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SlackUrlEntity.EntityPartitionKey));
+            
+            
+            var tableResult = await _slackUrlsTable.ExecuteQuerySegmentedAsync(query, null);
+            return tableResult.Results.Select(u => u.User).Distinct();
         }
     }
 }
