@@ -26,7 +26,7 @@ namespace Smartbot
                 .ConfigureLogging((context, configLogging) =>
                 {
                     configLogging
-                        .SetMinimumLevel(LogLevel.Trace)
+                        .SetMinimumLevel(LogLevel.Information)
                         .AddConsole(c => c.DisableColors = true)
                         .AddDebug();
                 })
