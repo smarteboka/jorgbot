@@ -44,7 +44,7 @@ namespace Smartbot.Utilities.Handlers
                         .Select(c => new Uri(c.Url))
                         .GroupBy(u => u.Host);
 
-                    var text = $"!!{smarting}:\n";
+                    var text = $"{smarting}:\n";
             
                     if (!domains.Any())
                     {
