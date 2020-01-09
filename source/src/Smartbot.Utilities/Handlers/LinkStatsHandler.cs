@@ -40,38 +40,51 @@ namespace Smartbot.Utilities.Handlers
                 if (usr != null)
                 {
                     var urlsForSmarting = await _storage.GetAllUrlsByUser(usr.Name);
-                    var domains = urlsForSmarting
-                        .Select(c => new Uri(c.Url))
-                        .GroupBy(u => u.Host);
+                  
 
                     var text = $"{smarting}:\n";
             
-                    if (!domains.Any())
+                    if (!urlsForSmarting.Any())
                     {
-                        var actual = await _storage.GetUniqueUsersForUrls();
-                        text += $"Fant ikke {smarting}. Prøv med en av {string.Join(',', actual)}";
+                        text += $"Fant ingen lenker fra {smarting}.";
                     }
-
-                    domains = domains.Where(o => o.Count() > 1).OrderByDescending(o => o.Count()).Take(5);
-
-                    if (!domains.Any())
+                    else
                     {
-                        text += "Har ikke delt NOE fra samme domene 2 ganger! Jikes.";
-                    }
+                        var domains = urlsForSmarting
+                            .Select(c => new Uri(c.Url))
+                            .GroupBy(u => u.Host);
+                        
+                        domains = domains.Where(o => o.Count() > 1).OrderByDescending(o => o.Count()).Take(5);
+
+                        if (!domains.Any())
+                        {
+                            text += "Har ikke delt NOE fra samme domene 2 ganger! Jikes.";
+                        }
                 
+                        foreach (var domain in domains)
+                        {
+                            text += $"\n•_{domain.Key}_ - {domain.Count()}";
+                        } 
+                    }
+
+                    await Publish(message, text);
+                }
+                
+                else if (parsedName == "<!channel>" || parsedName == "<!here>")
+                {
+                    var allUrls = await _storage.GetAllUrls();
+                    var domains = allUrls
+                        .Select(c => new Uri(c.Url))
+                        .GroupBy(u => u.Host);
+                        
+                    domains = domains.Where(o => o.Count() > 1).OrderByDescending(o => o.Count()).Take(10);
+                    var text = "Alle:";
                     foreach (var domain in domains)
                     {
                         text += $"\n•_{domain.Key}_ - {domain.Count()}";
                     } 
-                    
-                    foreach (var publisher in _publishers)
-                    {
-                        await publisher.Publish(new Notification
-                        {
-                            Recipient = message.ChatHub.Id,
-                            Msg = text
-                        });
-                    }
+                    await Publish(message, text);
+
                 }
 
             }
@@ -79,17 +92,23 @@ namespace Smartbot.Utilities.Handlers
             {
                 var actual = await _storage.GetUniqueUsersForUrls();
                 var text = $"Mangla litt input. Prøv `linkstats` og en av disse som input: {string.Join(',', actual)}";
-                foreach (var publisher in _publishers)
-                {
-                    await publisher.Publish(new Notification
-                    {
-                        Recipient = message.ChatHub.Id,
-                        Msg = text
-                    });
-                }
+                await Publish(message, text);
+
             }
 
             return new HandleResponse("OK");
+        }
+
+        private async Task Publish(SlackMessage message, string text)
+        {
+            foreach (var publisher in _publishers)
+            {
+                await publisher.Publish(new Notification
+                {
+                    Recipient = message.ChatHub.Id,
+                    Msg = text
+                });
+            }
         }
 
         public bool ShouldHandle(SlackMessage message)
