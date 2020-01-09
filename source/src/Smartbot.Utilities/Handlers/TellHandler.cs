@@ -19,7 +19,7 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldShowInHelp => true;
 
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("tell <slack-user> <what>", "Siste delte lenker");
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("tell <slack-user> <what>", "Be smartbot om å fortelle en smarting noe på DM");
 
         /// <summary>
         /// @smartbot tell @john bull hop stuff
