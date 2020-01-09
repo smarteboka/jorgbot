@@ -14,7 +14,7 @@
       <PackageReference Include="Slackbot.Net" Version="1.0.1" />
       <PackageReference Include="Slackbot.Net.Extensions.Publishers.Logger" Version="1.0.1" />
       <PackageReference Include="Slackbot.Net.Extensions.Publishers.Slack" Version="1.0.1" />
-      <PackageReference Include="Slackbot.Net.SlackClients.Http" Version="1.0.1" />
+      <PackageReference Include="Slackbot.Net.SlackClients.Http" Version="1.0.2" />
 </ItemGroup>
 
 

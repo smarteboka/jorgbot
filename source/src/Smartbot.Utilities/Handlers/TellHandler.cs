@@ -29,7 +29,7 @@ namespace Smartbot.Utilities.Handlers
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
             var args = message.Text.Split(' ');
-            var recipient = message.User.Id;
+            var recipient = message.ChatHub.Id;
             var content = "Psst";
             
             if (args.Length == 2)
@@ -44,19 +44,28 @@ namespace Smartbot.Utilities.Handlers
             
             if(args.Length > 3)
             {
-                var users = await _slackClient.UsersList();
+                
                 var parsedName = args[2];
+                
+                var users = await _slackClient.UsersList();
                 var usr = users.Members.FirstOrDefault(u => $"<@{u.Id}>" == parsedName);
+                
+                var channels = await _slackClient.ConversationsListPublicChannels();
+                var channel = channels.Channels.FirstOrDefault(c => string.Equals($"<#{c.Id}|{c.Name}>",parsedName, StringComparison.InvariantCultureIgnoreCase));
+
+                content = string.Join(" ", args[3..args.Length]);
+                
                 if (usr != null)
                 {
                     recipient = usr.Id;
-                    var end = args.Length;
-                    var restOfit = string.Join(" ", args[3..end]);
-                    content = restOfit;
+                }
+                else if(channel != null)
+                {
+                    recipient = channel.Id;
                 }
                 else
                 {
-                    content = $"lol, fant ikke {parsedName}";
+                    content = $"Kunne ikke sende noe til `{parsedName}` :/";
                 }
             }
 
@@ -67,16 +76,6 @@ namespace Smartbot.Utilities.Handlers
                 Text = content
             });
 
-            if (!res.Ok)
-            {
-                await _slackClient.ChatPostMessage(new ChatPostMessageRequest
-                {
-                    Channel = message.ChatHub.Id,
-                    as_user = "true",
-                    Text = "Klarte ikke :/ " + res.Error
-                });
-            }
-          
             return new HandleResponse("OK");
         }
 
