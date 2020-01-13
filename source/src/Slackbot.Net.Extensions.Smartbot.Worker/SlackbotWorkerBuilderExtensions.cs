@@ -35,6 +35,7 @@ namespace Smartbot
                 .AddHandler<LinkStatsHandler>()
                 .AddHandler<LinksHandler>()
                 .AddHandler<TellHandler>()
+                .AddHandler<WolframHandler>()
                 .AddFplBot(configuration.GetSection("smartebokafpl"))
                 .BuildRecurrers();
             return builder;
