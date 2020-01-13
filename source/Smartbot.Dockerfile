@@ -6,7 +6,11 @@ COPY Smartbot.sln ./Smartbot.sln
 
 COPY src/Smartbot/Smartbot.csproj ./src/Smartbot/Smartbot.csproj
 COPY src/Smartbot.Web/Smartbot.Web.csproj ./src/Smartbot.Web/Smartbot.Web.csproj
-COPY src/Smartbot.Utilities/Smartbot.Utilities.csproj ./src/Smartbot.Utilities/Smartbot.Utilities.csproj
+COPY src/Smartbot.Data/Smartbot.Data.csproj ./src/Smartbot.Data/Smartbot.Data.csproj
+COPY src/Slackbot.Net.Extensions.Smartbot.Worker/Slackbot.Net.Extensions.Smartbot.Worker.csproj ./src/Slackbot.Net.Extensions.Smartbot.Worker/Slackbot.Net.Extensions.Smartbot.Worker.csproj
+COPY src/Slackbot.Net.Extensions.Smartbot.Endpoints/Slackbot.Net.Extensions.Smartbot.Endpoints.csproj ./src/Slackbot.Net.Extensions.Smartbot.Endpoints/Slackbot.Net.Extensions.Smartbot.Endpoints.csproj
+COPY src/Slackbot.Net.Extensions.Smartbot.SharedWorkers/Slackbot.Net.Extensions.Smartbot.SharedWorkers.csproj ./src/Slackbot.Net.Extensions.Smartbot.SharedWorkers/Slackbot.Net.Extensions.Smartbot.SharedWorkers.csproj
+
 
 COPY test/Smartbot.Tests/Smartbot.Tests.csproj ./test/Smartbot.Tests/Smartbot.Tests.csproj
 COPY test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj ./test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj
