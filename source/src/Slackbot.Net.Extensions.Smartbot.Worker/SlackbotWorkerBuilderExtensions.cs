@@ -53,6 +53,7 @@ namespace Smartbot
 
             services.AddSingleton<StorsdagInviter>();
             services.AddSingleton<SlackQuestionClient>();
+            services.Configure<WulframOptions>(configuration);
         }
     }
 }
