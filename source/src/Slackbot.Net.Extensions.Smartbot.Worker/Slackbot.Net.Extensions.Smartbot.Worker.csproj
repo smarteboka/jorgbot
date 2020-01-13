@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Slackbot.Net.Extensions.Smartbot.SharedWorkers\Slackbot.Net.Extensions.Smartbot.SharedWorkers.csproj" />
       <ProjectReference Include="..\Smartbot.Data\Smartbot.Data.csproj" />
     </ItemGroup>
 

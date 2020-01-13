@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Sma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Data", "src\Smartbot.Data\Smartbot.Data.csproj", "{D136FBE7-45CF-44D2-BD49-7CA667FDC8C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Smartbot.SharedWorkers", "src\Slackbot.Net.Extensions.Smartbot.SharedWorkers\Slackbot.Net.Extensions.Smartbot.SharedWorkers.csproj", "{33BF3B85-A02D-4639-8F88-0922756DEE0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{D136FBE7-45CF-44D2-BD49-7CA667FDC8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D136FBE7-45CF-44D2-BD49-7CA667FDC8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D136FBE7-45CF-44D2-BD49-7CA667FDC8C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33BF3B85-A02D-4639-8F88-0922756DEE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33BF3B85-A02D-4639-8F88-0922756DEE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33BF3B85-A02D-4639-8F88-0922756DEE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33BF3B85-A02D-4639-8F88-0922756DEE0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{44E65F6B-A3FA-4601-AC2D-D4E090897839} = {ED8E20FC-B173-40FF-B447-D74B58FC27C6}
@@ -61,5 +67,6 @@ Global
 		{AF54F49F-AFDD-4E46-A557-317C0577CE1C} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{AEA7EE29-08EC-49BE-83BE-33B72441207B} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 		{D136FBE7-45CF-44D2-BD49-7CA667FDC8C6} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
+		{33BF3B85-A02D-4639-8F88-0922756DEE0C} = {53AD07F7-25C8-4F0F-A551-4979D2DD08F3}
 	EndGlobalSection
 EndGlobal

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Smartbot.Utilities.RecurringActions;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
 
 namespace Smartbot.Web
 {
@@ -33,7 +33,8 @@ namespace Smartbot.Web
                         })
                         .AddRecurring<HerokuFreeTierKeepAlive>();
                     
-                    services.AddSlackbotEndpoints().AddSmartbotEndpoints(context.Configuration);
+                    services.AddSlackbotEndpoints()
+                        .AddSmartbotEndpoints(context.Configuration);
 
                 })
                 .ConfigureLogging((context, configLogging) =>

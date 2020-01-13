@@ -10,13 +10,13 @@ namespace Smartbot.Data
     {
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IInvitationsStorage, InvitationsStorage>();
             services.Configure<SmartStorageOptions>(configuration);
-
-            services.Configure<SmartStorageOptions>(configuration);
+            
             services.AddSingleton<SlackMessagesStorage>();
+            services.AddSingleton<IInvitationsStorage, InvitationsStorage>();
             services.AddSingleton<IEventsStorage,EventsStorage>();
             services.AddSingleton<IInvitationsStorage,InvitationsStorage>();
+            
             return services;
         }
     }

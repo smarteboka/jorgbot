@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Handlers;
 
-namespace Smartbot.Utilities.RecurringActions
+namespace Slackbot.Net.Extensions.Smartbot.SharedWorkers
 {
     public class HerokuFreeTierKeepAlive : IRecurringAction
     {

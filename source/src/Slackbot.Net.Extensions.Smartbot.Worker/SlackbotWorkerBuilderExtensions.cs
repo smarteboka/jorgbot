@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
 using Smartbot.Data;
 using Smartbot.Utilities;
 using Smartbot.Utilities.Handlers;

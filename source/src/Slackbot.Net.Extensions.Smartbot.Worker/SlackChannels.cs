@@ -5,7 +5,7 @@ namespace Smartbot.Utilities
 {
     public class SlackChannels
     {
-        public SlackChannels(IHostingEnvironment env, ILogger<SlackChannels> logger)
+        public SlackChannels(IHostEnvironment env, ILogger<SlackChannels> logger)
         {
             if (env.IsDevelopment())
             {
