@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Smartbot.Utilities.RecurringActions;
-using Smartbot.Utilities.Storage;
-using Smartbot.Utilities.Storage.Events;
 using Slackbot.Net.Abstractions.Hosting;
 
 namespace Smartbot.Web
@@ -28,17 +26,15 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<IInvitationsStorage, InvitationsStorage>();
-                    services.Configure<SmartStorageOptions>(context.Configuration);
-
                     services.AddSlackbotWorker(o =>
                         {
                             o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
                             o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
                         })
                         .AddRecurring<HerokuFreeTierKeepAlive>();
-                    services.AddSlackbotEndpoints()
-                        .AddEndpointHandler<EventRsvpResponseHandler>();
+                    
+                    services.AddSlackbotEndpoints().AddSmartbotEndpoints(context.Configuration);
+
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>Smartbot.Utilities</RootNamespace>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+        
+        <PackageReference Include="Slackbot.Net.Abstractions.Handlers" Version="1.0.8" />
+        <PackageReference Include="Slackbot.Net.Abstractions.Hosting" Version="1.0.8" />
+        <PackageReference Include="Slackbot.Net.Abstractions.Publishers" Version="1.0.8" />
+        <PackageReference Include="Slackbot.Net.SlackClients.Http" Version="1.0.8" />
+        <PackageReference Include="Slackbot.Net.Extensions.FplBot" Version="0.3.5" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Smartbot.Data\Smartbot.Data.csproj" />
+    </ItemGroup>
+
+</Project>

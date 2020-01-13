@@ -10,7 +10,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Smartbot.Utilities\Smartbot.Utilities.csproj" />
+    <ProjectReference Include="..\..\src\Slackbot.Net.Extensions.Smartbot.Worker\Slackbot.Net.Extensions.Smartbot.Worker.csproj" />
     <ProjectReference Include="..\..\src\Smartbot\Smartbot.csproj" />
   </ItemGroup>
 </Project>

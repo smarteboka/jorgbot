@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Smartbot.Utilities.Storage.SlackUrls;
+using Smartbot.Data.Storage.SlackUrls;
 using Xunit;
 using Xunit.Abstractions;
 

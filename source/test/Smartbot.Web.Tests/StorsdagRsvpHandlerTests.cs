@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Endpoints.Interactive;
-using Smartbot.Utilities.Storage.Events;
+using Smartbot.Data.Storage.Events;
 using Smartbot.Web;
 using Xunit;
 
