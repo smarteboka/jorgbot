@@ -27,11 +27,11 @@ namespace Smartbot.Utilities.Handlers
         public bool ShouldShowInHelp => true;
 
 
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("wulf", "Gir deg Wulfram Alpha svar");
+        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("wolf", "Gir deg Wolfram Alpha svar");
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var messageText = message.Text.Replace($"<@{_botDetails.Id}> wulf ", "");
+            var messageText = message.Text.Replace($"<@{_botDetails.Id}> wolf ", "");
 
             var wolfram = new WolframAlpha(_options.Value.WulframAlphaAppId);
             var results = wolfram.Query(messageText);
@@ -71,7 +71,7 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldHandle(SlackMessage message)
         {
-            return message.MentionsBot && Contains(message.Text, "wulf");
+            return message.MentionsBot && Contains(message.Text, "wolf");
         }
 
         private static bool Contains(string haystack, params string[] needles) => needles.Any(s => haystack.Contains(s, StringComparison.InvariantCultureIgnoreCase));
