@@ -8,7 +8,6 @@ using Smartbot.Utilities.Handlers;
 using Smartbot.Utilities.Handlers._4sq;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Smartbot.Utilities.RecurringActions;
-using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.SlackQuestions;
 using Smartbot.Utilities.Storsdager.RecurringActions;
 
@@ -18,17 +17,7 @@ namespace Smartbot
     {
         public static ISlackbotWorkerBuilder AddSmartbot(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
         {
-            builder.Services.AddSingleton<SlackChannels>();
-            builder.Services.AddSingleton<Smartinger>();
-            builder.Services.AddData(configuration);
-
-            builder.Services.AddSingleton<FourSquareService>();
-            builder.Services.Configure<FourSquareOptions>(configuration);
-
-      
-
-            builder.Services.AddSingleton<StorsdagInviter>();
-            builder.Services.AddSingleton<SlackQuestionClient>();
+            builder.Services.AddServices(configuration);
             
             builder
                 .AddRecurring<HerokuFreeTierKeepAlive>()
@@ -49,6 +38,20 @@ namespace Smartbot
                 .AddFplBot(configuration.GetSection("smartebokafpl"))
                 .BuildRecurrers();
             return builder;
+        }
+
+        private static void AddServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddData(configuration);
+
+            services.AddSingleton<SlackChannels>();
+            services.AddSingleton<Smartinger>();
+            
+            services.Configure<FourSquareOptions>(configuration);
+            services.AddSingleton<FourSquareService>();
+
+            services.AddSingleton<StorsdagInviter>();
+            services.AddSingleton<SlackQuestionClient>();
         }
     }
 }

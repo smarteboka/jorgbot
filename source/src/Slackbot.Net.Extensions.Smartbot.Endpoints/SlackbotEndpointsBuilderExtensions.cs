@@ -6,7 +6,7 @@ using Smartbot.Web;
 
 namespace Smartbot
 {
-    public static class SlackbotWorkerBuilderExtensions
+    public static class SlackbotEndpointsBuilderExtensions
     {
         public static ISlackbotEndpointsBuilder AddSmartbotEndpoints(this ISlackbotEndpointsBuilder builder, IConfiguration configuration)
         {
