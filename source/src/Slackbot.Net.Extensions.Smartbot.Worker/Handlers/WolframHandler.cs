@@ -53,6 +53,9 @@ namespace Smartbot.Utilities.Handlers
                     }
                 }
             }
+
+            if (string.IsNullOrEmpty(text))
+                text = "Wulf aner ikke 🐺";
             
             foreach (var publisher in _publishers)
             {
