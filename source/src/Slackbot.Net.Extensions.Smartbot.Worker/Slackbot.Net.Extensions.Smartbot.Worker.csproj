@@ -16,7 +16,7 @@
         <PackageReference Include="Slackbot.Net.Abstractions.Hosting" Version="1.0.8" />
         <PackageReference Include="Slackbot.Net.Abstractions.Publishers" Version="1.0.8" />
         <PackageReference Include="Slackbot.Net.SlackClients.Http" Version="1.0.8" />
-        <PackageReference Include="Slackbot.Net.Extensions.FplBot" Version="0.3.5" />
+        <PackageReference Include="Slackbot.Net.Extensions.FplBot" Version="0.3.6" />
 
     </ItemGroup>
 

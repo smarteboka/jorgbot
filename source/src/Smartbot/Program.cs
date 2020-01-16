@@ -31,7 +31,10 @@ namespace Smartbot
                 .ConfigureLogging((context, configLogging) =>
                 {
                     configLogging
-                        .SetMinimumLevel(LogLevel.Information)
+                        .SetMinimumLevel(LogLevel.Warning)
+                        .AddFilter("Smartbot", LogLevel.Debug)
+                        .AddFilter("Slackbot", LogLevel.Debug)
+                        .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Information)
                         .AddConsole(c => c.DisableColors = true)
                         .AddDebug();
                 })
