@@ -17,7 +17,7 @@ namespace Smartbot.Utilities.Handlers._4sq
         private readonly FourSquareService _foursquare;
         private readonly IEnumerable<IPublisher> _publishers;
         private readonly ILogger<FourSquareHandler> _logger;
-        private readonly BotDetails _botDetails;
+        private readonly IGetConnectionDetails _botDetails;
 
         private List<string> Categories = new List<string>
         {
@@ -28,7 +28,7 @@ namespace Smartbot.Utilities.Handlers._4sq
             "topPicks"
         };
 
-        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger, BotDetails botDetails)
+        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger, IGetConnectionDetails botDetails)
         {
             _foursquare = foursquare;
             _publishers = publishers;
@@ -53,7 +53,8 @@ namespace Smartbot.Utilities.Handlers._4sq
             }
             else
             {
-                var messageText = message.Text.Replace($"<@{_botDetails.Id}> 4sq ", "");
+                var botDetails = _botDetails.GetConnectionBotDetails();
+                var messageText = message.Text.Replace($"<@{botDetails.Id}> 4sq ", "");
                 _logger.LogInformation($"Searching by query {messageText}");
                 var osloVenuesByQuery = _foursquare.GetOsloVenuesByQuery(messageText);
                 venueExplores = new List<VenueExplore>(osloVenuesByQuery);
@@ -83,7 +84,8 @@ namespace Smartbot.Utilities.Handlers._4sq
 
         public bool ShouldHandle(SlackMessage message)
         {
-            var execute = message.Text.StartsWith($"<@{_botDetails.Id}> 4sq", StringComparison.InvariantCultureIgnoreCase);
+            var botDetails = _botDetails.GetConnectionBotDetails();
+            var execute = message.Text.StartsWith($"<@{botDetails.Id}> 4sq", StringComparison.InvariantCultureIgnoreCase);
             return execute;
         }
     }

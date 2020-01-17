@@ -15,9 +15,9 @@ namespace Smartbot.Utilities.Handlers
     {
         private readonly IOptions<WulframOptions> _options;
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly BotDetails _botDetails;
+        private readonly IGetConnectionDetails _botDetails;
 
-        public WolframHandler(IOptions<WulframOptions> options, IEnumerable<IPublisher> publishers, BotDetails botDetails)
+        public WolframHandler(IOptions<WulframOptions> options, IEnumerable<IPublisher> publishers, IGetConnectionDetails botDetails)
         {
             _options = options;
             _publishers = publishers;
@@ -31,7 +31,8 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var messageText = message.Text.Replace($"<@{_botDetails.Id}> wolf ", "");
+            var botDetails = _botDetails.GetConnectionBotDetails();
+            var messageText = message.Text.Replace($"<@{botDetails.Id}> wolf ", "");
 
             var wolfram = new WolframAlpha(_options.Value.WulframAlphaAppId);
             var results = wolfram.Query(messageText);
