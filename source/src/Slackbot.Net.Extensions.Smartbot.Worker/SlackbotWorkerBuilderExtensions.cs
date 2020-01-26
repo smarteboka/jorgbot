@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
+using Slackbot.Net.SlackClients.Http.Extensions;
 using Smartbot.Data;
 using Smartbot.Utilities;
 using Smartbot.Utilities.Handlers;
@@ -54,6 +56,7 @@ namespace Smartbot
             services.AddSingleton<StorsdagInviter>();
             services.AddSingleton<SlackQuestionClient>();
             services.Configure<WulframOptions>(configuration);
+            services.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_BotUser)));
         }
     }
 }

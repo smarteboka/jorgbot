@@ -23,7 +23,7 @@ namespace Smartbot.Tests
                 c.OauthToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
             });
             
-            services.AddSlackbotClient(c =>
+            services.AddSlackHttpClient(c =>
             {
                 c.BotToken = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
             });

@@ -7,7 +7,6 @@ using Slackbot.Net.Abstractions.Handlers;
 using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
 using Slackbot.Net.Abstractions.Publishers;
 using WolframAlphaNet;
-using WolframAlphaNet.Objects;
 
 namespace Smartbot.Utilities.Handlers
 {
@@ -15,13 +14,11 @@ namespace Smartbot.Utilities.Handlers
     {
         private readonly IOptions<WulframOptions> _options;
         private readonly IEnumerable<IPublisher> _publishers;
-        private readonly IGetConnectionDetails _botDetails;
 
-        public WolframHandler(IOptions<WulframOptions> options, IEnumerable<IPublisher> publishers, IGetConnectionDetails botDetails)
+        public WolframHandler(IOptions<WulframOptions> options, IEnumerable<IPublisher> publishers)
         {
             _options = options;
             _publishers = publishers;
-            _botDetails = botDetails;
         }
 
         public bool ShouldShowInHelp => true;
@@ -31,7 +28,7 @@ namespace Smartbot.Utilities.Handlers
 
         public async Task<HandleResponse> Handle(SlackMessage message)
         {
-            var botDetails = _botDetails.GetConnectionBotDetails();
+            var botDetails = message.Bot;
             var messageText = message.Text.Replace($"<@{botDetails.Id}> wolf ", "");
 
             var wolfram = new WolframAlpha(_options.Value.WulframAlphaAppId);

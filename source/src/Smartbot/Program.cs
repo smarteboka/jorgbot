@@ -23,8 +23,8 @@ namespace Smartbot
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSlackbotWorker(context.Configuration)
-                        .AddPublisher<SlackPublisher>()
-                        .AddPublisher<LoggerPublisher>()
+                        .AddSlackPublisher()
+                        .AddLoggerPublisher()
                         .AddSmartbot(context.Configuration);
 
                 })
