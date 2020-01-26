@@ -1,8 +1,13 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Abstractions.Publishers;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
+using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Smartbot.Data;
 using Smartbot.Utilities;
@@ -56,7 +61,42 @@ namespace Smartbot
             services.AddSingleton<StorsdagInviter>();
             services.AddSingleton<SlackQuestionClient>();
             services.Configure<WulframOptions>(configuration);
+            services.AddSingleton<IPublisher, SlackPublisher>();
+            services.AddSingleton<IPublisher, LoggerPublisher>();
+
             services.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_BotUser)));
+            services.AddSlackbotOauthClient(c => c.OauthToken = configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_SlackApp)));
+        }
+    }
+    
+    internal class LoggerPublisher : IPublisher
+    {
+        private readonly ILogger<LoggerPublisher> _logger;
+
+        public LoggerPublisher(ILogger<LoggerPublisher> logger)
+        {
+            _logger = logger;
+        }
+
+        public Task Publish(Notification notification)
+        {
+            _logger.LogInformation($"[{DateTime.UtcNow.ToLongTimeString()}] {notification.Msg}");
+            return Task.CompletedTask;
+        }
+    }
+    
+    internal class SlackPublisher : IPublisher
+    {
+        private readonly ISlackClient _sender;
+
+        public SlackPublisher(ISlackClient sender)
+        {
+            _sender = sender;
+        }
+
+        public async Task Publish(Notification notification)
+        {
+            await _sender.ChatPostMessage(notification.Recipient, notification.Msg);
         }
     }
 }

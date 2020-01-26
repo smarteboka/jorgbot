@@ -60,11 +60,13 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
             var invitations = await _inviteStorage.GetInvitations(nextStorsdag.RowKey);
             var unanswered = invitations.Where(i => i.Rsvp == RsvpValues.Invited);
+            //unanswered = unanswered.Where(u => u.SlackUsername == "johnkors");
+
             foreach (var invite in unanswered)
             {
                 _logger.LogInformation($"Reminding {invite.SlackUsername} about {invite.EventTopic}");
-                //var res = await _slackClient.PostMessageAsync(invite.SlackUserId, "Hei, hørte ikke noe fra deg angående storsdag! :/ ", as_user:true);
-                //await SendInviteInSlackDM(invite);
+                var res = await _slackClient.ChatPostMessage(invite.SlackUserId, "Hei, hørte ikke noe fra deg angående storsdag! :/ ");
+                await SendInviteInSlackDM(invite);
             }
 
             return unanswered;

@@ -55,7 +55,7 @@ namespace Smartbot.Utilities.Handlers
 
         public bool ShouldHandle(SlackMessage message)
         {
-            return message.ChatHub.Type == ChatHubTypes.DirectMessage && message.User.Name == "johnkors" && message.Text == "storsdagreminder";
+            return message.ChatHub.Type == ChatHubTypes.DirectMessage && message.User.Name == "johnkors" && message.Text.Contains("storsdagreminder");
         }
     }
 }
