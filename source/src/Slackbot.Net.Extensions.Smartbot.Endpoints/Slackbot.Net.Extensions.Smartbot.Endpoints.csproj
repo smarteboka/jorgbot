@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Slackbot.Net.Abstractions.Hosting" Version="3.0.0-preview001" />
-      <PackageReference Include="Slackbot.Net.Endpoints" Version="3.0.0-preview001" />
+      <PackageReference Include="Slackbot.Net.Abstractions.Hosting" />
+      <PackageReference Include="Slackbot.Net.Endpoints" />
     </ItemGroup>
 
     <ItemGroup>

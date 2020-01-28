@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slackbot.Net.Abstractions.Hosting;
+using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Publishers.Logger;
 using Slackbot.Net.Extensions.Publishers.Slack;
 
@@ -23,10 +24,9 @@ namespace Smartbot
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSlackbotWorker(context.Configuration)
-                        .AddSlackPublisher()
-                        .AddLoggerPublisher()
+                        .AddSlackPublisher(c => c.BotToken = context.Configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_BotUser)))
+                        .AddPublisher<LoggerPublisher>()
                         .AddSmartbot(context.Configuration);
-
                 })
                 .ConfigureLogging((context, configLogging) =>
                 {
