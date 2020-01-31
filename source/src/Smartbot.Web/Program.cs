@@ -26,13 +26,6 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSlackbotWorker(o =>
-                        {
-                            o.Slackbot_SlackApiKey_BotUser = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_BotUser");
-                            o.Slackbot_SlackApiKey_SlackApp = Environment.GetEnvironmentVariable("Slackbot_SlackApiKey_SlackApp");
-                        })
-                        .AddRecurring<HerokuFreeTierKeepAlive>();
-                    
                     services.AddSlackbotEndpoints()
                         .AddSmartbotEndpoints(context.Configuration);
 
