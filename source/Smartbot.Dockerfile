@@ -14,6 +14,7 @@ COPY src/Slackbot.Net.Extensions.Smartbot.SharedWorkers/Slackbot.Net.Extensions.
 
 COPY test/Smartbot.Tests/Smartbot.Tests.csproj ./test/Smartbot.Tests/Smartbot.Tests.csproj
 COPY test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj ./test/Smartbot.Web.Tests/Smartbot.Web.Tests.csproj
+COPY Directory.Build.targets ./Directory.Build.targets
 
 RUN dotnet restore Smartbot.sln
 

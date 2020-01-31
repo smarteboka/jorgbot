@@ -20,6 +20,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartbot.Data", "src\Smartb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slackbot.Net.Extensions.Smartbot.SharedWorkers", "src\Slackbot.Net.Extensions.Smartbot.SharedWorkers\Slackbot.Net.Extensions.Smartbot.SharedWorkers.csproj", "{33BF3B85-A02D-4639-8F88-0922756DEE0C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{FEBE6CF1-C740-4B1F-9236-7DDECBFFF756}"
+ProjectSection(SolutionItems) = preProject
+	Directory.Build.targets = Directory.Build.targets
+	Smartbot.Dockerfile = Smartbot.Dockerfile
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
