@@ -20,7 +20,7 @@ namespace Smartbot
         public static ISlackbotWorkerBuilder AddSmartbot(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
         {
             builder.Services.AddServices(configuration);
-            
+
             builder
                 .AddRecurring<HerokuFreeTierKeepAlive>()
                 .AddRecurring<Jorger>()
@@ -38,7 +38,7 @@ namespace Smartbot
                 .AddHandler<LinksHandler>()
                 .AddHandler<TellHandler>()
                 .AddHandler<WolframHandler>()
-                .AddFplBot(configuration.GetSection("smartebokafpl"))
+                //.AddFplBot(configuration.GetSection("smartebokafpl"))
                 .BuildRecurrers();
             return builder;
         }
@@ -49,7 +49,7 @@ namespace Smartbot
 
             services.AddSingleton<SlackChannels>();
             services.AddSingleton<Smartinger>();
-            
+
             services.Configure<FourSquareOptions>(configuration);
             services.AddSingleton<FourSquareService>();
 
