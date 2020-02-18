@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using Slackbot.Net.Abstractions.Hosting;
 using Slackbot.Net.Configuration;
 using Slackbot.Net.Extensions.Publishers.Logger;
@@ -15,6 +17,13 @@ namespace Smartbot
     {
         static async Task Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateLogger();
+
             var host = new HostBuilder()
                 .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development")
                 .ConfigureAppConfiguration((hostContext, configApp) =>
@@ -39,6 +48,7 @@ namespace Smartbot
                         .AddDebug();
                 })
                 .UseConsoleLifetime()
+                .UseSerilog()
                 .Build();
 
             using (host)
