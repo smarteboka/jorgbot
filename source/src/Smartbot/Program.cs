@@ -17,14 +17,7 @@ namespace Smartbot
     {
         static async Task Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .CreateLogger();
-
-            var host = new HostBuilder()
+                var host = new HostBuilder()
                 .UseEnvironment(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development")
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
@@ -48,7 +41,11 @@ namespace Smartbot
                         .AddDebug();
                 })
                 .UseConsoleLifetime()
-                .UseSerilog()
+                .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                    .MinimumLevel.Debug()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} ({SourceContext}){NewLine}{Exception}"))
                 .Build();
 
             using (host)
