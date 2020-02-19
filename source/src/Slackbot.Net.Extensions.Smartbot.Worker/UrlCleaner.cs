@@ -23,7 +23,11 @@ namespace Smartbot.Utilities
             "notif_t", 
             "notif_id", 
             "acontext", 
-            "aref"
+            "aref",
+            
+            "gclsrc",
+            "scid",
+            "gclid"
         };
         
         public static string CleanForTrackingQueryParams(string url)
