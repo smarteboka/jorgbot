@@ -65,7 +65,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             foreach (var invite in unanswered)
             {
                 _logger.LogInformation($"Reminding {invite.SlackUsername} about {invite.EventTopic}");
-                var res = await _slackClient.ChatPostMessage(invite.SlackUserId, "Hei, hørte ikke noe fra deg angående storsdag! :/ ");
+                var res = await _slackClient.ChatPostMessage(invite.SlackUserId, "Hei, hørte ikke noe fra deg :/ ");
                 await SendInviteInSlackDM(invite);
             }
 
@@ -86,7 +86,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             await _inviteStorage.Save(invite);
             var inviteSentOk = await SendInviteInSlackDM(invite);
 
-            if(inviteSentOk)
+            if (inviteSentOk)
             {
                 _logger.LogInformation($"Sent invite {nextStorsdag.Topic} to {user.Name}");
             }
@@ -101,7 +101,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             var q = AttendStorsdagQuestion(invite);
             var res = await _questioner.PostMessageQuestionAsync(q);
 
-            if(!res.Ok)
+            if (!res.Ok)
                 throw new Exception(res.Error);
 
             return res.Ok;
@@ -112,28 +112,28 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             var q = new Question()
             {
                 QuestionId = invitationEntity.RowKey,
-                Message = invitationEntity.EventTopic,
+                Message = $"{invitationEntity.EventTopic} (CORONA EDITION! )",
                 Recipient = invitationEntity.SlackUserId,
                 Botname = "smartbot",
-                Image = "https://placebeer.com/300/150",
+                Image = "https://www.fhi.no/globalassets/koronavirus-tema.png", //"https://placebeer.com/300/150",
                 Options = new[]
                 {
                     new QuestionOption
                     {
-                        Text = "Med :+1:",
+                        Text = "Vil smittes :+1:",
                         ActionId = RsvpActionIds.Attending,
                         Value = RsvpValues.Attending,
                         Style = ButtonStyles.Primary
                     },
                     new QuestionOption
                     {
-                        Text = "Kanskje :man-shrugging:",
+                        Text = "Håper på smitte :man-shrugging:",
                         ActionId = RsvpActionIds.Maybe,
                         Value = RsvpValues.Maybe
                     },
                     new QuestionOption
                     {
-                        Text = "Nope :-1:",
+                        Text = "Følger myndighetene :-1:",
                         ActionId = RsvpActionIds.NotAttending,
                         Value = RsvpValues.NotAttending,
                         Style = ButtonStyles.Danger,
