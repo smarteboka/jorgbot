@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
-using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models.Events;
+using Slackbot.Net.SlackClients.Http;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices;
 using Smartbot.Utilities.Handlers._4sq.FourSquareServices.Entities;
 
 namespace Smartbot.Utilities.Handlers._4sq
 {
-    public class FourSquareHandler : IHandleMessages
+    public class FourSquareHandler : IHandleAppMentions
     {
         private readonly FourSquareService _foursquare;
-        private readonly IEnumerable<IPublisher> _publishers;
+        private readonly ISlackClient _client;
         private readonly ILogger<FourSquareHandler> _logger;
 
         private List<string> Categories = new List<string>
@@ -27,21 +27,18 @@ namespace Smartbot.Utilities.Handlers._4sq
             "topPicks"
         };
 
-        public FourSquareHandler(FourSquareService foursquare, IEnumerable<IPublisher> publishers, ILogger<FourSquareHandler> logger)
+        public FourSquareHandler(FourSquareService foursquare, ISlackClient client, ILogger<FourSquareHandler> logger)
         {
             _foursquare = foursquare;
-            _publishers = publishers;
+            _client = client;
             _logger = logger;
         }
 
-        public bool ShouldShowInHelp => true;
+        public (string HandlerTrigger, string Description) GetHelpDescription() => ("4sq <search>", "Søker i FourSquare etter <search> i Oslo");
 
-
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("4sq <search>", "Søker i FourSquare etter <search> i Oslo");
-
-        public async Task<HandleResponse> Handle(SlackMessage message)
+        public async Task<EventHandledResponse> Handle(EventMetaData eventMetadata, AppMentionEvent slackEvent)
         {
-            var matchingCategory = Categories.FirstOrDefault(c => message.Text.Contains(c, StringComparison.InvariantCultureIgnoreCase));
+            var matchingCategory = Categories.FirstOrDefault(c => slackEvent.Text.Contains(c, StringComparison.InvariantCultureIgnoreCase));
             var venueExplores = new List<VenueExplore>();
             if (matchingCategory != null)
             {
@@ -51,8 +48,8 @@ namespace Smartbot.Utilities.Handlers._4sq
             }
             else
             {
-                var botDetails = message.Bot;
-                var messageText = message.Text.Replace($"<@{botDetails.Id}> 4sq ", "");
+               
+                var messageText = slackEvent.Text.Replace($"4sq ", "");
                 _logger.LogInformation($"Searching by query {messageText}");
                 var osloVenuesByQuery = _foursquare.GetOsloVenuesByQuery(messageText);
                 venueExplores = new List<VenueExplore>(osloVenuesByQuery);
@@ -68,23 +65,15 @@ namespace Smartbot.Utilities.Handlers._4sq
             if (!venueExplores.Any())
                 sb.Append("Fant nada :/ Prøv å søke etter noe annet a");
 
-            foreach (var publisher in _publishers)
-            {
-                var notification = new Notification
-                {
-                    Msg = sb.ToString(),
-                    Recipient = message.ChatHub.Id
-                };
-                await publisher.Publish(notification);
-            }
-            return new HandleResponse("OK");
+            
+            await _client.ChatPostMessage(slackEvent.Channel, sb.ToString());
+            
+            return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(SlackMessage message)
-        {
-            var botDetails = message.Bot;
-            var execute = message.Text.StartsWith($"<@{botDetails.Id}> 4sq", StringComparison.InvariantCultureIgnoreCase);
-            return execute;
-        }
+
+        public bool ShouldHandle(AppMentionEvent message) => message.Text.StartsWith($"4sq", StringComparison.InvariantCultureIgnoreCase);
+           
+        
     }
 }

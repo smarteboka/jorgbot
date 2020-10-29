@@ -1,35 +1,31 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
-using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models.Events;
+using Slackbot.Net.SlackClients.Http;
 using WolframAlphaNet;
 
 namespace Smartbot.Utilities.Handlers
 {
-    public class WolframHandler : IHandleMessages
+    public class WolframHandler : IHandleAppMentions
     {
         private readonly IOptions<WulframOptions> _options;
-        private readonly IEnumerable<IPublisher> _publishers;
+        private readonly ISlackClient _client;
 
-        public WolframHandler(IOptions<WulframOptions> options, IEnumerable<IPublisher> publishers)
+        public WolframHandler(IOptions<WulframOptions> options, ISlackClient client)
         {
             _options = options;
-            _publishers = publishers;
+            _client = client;
         }
 
-        public bool ShouldShowInHelp => true;
+        public (string, string) GetHelpDescription() => ("wolf", "Gir deg Wolfram Alpha svar");
 
-
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("wolf", "Gir deg Wolfram Alpha svar");
-
-        public async Task<HandleResponse> Handle(SlackMessage message)
+        public async Task<EventHandledResponse> Handle(EventMetaData data, AppMentionEvent message)
         {
-            var botDetails = message.Bot;
-            var messageText = message.Text.Replace($"<@{botDetails.Id}> wolf ", "");
+            
+            var messageText = message.Text.Replace($"wolf ", "");
 
             var wolfram = new WolframAlpha(_options.Value.WulframAlphaAppId);
             var results = wolfram.Query(messageText);
@@ -54,23 +50,13 @@ namespace Smartbot.Utilities.Handlers
 
             if (string.IsNullOrEmpty(text))
                 text = "Wulf aner ikke 🐺";
-            
-            foreach (var publisher in _publishers)
-            {
-                await publisher.Publish(new Notification
-                {
-                    Msg = text,
-                    Recipient = message.ChatHub.Id
-                });
-            }
 
-            return new HandleResponse("OK");
+            await _client.ChatPostMessage(message.Channel, text);
+
+            return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(SlackMessage message)
-        {
-            return message.MentionsBot && Contains(message.Text, "wolf");
-        }
+        public bool ShouldHandle(AppMentionEvent message) => Contains(message.Text, "wolf");
 
         private static bool Contains(string haystack, params string[] needles) => needles.Any(s => haystack.Contains(s, StringComparison.InvariantCultureIgnoreCase));
     }

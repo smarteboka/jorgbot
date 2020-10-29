@@ -1,21 +1,16 @@
 using System;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.SlackClients;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
-using Slackbot.Net.Utilities;
 using Smartbot.Data.Storage.Events;
-using Smartbot.Utilities;
-using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.SlackQuestions;
 using Smartbot.Utilities.Storsdager.RecurringActions;
-using Smartbot.Utilities.Times;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -31,7 +26,7 @@ namespace Smartbot.Tests.Workers
         }
 
         [Fact(Skip = "Already seeded")]
-        public async Task SeedStorsdager()
+        public void SeedStorsdager()
         {
             // var eventStorage = EventsStorage();
             // var nesteStorsdager = new Timing().Get10NextOccurrences(Crons.LastThursdayOfMonthCron);
@@ -144,7 +139,7 @@ namespace Smartbot.Tests.Workers
         public async Task SendsInvites()
         {
             var inviter = StorsdagRecurrer();
-            await inviter.Process();
+            await inviter.Process(CancellationToken.None);
         }
 
         private StorsdagInvitationRecurrer StorsdagRecurrer()

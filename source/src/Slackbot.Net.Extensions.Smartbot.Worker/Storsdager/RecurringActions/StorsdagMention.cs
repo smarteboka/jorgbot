@@ -1,33 +1,25 @@
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Publishers;
+using CronBackgroundServices;
+using Slackbot.Net.SlackClients.Http;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
     public class StorsdagMention : IRecurringAction
     {
-        private readonly IEnumerable<IPublisher> _publishers;
+        private readonly ISlackClient _client;
         private readonly SlackChannels _channels;
     
-        public StorsdagMention(IEnumerable<IPublisher> publishers,
+        public StorsdagMention(ISlackClient client,
             SlackChannels channels)
         {
-            _publishers = publishers;
+            _client = client;
             _channels = channels;
         }
     
-        public async Task Process()
+        public async Task Process(CancellationToken token)
         {
-            foreach (var publisher in _publishers)
-            {
-                var notification = new Notification
-                {
-                    Msg = $"Storsdag!",
-                    Recipient = _channels.SmartebokaChannel
-                };
-                await publisher.Publish(notification);
-            }
+            await _client.ChatPostMessage(_channels.SmartebokaChannel, "Storsdag!");
         }
 
         public string Cron => Crons.LastThursdayOfMonthCron;

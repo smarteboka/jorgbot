@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Publishers;
+using CronBackgroundServices;
+using Slackbot.Net.SlackClients.Http;
 using Smartbot.Utilities.Times;
 
 namespace Smartbot.Utilities.RecurringActions
@@ -9,31 +9,23 @@ namespace Smartbot.Utilities.RecurringActions
     public class HappyBirthday : IRecurringAction
     {
         private readonly Smartinger _smartinger;
-        private readonly IEnumerable<IPublisher> _publishers;
         private readonly SlackChannels _channels;
+        private readonly ISlackClient _client;
         private readonly Timing _timing;
 
-        public HappyBirthday(Smartinger smartinger, IEnumerable<IPublisher> publishers, SlackChannels channels)
+        public HappyBirthday(Smartinger smartinger, SlackChannels channels, ISlackClient client)
         {
             _smartinger = smartinger;
-            _publishers = publishers;
             _channels = channels;
+            _client = client;
             _timing = new Timing();
         }
 
-        public async Task Process()
+        public async Task Process(CancellationToken token)
         {
             foreach (var smarting in _smartinger.ThatHasBirthday())
             {
-                foreach (var p in _publishers)
-                {
-                    var notification = new Notification
-                    {
-                        Msg = $"Idag jazzulerer vi {smarting.Name} med {_timing.CalculateAge(smarting.BirthDate)}-årsdagen!",
-                        Recipient = _channels.SmartebokaChannel
-                    };
-                    await p.Publish(notification);
-                }
+                await _client.ChatPostMessage(_channels.SmartebokaChannel, $"Idag jazzulerer vi {smarting.Name} med {_timing.CalculateAge(smarting.BirthDate)}-årsdagen!");
             }
         }
 

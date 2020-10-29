@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 
 namespace Smartbot.Utilities.Handlers
 {
-    public class TellHandler : IHandleMessages
+    public class TellHandler : IHandleAppMentions
     {
         private readonly ISlackClient _slackClient;
 
@@ -17,19 +17,17 @@ namespace Smartbot.Utilities.Handlers
             _slackClient = slackClient;
         }
 
-        public bool ShouldShowInHelp => true;
-
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("tell <slack-user> <what>", "Be smartbot om å fortelle en smarting noe på DM");
+        public (string, string) GetHelpDescription() => ("tell <slack-user> <what>", "Be smartbot om å fortelle en smarting noe på DM");
 
         /// <summary>
         /// @smartbot tell @john bull hop stuff
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<HandleResponse> Handle(SlackMessage message)
+        public async Task<EventHandledResponse> Handle(EventMetaData data, AppMentionEvent message)
         {
             var args = message.Text.Split(' ');
-            var recipient = message.ChatHub.Id;
+            var recipient = message.Channel;
             var content = "Psst";
             
             if (args.Length == 2)
@@ -76,13 +74,9 @@ namespace Smartbot.Utilities.Handlers
                 Text = content
             });
 
-            return new HandleResponse("OK");
+            return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(SlackMessage message)
-        {
-            var sharedUrls = message.Text.Contains("tell", StringComparison.InvariantCultureIgnoreCase);
-            return message.MentionsBot && sharedUrls;        
-        }
+        public bool ShouldHandle(AppMentionEvent message) => message.Text.Contains("tell", StringComparison.InvariantCultureIgnoreCase);
     }
 }

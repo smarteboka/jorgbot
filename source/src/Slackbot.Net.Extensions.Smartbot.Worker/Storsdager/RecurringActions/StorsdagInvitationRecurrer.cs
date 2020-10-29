@@ -1,5 +1,6 @@
+using System.Threading;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
+using CronBackgroundServices;
 
 namespace Smartbot.Utilities.Storsdager.RecurringActions
 {
@@ -12,7 +13,7 @@ namespace Smartbot.Utilities.Storsdager.RecurringActions
             _inviter = inviter;
         }
     
-        public async Task Process()
+        public async Task Process(CancellationToken token)
         {
             await _inviter.InviteNextStorsdag();
         }

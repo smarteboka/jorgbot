@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Configuration;
+using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
 using Slackbot.Net.SlackClients.Http.Extensions;
 using Smartbot.Data;
@@ -17,33 +16,30 @@ namespace Smartbot
 {
     public static class SlackbotWorkerBuilderExtensions
     {
-        public static ISlackbotWorkerBuilder AddSmartbot(this ISlackbotWorkerBuilder builder, IConfiguration configuration)
+        public static IServiceCollection AddSmartbot(this IServiceCollection builder, IConfiguration configuration)
         {
-            builder.Services.AddServices(configuration);
+            builder.AddServices(configuration);
 
-            builder
-                .AddRecurring<HerokuFreeTierKeepAlive>()
-                .AddRecurring<Jorger>()
-                .AddRecurring<HappyBirthday>()
-                .AddRecurring<StorsdagMention>()
-                .AddRecurring<StorsdagInvitationRecurrer>()
+            builder.AddRecurringActions()
+                .AddRecurrer<HerokuFreeTierKeepAlive>()
+                .AddRecurrer<HappyBirthday>()
+                .AddRecurrer<StorsdagMention>()
+                .AddRecurrer<StorsdagInvitationRecurrer>()
+                .Build();
 
-                .AddHandler<NesteStorsdagHandler>()
-                .AddHandler<FourSquareHandler>()
-                .AddHandler<OldHandler>()
-                .AddHandler<UrlsSaveHandler>()
-                .AddHandler<RandomSmartingHandler>()
-                .AddHandler<RsvpReminder>()
-                .AddHandler<LinkStatsHandler>()
-                .AddHandler<LinksHandler>()
-                .AddHandler<TellHandler>()
-                .AddHandler<WolframHandler>()
-                //.AddFplBot(configuration.GetSection("smartebokafpl"))
-                .BuildRecurrers();
+            builder.AddSlackBotEvents<InMemTokenStore>()
+
+                .AddAppMentionHandler<NesteStorsdagHandler>()
+                .AddAppMentionHandler<FourSquareHandler>()
+                .AddAppMentionHandler<RandomSmartingHandler>()
+                .AddAppMentionHandler<RsvpReminder>()
+                .AddAppMentionHandler<TellHandler>()
+                .AddAppMentionHandler<WolframHandler>();
+
             return builder;
         }
 
-        private static void AddServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddData(configuration);
 
@@ -57,8 +53,8 @@ namespace Smartbot
             services.AddSingleton<SlackQuestionClient>();
             services.Configure<WulframOptions>(configuration);
 
-            // services.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_BotUser)));
-            services.AddSlackbotOauthClient(c => c.OauthToken = configuration.GetValue<string>(nameof(SlackOptions.Slackbot_SlackApiKey_SlackApp)));
+            services.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>("Slackbot_SlackApiKey_BotUser"));
+            services.AddSlackbotOauthClient(c => c.OauthToken = configuration.GetValue<string>("lackbot_SlackApiKey_SlackApp"));
         }
     }
 }

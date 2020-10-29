@@ -1,35 +1,30 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Slackbot.Net.Abstractions.Handlers;
-using Slackbot.Net.Abstractions.Handlers.Models.Rtm.MessageReceived;
-using Slackbot.Net.Abstractions.Publishers;
+using Slackbot.Net.Endpoints.Abstractions;
+using Slackbot.Net.Endpoints.Models.Events;
+using Slackbot.Net.SlackClients.Http;
 using Smartbot.Data.Storage.Events;
 
 namespace Smartbot.Utilities.Handlers
 {
-    public class NesteStorsdagHandler : IHandleMessages
+    public class NesteStorsdagHandler : IHandleAppMentions
     {
-        private readonly IEnumerable<IPublisher> _publishers;
+        private readonly ISlackClient _client;
         private readonly IEventsStorage _eventStorage;
         private readonly IInvitationsStorage _inviteStorage;
 
 
-        public NesteStorsdagHandler(IEnumerable<IPublisher> publishers, IEventsStorage eventStorage, IInvitationsStorage inviteStorage)
+        public NesteStorsdagHandler(ISlackClient client, IEventsStorage eventStorage, IInvitationsStorage inviteStorage)
         {
-            _publishers = publishers;
+            _client = client;
             _eventStorage = eventStorage;
             _inviteStorage = inviteStorage;
         }
 
-        public bool ShouldShowInHelp => true;
+        public (string, string) GetHelpDescription() => ("neste storsdag", "Viser litt info om neste storsdag");
 
-
-        public Tuple<string, string> GetHelpDescription() => new Tuple<string, string>("neste storsdag", "Viser litt info om neste storsdag");
-
-        public async Task<HandleResponse> Handle(SlackMessage message)
+        public async Task<EventHandledResponse> Handle(EventMetaData data, AppMentionEvent message)
         {
             var nextStorsdag = await _eventStorage.GetNextEvent(EventTypes.StorsdagEventType);
             var invitations = await _inviteStorage.GetInvitations(nextStorsdag.RowKey);
@@ -41,26 +36,10 @@ namespace Smartbot.Utilities.Handlers
                 rapport += $"\n• `{inviteGroup.Key}` : {names}";
             }
 
-            var culture = new CultureInfo("nb-NO");
-            foreach (var publisher in _publishers)
-            {
-                var notification = new Notification
-                {
-                    Msg = rapport,
-                    Recipient = message.ChatHub.Id
-                };
-                await publisher.Publish(notification);
-            }
-
-
-            return new HandleResponse("OK");
+            await _client.ChatPostMessage(message.Channel, rapport);
+            return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(SlackMessage message)
-        {
-            var containsNeste = message.Text.Contains("neste", StringComparison.InvariantCultureIgnoreCase);
-            var containsStorsdag = message.Text.Contains("storsdag", StringComparison.InvariantCultureIgnoreCase);
-            return message.MentionsBot && containsNeste && containsStorsdag;
-        }
+        public bool ShouldHandle(AppMentionEvent message) => message.Text.Contains("neste", StringComparison.InvariantCultureIgnoreCase) && message.Text.Contains("storsdag", StringComparison.InvariantCultureIgnoreCase);
     }
 }

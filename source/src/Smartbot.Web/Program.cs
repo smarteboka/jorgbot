@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Hosting;
-using Slackbot.Net.Extensions.Smartbot.SharedWorkers;
+using Slackbot.Net.Endpoints.Hosting;
 
 namespace Smartbot.Web
 {
@@ -26,8 +24,7 @@ namespace Smartbot.Web
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSlackbotEndpoints()
-                        .AddSmartbotEndpoints(context.Configuration);
+                    services.AddSmartbot(context.Configuration);
 
                 })
                 .ConfigureLogging((context, configLogging) =>
@@ -49,13 +46,12 @@ namespace Smartbot.Web
                         });
                     });
 
-                    app.UseSlackbotEndpoint("/interactive");
+                    app.UseSlackbot();
                 })
+             
                 .Build();
 
-            var logger = host.Services.GetService<ILogger<Program>>();
-            logger.LogInformation($"Using port '{port}'");
-
+   
             using (host)
             {
                 await host.RunAsync();

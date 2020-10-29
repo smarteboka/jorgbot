@@ -1,6 +1,7 @@
+using System.Threading;
 using System.Threading.Tasks;
+using CronBackgroundServices;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.Abstractions.Handlers;
 
 namespace Slackbot.Net.Extensions.Smartbot.SharedWorkers
 {
@@ -14,7 +15,7 @@ namespace Slackbot.Net.Extensions.Smartbot.SharedWorkers
             Cron = "0 */10 * * * *";
         }
 
-        public Task Process()
+        public Task Process(CancellationToken token)
         {
             _logger.LogInformation("Keep process alive");
             return Task.CompletedTask;
