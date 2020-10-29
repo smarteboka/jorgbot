@@ -24,7 +24,7 @@ namespace Smartbot.Utilities.Handlers
         {
             var index = new Random().Next(_smartinger.Smartingene.Count);
             var randomSmarting = _smartinger.Smartingene[index];
-            await _client.ChatGetPermalink(message.Channel, randomSmarting.Name);
+            await _client.ChatPostMessage(message.Channel, randomSmarting.Name);
             return new EventHandledResponse("OK");
         }
 
