@@ -28,7 +28,7 @@ namespace Smartbot
                 .Build();
 
             builder.AddSlackBotEvents<InMemTokenStore>()
-
+                .AddShortcut<Help>()
                 .AddAppMentionHandler<NesteStorsdagHandler>()
                 .AddAppMentionHandler<FourSquareHandler>()
                 .AddAppMentionHandler<RandomSmartingHandler>()
