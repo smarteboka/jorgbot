@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Slackbot.Net.Endpoints.Hosting;
 
 namespace Smartbot.Web
@@ -31,7 +32,7 @@ namespace Smartbot.Web
                 {
                     configLogging
                         .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
-                        .AddConsole(c => c.DisableColors = true)
+                        .AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled)
                         .AddDebug();
                 }).
                 Configure(app =>
