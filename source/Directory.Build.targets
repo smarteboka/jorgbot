@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <SlackbotNetVersion>4.0.0</SlackbotNetVersion>
-    <AspNetVersion>5.0.0-*</AspNetVersion>
+    <SlackbotNetVersion>4.1.0</SlackbotNetVersion>
+    <AspNetVersion>5.0.0</AspNetVersion>
   </PropertyGroup>
 
   <ItemGroup>

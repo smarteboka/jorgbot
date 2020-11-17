@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Slackbot.Net.SlackClients;
+using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http;
-using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage.Blocks;
 using Slackbot.Net.SlackClients.Http.Models.Responses.UsersList;
 using Smartbot.Data.Storage.Events;
-using Smartbot.Utilities.SlackAPIExtensions;
 using Smartbot.Utilities.SlackAPIExtensions.Models;
 using Smartbot.Utilities.SlackQuestions;
 
