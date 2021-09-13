@@ -1,3 +1,4 @@
+using CronBackgroundServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slackbot.Net.Endpoints.Hosting;
@@ -20,12 +21,12 @@ namespace Smartbot
         {
             builder.AddServices(configuration);
 
-            builder.AddRecurringActions()
+            builder
                 .AddRecurrer<HerokuFreeTierKeepAlive>()
                 .AddRecurrer<HappyBirthday>()
                 .AddRecurrer<StorsdagMention>()
-                .AddRecurrer<StorsdagInvitationRecurrer>()
-                .Build();
+                .AddRecurrer<StorsdagInvitationRecurrer>();
+                
 
             builder.AddSlackBotEvents<InMemTokenStore>()
                 .AddShortcut<Help>()
