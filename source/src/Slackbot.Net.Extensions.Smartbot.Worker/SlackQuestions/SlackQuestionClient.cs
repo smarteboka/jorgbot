@@ -34,7 +34,7 @@ namespace Smartbot.Utilities.SlackQuestions
 
         private IEnumerable<IBlock> ToBlocks(Question question)
         {
-            yield return new Block
+            yield return new SectionBlock()
             {
                 type = BlockTypes.Section,
                 text = new Text
@@ -43,14 +43,14 @@ namespace Smartbot.Utilities.SlackQuestions
                     type = TextTypes.PlainText
                 }
             };
-            yield return new Block
+            yield return new ImageBlock()
             {
                 type = BlockTypes.Image,
                 alt_text = "øl",
                 image_url = question.Image
             };
 
-            var optionsBlock = new Block()
+            var optionsBlock = new ActionsBlock()
             {
                 type = BlockTypes.Actions,
                 block_id = question.QuestionId,

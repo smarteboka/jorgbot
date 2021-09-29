@@ -28,7 +28,7 @@ namespace Smartbot
                 .AddRecurrer<StorsdagInvitationRecurrer>();
                 
 
-            builder.AddSlackBotEvents<InMemTokenStore>()
+            builder.AddSlackBotEvents()
                 .AddShortcut<Help>()
                 .AddAppMentionHandler<NesteStorsdagHandler>()
                 .AddAppMentionHandler<FourSquareHandler>()
