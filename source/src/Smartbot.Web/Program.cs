@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,10 +37,10 @@ var host = new WebHostBuilder()
         // keep-alive by pinging from uptimerobot
         app.UseWhen(c => c.Request.Path == "/", a =>
         {
-            a.Run(c =>
+            a.Run(async c =>
             {
                 c.Response.StatusCode = 200;
-                return Task.CompletedTask;
+                await c.Response.WriteAsync($"Smartbot is alive {Guid.NewGuid()}");
             });
         });
 
