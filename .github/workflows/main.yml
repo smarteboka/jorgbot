@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - master
 jobs:
   deploy:
     name: Deploy app
@@ -11,6 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy ./source --remote-only
+      - run: flyctl deploy ./source --remote-only --now --detach
         env:
           FLY_API_TOKEN: ${{ secrets.SMARTBOT_FLY_API_TOKEN }}
