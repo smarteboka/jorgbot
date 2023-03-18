@@ -1,6 +1,0 @@
-build:
-  docker:
-    web: /source/Smartbot.Dockerfile
-
-run:
-  web: dotnet ./smartbot.web/Smartbot.Web.dll
