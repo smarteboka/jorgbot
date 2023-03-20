@@ -7,11 +7,14 @@ primary_region = "arn"
 processes = ["smartbotweb"]
 
 [build]
-  dockerfile = "./Smartbot.Dockerfile"
+  builder = "paketobuildpacks/builder-jammy-full"
+  buildpacks = ["paketo-buildpacks/dotnet-core"]
 
+[build.args]
+  BP_DOTNET_PROJECT_PATH="./src/Smartbot.Web"
 
 [processes]
-  smartbotweb = "dotnet ./smartbot.web/Smartbot.Web.dll"
+  smartbotweb = "dotnet ./Smartbot.Web.dll"
 
 [env]
   ASPNETCORE_ENVIRONMENT = "Production"
