@@ -16,10 +16,7 @@ var host = new WebHostBuilder()
     .UseKestrel()
     .UseUrls($"http://*:{port}")
     .UseEnvironment(environment)
-    .ConfigureAppConfiguration((hostContext, configApp) =>
-    {
-        configApp.AddEnvironmentVariables();
-    })
+    .ConfigureAppConfiguration((hostContext, configApp) => { configApp.AddEnvironmentVariables(); })
     .ConfigureServices((context, services) =>
     {
         services.AddAuthentication().AddSlackbotEvents(c => { c.SigningSecret = "123"; });
@@ -31,8 +28,7 @@ var host = new WebHostBuilder()
             .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
             .AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled)
             .AddDebug();
-    }).
-    Configure(app =>
+    }).Configure(app =>
     {
         // keep-alive by pinging from uptimerobot
         app.UseWhen(c => c.Request.Path == "/", a =>
@@ -40,17 +36,42 @@ var host = new WebHostBuilder()
             a.Run(async c =>
             {
                 c.Response.StatusCode = 200;
-                await c.Response.WriteAsync($"Smartbot v{VersionDetails.Versions().Informational} is alive! \nReq:{Guid.NewGuid()}");
+                await c.Response.WriteAsync(Html());
             });
         });
 
-        app.Map("/events", a => a.UseSlackbot(enableAuth:false));
+        app.Map("/events", a => a.UseSlackbot(false));
     })
-
     .Build();
 
 
 using (host)
 {
     await host.RunAsync();
+}
+
+string Html()
+{
+    return
+$"""
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body style="background: black; color:white;font-family: 'Inter', sans-serif; " >
+    <h2 style="">Smartbot v{VersionDetails.Versions().MajorMinorPatch}</h2>
+    <ul>
+        <li><span style="display:inline-block;font-weight:600;width:100px">Version:</span>{VersionDetails.Versions().Informational}</li>
+        <li><span style="display:inline-block;font-weight:600;width:100px">Request:</span>{Guid.NewGuid()}</li>
+        <li><span style="display:inline-block;font-weight:600;width:100px">Source:</span><a
+                style="color:white"
+                href="https://github.com/smarteboka/smartbot/commit/{VersionDetails.Versions().Sha}">https://github.com/smarteboka/smartbot/commit/{VersionDetails.Versions().Sha}
+            </a>
+        </li>
+    </ul>
+</body>
+</html>
+""";
 }
