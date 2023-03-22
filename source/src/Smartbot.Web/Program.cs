@@ -40,7 +40,7 @@ var host = new WebHostBuilder()
             a.Run(async c =>
             {
                 c.Response.StatusCode = 200;
-                await c.Response.WriteAsync($"Smartbot is alive {Guid.NewGuid()}");
+                await c.Response.WriteAsync($"Smartbot v{VersionDetails.Versions().Informational} is alive! \nReq:{Guid.NewGuid()}");
             });
         });
 
