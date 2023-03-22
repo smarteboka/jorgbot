@@ -9,7 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.10.2
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy ./source --remote-only --now --detach
+      - run: flyctl deploy ./source --remote-only --now --detach --build-arg VERSION=${{ env.GITVERSION_MAJORMINORPATCH }} --build-arg INFOVERSION=${{ env.GITVERSION_INFORMATIONALVERSION }}
+
         env:
           FLY_API_TOKEN: ${{ secrets.SMARTBOT_FLY_API_TOKEN }}

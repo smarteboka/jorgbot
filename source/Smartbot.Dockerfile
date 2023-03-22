@@ -16,7 +16,10 @@ RUN dotnet restore Smartbot.sln
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish src/Smartbot.Web/Smartbot.Web.csproj -c Release -o /app/out/smartbot.web
+ARG INFOVERSION="0.666"
+ARG VERSION="1.0.666"
+RUN echo "Infoversion: $INFOVERSION"
+RUN dotnet publish src/Smartbot.Web/Smartbot.Web.csproj -c Release -o /app/out/smartbot.web /p:Version=$VERSION /p:InformationalVersion=$INFOVERSION
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
