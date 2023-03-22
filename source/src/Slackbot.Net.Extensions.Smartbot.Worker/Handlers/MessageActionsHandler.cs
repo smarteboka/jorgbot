@@ -32,7 +32,7 @@ public class MessageActionsHandler : IHandleMessageActions
         _httpClient = new HttpClient();
 
     }
-    
+
     public Task<EventHandledResponse> Handle(MessageActionInteraction @event)
     {
         _logger.LogInformation(JsonConvert.SerializeObject(@event));
@@ -42,12 +42,19 @@ public class MessageActionsHandler : IHandleMessageActions
             {
                 "gpt_critico" => await ElCritico(@event.Message.Text, @event.Message.User),
                 "gpt_tldr" => await ThreadTLDR(@event.Channel.Id, @event.Message_Ts),
+                "gpt_oracle" => await Answer(@event.Message.Text, @event.Message.User, @event.User.Username),
+                _ => null
+            };
+
+            bool? broadcast = @event.Callback_Id switch
+            {
+                "gpt_tldr" => true,
                 _ => null
             };
 
             if (completionPrompt != null)
             {
-                var ctoken = new CancellationTokenSource(10000);
+                var ctoken = new CancellationTokenSource(20000);
                 try
                 {
                     var res = await _client.ChatEndpoint.GetCompletionAsync(new ChatRequest(messages: completionPrompt),
@@ -61,7 +68,7 @@ public class MessageActionsHandler : IHandleMessageActions
                         thread_ts = @event.Message_Ts,
                         Text = completions,
                         Link_Names = true,
-                        Reply_Broadcast = true
+                        Reply_Broadcast = broadcast
                     });
                 }
                 catch (Exception e)
@@ -81,6 +88,10 @@ public class MessageActionsHandler : IHandleMessageActions
             }
             else
             {
+                await _httpClient.PostAsJsonAsync(@event.Response_Url, new
+                {
+                    text = "Denne funksjonen støttes ikke ennå :/"
+                });
                 _logger.LogInformation($"Not doing anything. Unknown callback_id {@event.Callback_Id}");
             }
         });
@@ -102,7 +113,7 @@ public class MessageActionsHandler : IHandleMessageActions
         var p2 = new ChatPrompt("user", $"{userForId} sier:{text}");
         return new[] { p1, p2 };
     }
-    
+
     private async Task<IEnumerable<ChatPrompt>> ThreadTLDR(string channel, string ts)
     {
         _logger.LogInformation("kom hit1 ");
@@ -136,6 +147,48 @@ public class MessageActionsHandler : IHandleMessageActions
             "Dialog:\n\n"+
             $"{string.Join("\n", chatDialog)}");
 
+        return new[] { p1, p2 };
+    }
+
+    private async Task<IEnumerable<ChatPrompt>> Answer(string text, string userId, string triggerName)
+    {
+        var users = await _slackClient.UsersList();
+        if (!users.Ok)
+            throw new Exception("Retry plz");
+        
+        var username = users.Members.FirstOrDefault(m => m.Id == userId) != null
+            ? users.Members.First(m => m.Id == userId).Name
+            : "Ukjent";
+        
+        var setup = "You are an helpful assistant. " +
+                    $"I will provide you with a dialogue between two friends named, {username} and {triggerName}." +
+                    "I want you to reply with some helpful insights" +
+                    "and recommeded approaches or products. " +
+                    "Reply with recommended products or services. " +
+                    "If I ask for product recommendations, provide pros and cons of each product and a reasoning behind " +
+                    "the recommendation. " +
+                    "Answer in norwegian language. " +
+                    "Use maximum 150 words in your replies. " +
+                    "Never use wish anyone good luck or use phrases like \"Lykke til\". " +
+                    "Never ask follow up questions. " +
+                    "If you don't know of any recommendations, just reply with funny excuses about being a robot." +
+                    $"Always directly address the first person {triggerName} in the dialogue with a short thanks."+
+                    $"Recommendations must be directed to {username}";
+
+        var p1 = new ChatPrompt("system", setup);
+    
+
+        var priming = $"Under kommer en dialog mellom to venner som ønsker din mening eller anbefalinger. " +
+                      $"Start alltid svaret ditt med en takk til {triggerName} for å inkludere deg i samtalen med emojier." +
+                      $"Svar så med å anbefalinge {username} produkter eller tjenester" +
+                      $"Aldri ønsk noen lykke til.";
+        var chat1 = $"{username}: {text}\n";
+        var chat2 = $"{triggerName}: Hva synes du?\n";
+
+        var full = $"{priming}\n\n Dialog:\n\n{chat1}{chat2}";
+        Console.WriteLine(full);                                   
+        
+        var p2 = new ChatPrompt("user", full);
         return new[] { p1, p2 };
     }
 }
