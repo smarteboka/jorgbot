@@ -39,7 +39,8 @@ namespace Smartbot
                 .AddAppMentionHandler<RsvpReminder>()
                 .AddAppMentionHandler<TellHandler>()
                 .AddAppMentionHandler<WolframHandler>()
-                .AddMessageActionsHandler<MessageActionsHandler>();
+                .AddNoOpAppMentionHandler<GptHandler>()
+                .AddMessageActionsHandler<GptHandler>();
             return builder;
         }
 
