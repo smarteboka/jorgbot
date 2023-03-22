@@ -6,13 +6,13 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
 
 namespace Smartbot.Utilities.Handlers;
 
@@ -22,6 +22,7 @@ public class MessageActionsHandler : IHandleMessageActions
     private readonly ILogger<MessageActionsHandler> _logger;
     private readonly OpenAIClient _client;
     private readonly HttpClient _httpClient;
+    private User[] _users;
 
     public MessageActionsHandler(ISlackClient slackClient, ILogger<MessageActionsHandler> logger)
     {
@@ -30,80 +31,94 @@ public class MessageActionsHandler : IHandleMessageActions
         var key = Environment.GetEnvironmentVariable("SMARTBOT_OPENAI_KEY");
         _client = new OpenAIClient(key);
         _httpClient = new HttpClient();
+        _users = Array.Empty<User>();
 
     }
 
-    public Task<EventHandledResponse> Handle(MessageActionInteraction @event)
+    public async Task<EventHandledResponse> Handle(MessageActionInteraction @event)
     {
-        _logger.LogInformation(JsonConvert.SerializeObject(@event));
+        _logger.LogInformation($"{@event.Callback_Id} req from {@event.User.Username} on text '{@event.Message.User}:{@event.Message.Text}'");
         Task.Run(async () =>
         {
-            var completionPrompt = @event.Callback_Id switch
+            try
             {
-                "gpt_critico" => await ElCritico(@event.Message.Text, @event.Message.User),
-                "gpt_tldr" => await ThreadTLDR(@event.Channel.Id, @event.Message_Ts),
-                "gpt_oracle" => await Answer(@event.Message.Text, @event.Message.User, @event.User.Username),
-                _ => null
-            };
-
-            bool? broadcast = @event.Callback_Id switch
-            {
-                "gpt_tldr" => true,
-                _ => null
-            };
-
-            if (completionPrompt != null)
-            {
-                var ctoken = new CancellationTokenSource(20000);
-                try
-                {
-                    var res = await _client.ChatEndpoint.GetCompletionAsync(new ChatRequest(messages: completionPrompt),
-                        ctoken.Token);
-                    _logger.LogInformation(res.ProcessingTime.ToPrettyFormat());
-                    var completions = res.FirstChoice.Message.Content;
-
-                    await _slackClient.ChatPostMessage(new ChatPostMessageRequest
-                    {
-                        Channel = @event.Channel.Id,
-                        thread_ts = @event.Message_Ts,
-                        Text = completions,
-                        Link_Names = true,
-                        Reply_Broadcast = broadcast
-                    });
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, e.Message);
-
-                    var txt = e switch
-                    {
-                        TaskCanceledException or {InnerException: TaskCanceledException} => "⏳ Oops, nå brukte jeg litt lang tid her. Prøv igjen litt senere, a.",
-                        _ => $"Der gikk noe i stå-bot. Smartbot må nok inn på sørvis."
-                    };
-                    await _httpClient.PostAsJsonAsync(@event.Response_Url, new
-                    {
-                        text = txt
-                    });
-                }
+                await RunInBackgroundThread(@event);
             }
-            else
+            catch(Exception e)
             {
-                await _httpClient.PostAsJsonAsync(@event.Response_Url, new
-                {
-                    text = "Denne funksjonen støttes ikke ennå :/"
-                });
-                _logger.LogInformation($"Not doing anything. Unknown callback_id {@event.Callback_Id}");
+                _logger.LogError(e, e.Message);
             }
         });
 
-        return Task.FromResult(new EventHandledResponse("OK"));
+        return new EventHandledResponse("NON-BG");
+    }
+
+    private async Task RunInBackgroundThread(MessageActionInteraction @event)
+    {
+        var completionPrompt = @event.Callback_Id switch
+        {
+            "gpt_critico" => await ElCritico(@event.Message.Text, @event.Message.User),
+            "gpt_tldr" => await ThreadTLDR(@event.Channel.Id, @event.Message_Ts),
+            "gpt_oracle" => await Answer(@event.Message.Text, @event.Message.User, @event.User.Username),
+            _ => null
+        };
+
+        bool? broadcast = @event.Callback_Id switch
+        {
+            "gpt_tldr" => true,
+            _ => null
+        };
+
+        if (completionPrompt != null)
+        {
+            var ctoken = new CancellationTokenSource(20000);
+            try
+            {
+                var res = await _client.ChatEndpoint.GetCompletionAsync(new ChatRequest(messages: completionPrompt),
+                    ctoken.Token);
+                _logger.LogInformation(res.ProcessingTime.ToPrettyFormat());
+                var completions = res.FirstChoice.Message.Content;
+
+                await _slackClient.ChatPostMessage(new ChatPostMessageRequest
+                {
+                    Channel = @event.Channel.Id,
+                    thread_ts = @event.Message_Ts,
+                    Text = completions,
+                    Link_Names = true,
+                    Reply_Broadcast = broadcast
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+
+                var txt = e switch
+                {
+                    TaskCanceledException or { InnerException: TaskCanceledException } =>
+                        "⏳ Oops, nå brukte jeg litt lang tid her. Prøv igjen litt senere, a.",
+                    _ => $"Der gikk noe i stå-bot. Smartbot må nok inn på sørvis."
+                };
+                await _httpClient.PostAsJsonAsync(@event.Response_Url, new
+                {
+                    text = txt
+                });
+            }
+        }
+        else
+        {
+            await _httpClient.PostAsJsonAsync(@event.Response_Url, new
+            {
+                text = "Denne funksjonen støttes ikke ennå :/"
+            });
+            _logger.LogInformation($"Not doing anything. Unknown callback_id {@event.Callback_Id}");
+        }
     }
 
     private async Task<IEnumerable<ChatPrompt>> ElCritico(string text, string userId)
     {
-        var usersInReplies = await _slackClient.UsersList();
-        var allMembers = usersInReplies.Members;
-        var userForId = allMembers.FirstOrDefault(u => u.Id == userId);
+        var usersInReplies = await FetchUserFromSlackOrCache();
+        ;
+        var userForId = usersInReplies.FirstOrDefault(u => u.Id == userId);
         var p1 = new ChatPrompt("system", "Du er en satiriker som liker å bruke ironi og sarkasme i dialog. " +
                                           "Du liker å bruke ungdommelig språk og starter og avslutter alle setninger med emojiis. " +
                                           "Spesielt hodeskalle-emojii. Du bruker maaaaange hodeskalle-emojii " +
@@ -114,12 +129,30 @@ public class MessageActionsHandler : IHandleMessageActions
         return new[] { p1, p2 };
     }
 
+    private async Task<User[]> FetchUserFromSlackOrCache()
+    {
+        if (!_users.Any())
+        {
+            var userRes = await _slackClient.UsersList();
+            if (userRes.Ok)
+            {
+                _users = userRes.Members;
+            }
+            else
+            {
+                if (!userRes.Ok)
+                    throw new Exception("aiaiai, klarte ikke hente ut noe greier fra slack api");
+            }
+        }
+
+        return _users;
+    }
+
     private async Task<IEnumerable<ChatPrompt>> ThreadTLDR(string channel, string ts)
     {
         _logger.LogInformation("kom hit1 ");
         var replies = await _slackClient.ConversationsReplies(channel, ts);
-        var usersInReplies = await _slackClient.UsersList();
-        var allMembers = usersInReplies.Members;
+        var allMembers = await FetchUserFromSlackOrCache();
         _logger.LogInformation("kom hit2");
         var chatDialog = replies.Messages.Select(c => $"{allMembers.FirstOrDefault(a => a.Id == c.User)?.Name ?? "inntrenger"} : '{c.Text}'\n");
         _logger.LogInformation(string.Join("\n", chatDialog));
@@ -152,12 +185,10 @@ public class MessageActionsHandler : IHandleMessageActions
 
     private async Task<IEnumerable<ChatPrompt>> Answer(string text, string userId, string triggerName)
     {
-        var users = await _slackClient.UsersList();
-        if (!users.Ok)
-            throw new Exception("Retry plz");
-        
-        var username = users.Members.FirstOrDefault(m => m.Id == userId) != null
-            ? users.Members.First(m => m.Id == userId).Name
+        var users = await FetchUserFromSlackOrCache();
+
+        var username = users.FirstOrDefault(m => m.Id == userId) != null
+            ? users.First(m => m.Id == userId).Name
             : "Ukjent";
         
         var setup = "You are an helpful assistant. " +
@@ -168,7 +199,7 @@ public class MessageActionsHandler : IHandleMessageActions
                     "If I ask for product recommendations, provide pros and cons of each product and a reasoning behind " +
                     "the recommendation. " +
                     "Answer in norwegian language. " +
-                    "Use maximum 150 words in your replies. " +
+                    "Use maximum 200 words in your replies. " +
                     "Never use wish anyone good luck or use phrases like \"Lykke til\". " +
                     "Never ask follow up questions. " +
                     "If you don't know of any recommendations, just reply with funny excuses about being a robot." +
@@ -179,11 +210,11 @@ public class MessageActionsHandler : IHandleMessageActions
     
 
         var priming = $"Under kommer en dialog mellom to venner som ønsker din mening eller anbefalinger. " +
-                      $"Start alltid svaret ditt med en takk til {triggerName} for å inkludere deg i samtalen med emojier." +
-                      $"Svar så med å anbefalinge {username} produkter eller tjenester" +
-                      $"Aldri ønsk noen lykke til.";
-        var chat1 = $"{username}: {text}\n";
-        var chat2 = $"{triggerName}: Hva synes du?\n";
+                      $"Start alltid svaret ditt med en takk til {triggerName} for å inkludere deg i samtalen" +
+                      $"Svar så med å anbefale {username} noe." +
+                      $"Ikke bruk frasen \"Lykke til\".";
+        var chat1 = $"{username}: '{text}'\n\n";
+        var chat2 = $"{triggerName}: 'Hva synes du?'\n\n";
 
         var full = $"{priming}\n\n Dialog:\n\n{chat1}{chat2}";
         Console.WriteLine(full);                                   
