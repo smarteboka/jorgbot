@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Slackbot.Net.Endpoints.Authentication;
@@ -12,43 +13,31 @@ using Smartbot;
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
-var host = new WebHostBuilder()
-    .UseKestrel()
-    .UseUrls($"http://*:{port}")
-    .UseEnvironment(environment)
-    .ConfigureAppConfiguration((hostContext, configApp) => { configApp.AddEnvironmentVariables(); })
-    .ConfigureServices((context, services) =>
-    {
-        services.AddAuthentication().AddSlackbotEvents(c => { c.SigningSecret = "123"; });
-        services.AddSmartbot(context.Configuration);
-    })
-    .ConfigureLogging((context, configLogging) =>
-    {
-        configLogging
-            .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
-            .AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled)
-            .AddDebug();
-    }).Configure(app =>
-    {
-        // keep-alive by pinging from uptimerobot
-        app.UseWhen(c => c.Request.Path == "/", a =>
-        {
-            a.Run(async c =>
-            {
-                c.Response.StatusCode = 200;
-                await c.Response.WriteAsync(Html());
-            });
-        });
-
-        app.Map("/events", a => a.UseSlackbot(false));
-    })
-    .Build();
+var builder = WebApplication.CreateBuilder();
+builder.WebHost.UseUrls($"http://*:{port}");
+builder.Host.UseEnvironment(environment);
+builder.Configuration.AddEnvironmentVariables();
+builder.Services.AddAuthentication().AddSlackbotEvents(c => { c.SigningSecret = "123"; });
+builder.Services.AddSmartbot(builder.Configuration);
+builder.Logging
+        .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
+        .AddFilter("Slackbot.Net.Endpoints.Middlewares", LogLevel.Trace)
+        .AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled)
+        .AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 
-using (host)
+var app = builder.Build();
+
+app.MapGet("/", async c => 
 {
-    await host.RunAsync();
-}
+    c.Response.StatusCode = 200;
+    await c.Response.WriteAsync(Html());
+});
+
+app.Map("/events", a => a.UseSlackbot(false));
+
+await app.RunAsync();
 
 string Html()
 {

@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
 using Slackbot.Net.Endpoints.Abstractions;
@@ -14,6 +15,8 @@ using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Smartbot.Utilities.Handlers.Sanity;
+using JsonSerializer = RestSharp.Serialization.Json.JsonSerializer;
+using Message = Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse.Message;
 using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
 
 namespace Smartbot.Utilities.Handlers;
@@ -126,32 +129,25 @@ SMDB contents:
         }
 
         
-        
-        
+        var userList = string.Join("\n", users.Select(
+            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
 
         var setup =
 $"""
-You are a Slackbot in the workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
+You are a Slackbot named @smartbot in the Slack workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
 
 - Answer when @smartbot is mentioned in a slack message
 - Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
 
-About the commands you provide:
+The context menu are:
 - "tldr": summerizes a slack thread
 - "kritisk blikk": provides a snappy reply
 - "orakel": recommendations or answers questions
 
 {smdbSetup}
-""";
 
-        var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
-        
-        var priming =
-$"""
-You are a bot in the Slack workspace named "Smarteboka". 
 
-The full list of other human users in this workspace is semi-colon separated list on format:
+Each user in the Slack workspace is called a 'smarting'. The full list of smartinger are:
 
 | userId | real name | username | bot or human |
 | --- | --- | --- | --- |
@@ -161,22 +157,38 @@ Your replies always answer humans back in norwegian.
 Your replies never provide the userId in replies.
 If adressing a user, always adress them on format:  @username
 Your replies never contain questions or follow up questions.
+Your replies never begin with the text smartbot or oldbot or your own name.
 
-Provide an answer to the user sending the following slack message to @smartbot:
-
-
-
-{userName} : '{appMention.Text}'
 """;
+
+        
+        
+
         Console.WriteLine(setup);
-        Console.WriteLine(priming);
 
-        IEnumerable<ChatPrompt> prompts = new[]
+
+
+        var prompts = new List<ChatPrompt>();
+        prompts.Add(new ChatPrompt("system", setup));
+        var replies = Array.Empty<Message>();
+        if (appMention.Thread_Ts is { })
         {
-            new ChatPrompt("system", setup),
-            new ChatPrompt("user", priming)
-        };
+            var repliesResponse =  await _slackClient.ConversationsReplies(@appMention.Channel, @appMention.Thread_Ts);
+            replies = repliesResponse.Messages;
+        }
 
+        Console.WriteLine($"There are {replies.Length} messages in thread");
+
+        foreach (var threadMessage in replies)
+        {
+            var matchingUser = users.First(u => u.Id == threadMessage.User);
+            prompts.Add(new ChatPrompt(matchingUser.Is_Bot ? "assistant": "user", $"{(!matchingUser.Is_Bot ? $"{matchingUser.Name}: " : "")}{threadMessage.Text}"));
+        }
+        
+        prompts.Add(new ChatPrompt("user", $"{userName} : '{appMention.Text}'"));
+        Console.WriteLine("***");
+        Console.WriteLine(JsonConvert.SerializeObject(prompts.ToArray()[1..]));
+        Console.WriteLine("***");
         var ctoken = new CancellationTokenSource(20000);
         try
         {
@@ -297,7 +309,7 @@ Provide an answer to the user sending the following slack message to @smartbot:
             var userRes = await _slackClient.UsersList();
             if (userRes.Ok)
             {
-                _users = userRes.Members.Where(u => !u.Deleted && !u.Is_Bot && u.Id != "USLACKBOT").ToArray();
+                _users = userRes.Members.Where(u => !u.Deleted && u.Id != "USLACKBOT").ToArray();
             }
             else
             {
