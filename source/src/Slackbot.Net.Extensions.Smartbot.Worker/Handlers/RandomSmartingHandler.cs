@@ -28,7 +28,7 @@ namespace Smartbot.Utilities.Handlers
             return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(AppMentionEvent message) => Contains(message.Text, "random", "tilfeldig");
+        public bool ShouldHandle(AppMentionEvent message) => message.Text.StartsWith("cmd") && Contains(message.Text, "random", "tilfeldig");
 
         private static bool Contains(string haystack, params string[] needles) => needles.Any(s => haystack.Contains(s, StringComparison.InvariantCultureIgnoreCase));
     }

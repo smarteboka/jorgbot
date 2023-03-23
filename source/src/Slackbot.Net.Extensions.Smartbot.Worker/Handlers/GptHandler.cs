@@ -73,15 +73,47 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
     private async Task AnswerDirectly(AppMentionEvent appMention)
     {
+        var users = await FetchUserFromSlackOrCache();
+
+        var userName = users.First(u => u.Id == @appMention.User).Name;
+
+        var setup =
+"""
+You are a Slackbot in the workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
+
+- Answer when @smartbot is mentioned in a slack message
+- Manually triggered by certain commands named:  "tldr", "orakel" or "kritisk blikk";
+""";
+       
+
+        var userList = string.Join("\n", users.Select(
+            u => $"<@{u.Id}>;{u.Real_name};{u.Name};{(u.Is_Bot ? "bot" : "human")}"));
+        
+        var priming =
+$"""
+You are a bot in the Slack workspace named "Smarteboka". 
+
+The full list of other human users in this workspace is semi-colon separated list on format:
+userId;real name;username
+
+{userList}
+
+Your replies always answer humans back in norwegian.
+Your replies never provide the userId in replies.
+If adressing a user, always adress them on format:  @username
+Your replies never contain questions or follow up questions.
+
+Provide an answer to the user sending the following slack message to @smartbot:
+
+{userName} : '{appMention.Text}'
+""";
+        
+        Console.WriteLine(priming);
+
         IEnumerable<ChatPrompt> prompts = new[]
         {
-            new ChatPrompt("system", "You are an helpful assistant. " +
-                                     "You are not allowed to say you don't know or cannot figure a question out. " +
-                                     "When you don't know the answer, you must make one up. " +
-                                     "Never reply with an question. " +
-                                     "Don't ask followup questions" +
-                                     "Answer in norwegian."),
-            new ChatPrompt("user", appMention.Text)
+            new ChatPrompt("system", setup),
+            new ChatPrompt("user", priming)
         };
 
         var ctoken = new CancellationTokenSource(20000);

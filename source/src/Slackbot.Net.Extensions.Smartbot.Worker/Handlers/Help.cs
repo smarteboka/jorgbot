@@ -24,6 +24,6 @@ namespace Smartbot.Utilities.Handlers
             await _slackClient.ChatPostMessage(appMentioned.Channel, text);
         }
 
-        public bool ShouldShortcut(AppMentionEvent appMention) => appMention.Text.Contains("help") || appMention.Text.Contains("hjelp");
+        public bool ShouldShortcut(AppMentionEvent appMention) => appMention.Text.Contains("zhelp");
     }
 }

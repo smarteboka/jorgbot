@@ -40,6 +40,6 @@ namespace Smartbot.Utilities.Handlers
             return new EventHandledResponse("OK");
         }
 
-        public bool ShouldHandle(AppMentionEvent message) => message.Text.Contains("neste", StringComparison.InvariantCultureIgnoreCase) && message.Text.Contains("storsdag", StringComparison.InvariantCultureIgnoreCase);
+        public bool ShouldHandle(AppMentionEvent message) => message.Text.StartsWith("cmd") && message.Text.Contains("neste", StringComparison.InvariantCultureIgnoreCase) && message.Text.Contains("storsdag", StringComparison.InvariantCultureIgnoreCase);
     }
 }
