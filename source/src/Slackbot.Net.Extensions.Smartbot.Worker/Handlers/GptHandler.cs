@@ -115,6 +115,7 @@ The last column contains comments from users and can be a positive review, neutr
 SMDB contents:  
 
 | Title | Series or Movie | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | User reviews |
+| ---   | ---             | ---         | ---     | ---     | ---  | ---              | ---       | ---          |
 {mediaEntries}
 
 """;    
@@ -153,7 +154,7 @@ You are a bot in the Slack workspace named "Smarteboka".
 The full list of other human users in this workspace is semi-colon separated list on format:
 
 | userId | real name | username | bot or human |
-
+| --- | --- | --- | --- |
 {userList}
 
 Your replies always answer humans back in norwegian.
