@@ -82,9 +82,13 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 You are a Slackbot in the workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
 
 - Answer when @smartbot is mentioned in a slack message
-- Manually triggered by certain commands named:  "tldr", "orakel" or "kritisk blikk";
+- Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
+
+About the commands you provide:
+- "tldr": summerizes a slack thread
+- "kritisk blikk": provides a snappy reply
+- "orakel": recommendations or answers questions
 """;
-       
 
         var userList = string.Join("\n", users.Select(
             u => $"<@{u.Id}>;{u.Real_name};{u.Name};{(u.Is_Bot ? "bot" : "human")}"));
