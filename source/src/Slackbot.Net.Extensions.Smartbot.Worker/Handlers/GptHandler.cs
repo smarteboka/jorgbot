@@ -87,21 +87,26 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         {
             var mediaEntries = string.Join("\n", media.Select(m =>
             {
-                return $"- {m.Title};{m.Description};{m.IMDBUrl};{m.Year};{Quotes(m)}";
+                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {m.Year} | {Quotes(m)} |";
 
                 string Quotes(MovieOrSeries m)
                 {
                     if (m.Quotes.Any())
-                        return m.Quotes.Select(c => $"{c.Author.Nickname}:{c.Text}").Aggregate((x, y) => $"{x};{y}");
+                        return m.Quotes.Select(c => $"{c.Author.Nickname}:'{c.Text}'").Aggregate((x, y) => $"{x}|{y}");
                     return "";
                 }
             }));
             smdbSetup =
 $"""
 
-The users have compiled a library of movies and tv-shows that can be used for movie or series recommendations. The full list is:
+The users have compiled a table of movies and tv-shows that can be used for movie or series recommendations. The full table is on format
+
+| Title | Type | Description | IMDB-URL | Year | Quotes |
+
+Full table:  
 
 {mediaEntries}
+
 """;    
         }
         else
