@@ -1,0 +1,14 @@
+GET https://hs7ia5dp.apicdn.sanity.io/v2021-06-07/data/query/production?query=*%5B_type%20in%20%5B%22series%22%2C%20%22movie%22%5D%5D%20%7B%20...%2C%20quotes%5B%5D%20%7B%20...%2C%20author-%3E%20%7D%2C%20streamingservice%20-%3E%20%7D%20%7C%20order(_createdAt%20desc)
+
+
+###
+
+*[_type in ["series", "movie"]] { ..., quotes[] { ..., author-> }, streamingservice -> }
+
+*%5B_type%20in%20%5B%22series%22%2C%20%22movie%22%5D%5D%20%7B%20...%2C%20quotes%5B%5D%20%7B%20...%2C%20author-%3E%20%7D%2C%20streamingservice%20-%3E%20%7D
+
+*[_id == $id]&$id="myId"
+*%5B_id%20%3D%3D%20%24id%5D&%24id=%22myId%22
+
+*[_type in ["series", "movie"]] { ..., quotes[] { ..., author-> }, streamingservice -> } | order(_createdAt desc)
+*%5B_type%20in%20%5B%22series%22%2C%20%22movie%22%5D%5D%20%7B%20...%2C%20quotes%5B%5D%20%7B%20...%2C%20author-%3E%20%7D%2C%20streamingservice%20-%3E%20%7D%20%7C%20order(_createdAt%20desc)

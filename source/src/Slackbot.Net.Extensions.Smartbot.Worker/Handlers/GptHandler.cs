@@ -13,6 +13,7 @@ using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Smartbot.Utilities.Handlers.Sanity;
 using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
 
 namespace Smartbot.Utilities.Handlers;
@@ -24,8 +25,9 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
     private readonly ILogger<GptHandler> _logger;
     private readonly ISlackClient _slackClient;
     private User[] _users;
+    private readonly SanityHelper _sanity;
 
-    public GptHandler(ISlackClient slackClient, ILogger<GptHandler> logger)
+    public GptHandler(ISlackClient slackClient, IHttpClientFactory factory, ILogger<GptHandler> logger)
     {
         _slackClient = slackClient;
         _logger = logger;
@@ -33,6 +35,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         _client = new OpenAIClient(key);
         _httpClient = new HttpClient();
         _users = Array.Empty<User>();
+        _sanity = new SanityHelper(factory);
     }
 
     public async Task<EventHandledResponse> Handle(MessageActionInteraction @event)
@@ -74,11 +77,44 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
     private async Task AnswerDirectly(AppMentionEvent appMention)
     {
         var users = await FetchUserFromSlackOrCache();
-
+        var media = await _sanity.GetMoviesAndSeries();
+ 
         var userName = users.First(u => u.Id == @appMention.User).Name;
 
+        
+        string smdbSetup = "";
+        if (media.Any())
+        {
+            var mediaEntries = string.Join("\n", media.Select(m =>
+            {
+                return $"- {m.Title};{m.Description};{m.IMDBUrl};{m.Year};{Quotes(m)}";
+
+                string Quotes(MovieOrSeries m)
+                {
+                    if (m.Quotes.Any())
+                        return m.Quotes.Select(c => $"{c.Author.Nickname}:{c.Text}").Aggregate((x, y) => $"{x};{y}");
+                    return "";
+                }
+            }));
+            smdbSetup =
+$"""
+
+The users have compiled a library of movies and tv-shows that can be used for movie or series recommendations. The full list is:
+
+{mediaEntries}
+""";    
+        }
+        else
+        {
+            _logger.LogInformation("No media");
+        }
+
+        
+        
+        
+
         var setup =
-"""
+$"""
 You are a Slackbot in the workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
 
 - Answer when @smartbot is mentioned in a slack message
@@ -88,6 +124,8 @@ About the commands you provide:
 - "tldr": summerizes a slack thread
 - "kritisk blikk": provides a snappy reply
 - "orakel": recommendations or answers questions
+
+{smdbSetup}
 """;
 
         var userList = string.Join("\n", users.Select(
@@ -109,9 +147,11 @@ Your replies never contain questions or follow up questions.
 
 Provide an answer to the user sending the following slack message to @smartbot:
 
+
+
 {userName} : '{appMention.Text}'
 """;
-        
+        Console.WriteLine(setup);
         Console.WriteLine(priming);
 
         IEnumerable<ChatPrompt> prompts = new[]

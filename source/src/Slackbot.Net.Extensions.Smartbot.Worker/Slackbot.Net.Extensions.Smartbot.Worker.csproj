@@ -11,6 +11,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(AspNetVersion)" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="$(AspNetVersion)" />
         <PackageReference Include="OpenAI-DotNet" Version="6.3.1" />
+        <PackageReference Include="Sanity.Linq" Version="1.7.0" />
         <PackageReference Include="WolframAlphaNET" Version="2.0.0" />
         <PackageReference Include="CronBackgroundServices" />
         <PackageReference Include="Slackbot.Net.Endpoints" />
