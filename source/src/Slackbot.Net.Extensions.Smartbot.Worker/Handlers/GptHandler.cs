@@ -87,7 +87,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         {
             var mediaEntries = string.Join("\n", media.Select(m =>
             {
-                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService} | {m.StreamUrl} | {Quotes(m)} |";
+                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService?.Name} | {m.StreamUrl} | {Quotes(m)} |";
 
                 string SmdbUrl(MovieOrSeries m)
                 {
@@ -101,19 +101,20 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
                 string Quotes(MovieOrSeries m)
                 {
                     if (m.Quotes.Any())
-                        return m.Quotes.Select(c => $"{c.Author.Nickname}:'{c.Text}'").Aggregate((x, y) => $"{x}|{y}");
+                        return string.Join("\n", m.Quotes.Select(c => $" {c.Author.Nickname}: '{c.Text}'"));
                     return "";
                 }
             }));
             smdbSetup =
 $"""
 
-The users have compiled a table of movies and tv-shows that can be used for movie or series recommendations. The full table is on format
+The users have compiled a list of movies and tv-shows that can be used for movie or series recommendations. 
+The name of this list is SMDB, or the 'Smarting Movie Database'. 
+The last column contains comments from users and can be a positive review, neutral review, or a negative review.
 
-| Title | Type | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | Quotes |
+SMDB contents:  
 
-Full table:  
-
+| Title | Series or Movie | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | User reviews |
 {mediaEntries}
 
 """;    
@@ -143,14 +144,15 @@ About the commands you provide:
 """;
 
         var userList = string.Join("\n", users.Select(
-            u => $"<@{u.Id}>;{u.Real_name};{u.Name};{(u.Is_Bot ? "bot" : "human")}"));
+            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
         
         var priming =
 $"""
 You are a bot in the Slack workspace named "Smarteboka". 
 
 The full list of other human users in this workspace is semi-colon separated list on format:
-userId;real name;username
+
+| userId | real name | username | bot or human |
 
 {userList}
 
