@@ -46,6 +46,7 @@ public class SanityHelper
 
 public class MovieOrSeries : SanityDocument
 {
+    public Slug Slug { get; set; }
     
     public string Title { get; set; }
     public string Description { get; set; }
@@ -65,4 +66,9 @@ public class Quote
 public class Author
 {
     public string Nickname { get; set; }
+}
+
+public class Slug
+{
+    public string Current { get; set; }
 }
