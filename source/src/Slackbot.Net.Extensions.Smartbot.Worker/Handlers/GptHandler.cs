@@ -87,7 +87,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         {
             var mediaEntries = string.Join("\n", media.Select(m =>
             {
-                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {Quotes(m)} |";
+                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService} | {m.StreamUrl} | {Quotes(m)} |";
 
                 string SmdbUrl(MovieOrSeries m)
                 {
@@ -110,7 +110,7 @@ $"""
 
 The users have compiled a table of movies and tv-shows that can be used for movie or series recommendations. The full table is on format
 
-| Title | Type | Description | IMDBURL | SMDBURL | Year | Quotes |
+| Title | Type | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | Quotes |
 
 Full table:  
 

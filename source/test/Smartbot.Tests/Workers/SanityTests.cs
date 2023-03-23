@@ -23,6 +23,8 @@ public class SanityTests
         Assert.Equal("Samme regissør som Budapest Hotel. Meganiz. French dispatch er en herlig surrealistisk affære (som kan være litt langdryg)", first.Quotes.First().Text );
         Assert.Equal("ef", first.Quotes.First().Author.Nickname );
         Assert.Equal("the-darjeeling-limited", first.Slug.Current );
+        Assert.Equal("Disney+", first.StreamingService.Name );
+        Assert.Equal("https://www.disneyplus.com/movies/the-darjeeling-limited/5ZZV79hyPHsW", first.StreamUrl );
         
     }
 }

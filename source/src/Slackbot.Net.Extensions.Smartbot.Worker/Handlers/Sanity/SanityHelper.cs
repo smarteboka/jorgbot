@@ -52,9 +52,18 @@ public class MovieOrSeries : SanityDocument
     public string Description { get; set; }
     
     public string IMDBUrl { get; set; }
+    
+    public string StreamUrl { get; set; }
 
     public IEnumerable<Quote> Quotes { get; set; } = Enumerable.Empty<Quote>();
     public string Year { get; set; }
+    
+    public StreamingService StreamingService { get; set; }
+}
+
+public class StreamingService
+{
+    public string Name { get; set; }
 }
 
 public class Quote
