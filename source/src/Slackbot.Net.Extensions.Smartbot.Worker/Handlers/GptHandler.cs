@@ -146,6 +146,13 @@ Provide an answer to the user sending the following slack message to @smartbot:
                     "⏳ Oops, nå brukte jeg litt lang tid her. Prøv igjen litt senere, a.",
                 _ => "Der gikk noe i stå-bot. Smartbot må nok inn på sørvis."
             };
+            
+            await _slackClient.ChatPostMessage(new ChatPostMessageRequest
+            {
+                Channel = appMention.Channel,
+                thread_ts = appMention.Ts,
+                Text = "Oops, dette tok for lang tid for OpenAI. Prøv igjen senere",
+            });
         }
     }
 
