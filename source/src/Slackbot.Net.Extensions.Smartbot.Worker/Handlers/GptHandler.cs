@@ -80,7 +80,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
     private async Task AnswerDirectly(AppMentionEvent appMention)
     {
         var users = await FetchUserFromSlackOrCache();
-        var media = await _sanity.GetMoviesAndSeries();
+        var media = (await _sanity.GetMoviesAndSeries()).Take(10);
  
         var userName = users.First(u => u.Id == @appMention.User).Name;
 
@@ -157,7 +157,6 @@ Each user in the Slack workspace is called a 'smarting'. The full list of smarti
 Your replies always answer humans back in norwegian.
 Your replies never provide the userId in replies.
 If adressing a user, always adress them on format:  @username
-Your replies never contain questions or follow up questions.
 Your replies never begin with the text smartbot or oldbot or your own name.
 
 """;
