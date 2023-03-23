@@ -181,8 +181,18 @@ Your replies never begin with the text smartbot or oldbot or your own name.
 
         foreach (var threadMessage in replies)
         {
-            var matchingUser = users.First(u => u.Id == threadMessage.User);
-            prompts.Add(new ChatPrompt(matchingUser.Is_Bot ? "assistant": "user", $"{(!matchingUser.Is_Bot ? $"{matchingUser.Name}: " : "")}{threadMessage.Text}"));
+            var matchingUser = users.FirstOrDefault(u => u.Id == threadMessage.User);
+            if (matchingUser != null)
+            {
+                var promptee = matchingUser is { Is_Bot: true } ? "assistant": "user";
+                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Name}: ")}{threadMessage.Text}";
+                prompts.Add(new ChatPrompt(promptee, promptText));
+            }
+            else
+            {
+                _logger.LogWarning($"No match for {threadMessage.User}");
+                prompts.Add(new ChatPrompt("user", $"smarting: {threadMessage.Text}"));
+            }
         }
         
         prompts.Add(new ChatPrompt("user", $"{userName} : '{appMention.Text}'"));
