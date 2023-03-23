@@ -297,7 +297,7 @@ Provide an answer to the user sending the following slack message to @smartbot:
             var userRes = await _slackClient.UsersList();
             if (userRes.Ok)
             {
-                _users = userRes.Members;
+                _users = userRes.Members.Where(u => !u.Deleted && !u.Is_Bot && u.Id != "USLACKBOT").ToArray();
             }
             else
             {
