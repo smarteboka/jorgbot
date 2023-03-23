@@ -113,7 +113,8 @@ $"""
 
 The users have compiled a list of movies and tv-shows that can be used for movie or series recommendations. 
 The name of this list is SMDB, or the 'Smarting Movie Database'. 
-The last column contains comments from users and can be a positive review, neutral review, or a negative review.
+User reviews can be either positive, neutral, or negative to the show.
+When you recommend any movies or tv series, you only list items from SMDB:
 
 SMDB contents:  
 
