@@ -79,126 +79,11 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
     private async Task AnswerDirectly(AppMentionEvent appMention)
     {
-        var users = await FetchUserFromSlackOrCache();
-        var media = (await _sanity.GetMoviesAndSeries()).Take(10);
- 
-        var userName = users.First(u => u.Id == @appMention.User).Name;
+        var prompts = await GeneratePrompts(appMention);
+        string[] strings = prompts.Where(p => p.Role != "system").Select( p => p.Content).ToArray();
 
-        
-        string smdbSetup = "";
-        if (media.Any())
-        {
-            var mediaEntries = string.Join("\n", media.Select(m =>
-            {
-                return $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService?.Name} | {m.StreamUrl} | {Quotes(m)} |";
-
-                string SmdbUrl(MovieOrSeries m)
-                {
-                    return m.SanityType switch
-                    {
-                        "movie" or "series" => $"https://smdb.app/{m.SanityType}/{m.Slug.Current}",
-                        _ => "https://smdb.app"
-                    };
-                }
-
-                string Quotes(MovieOrSeries m)
-                {
-                    if (m.Quotes.Any())
-                        return string.Join("\n", m.Quotes.Select(c => $" {c.Author.Nickname}: '{c.Text}'"));
-                    return "";
-                }
-            }));
-            smdbSetup =
-$"""
-
-The users have compiled a list of movies and tv-shows that can be used for movie or series recommendations. 
-The name of this list is SMDB, or the 'Smarting Movie Database'. 
-User reviews can be either positive, neutral, or negative to the show.
-When you recommend any movies or tv series, you only list items from SMDB:
-
-SMDB contents:  
-
-| Title | Series or Movie | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | User reviews |
-| ---   | ---             | ---         | ---     | ---     | ---  | ---              | ---       | ---          |
-{mediaEntries}
-
-""";    
-        }
-        else
-        {
-            _logger.LogInformation("No media");
-        }
-
-        
-        var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
-
-        var setup =
-$"""
-You are a Slackbot named @smartbot in the Slack workspace "Smarteboka. You provide helpful replies, but never questions. Your capabilities are:
-
-- Answer when @smartbot is mentioned in a slack message
-- Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
-
-The context menu are:
-- "tldr": summerizes a slack thread
-- "kritisk blikk": provides a snappy reply
-- "orakel": recommendations or answers questions
-
-{smdbSetup}
-
-
-Each user in the Slack workspace is called a 'smarting'. The full list of smartinger are:
-
-| userId | real name | username | bot or human |
-| --- | --- | --- | --- |
-{userList}
-
-Your replies always answer humans back in norwegian.
-Your replies never provide the userId in replies.
-If adressing a user, always adress them on format:  @username
-Your replies never begin with the text smartbot or oldbot or your own name.
-
-""";
-
-        
-        
-
-        Console.WriteLine(setup);
-
-
-
-        var prompts = new List<ChatPrompt>();
-        prompts.Add(new ChatPrompt("system", setup));
-        var replies = Array.Empty<Message>();
-        if (appMention.Thread_Ts is { })
-        {
-            var repliesResponse =  await _slackClient.ConversationsReplies(@appMention.Channel, @appMention.Thread_Ts);
-            replies = repliesResponse.Messages;
-        }
-
-        Console.WriteLine($"There are {replies.Length} messages in thread");
-
-        foreach (var threadMessage in replies)
-        {
-            var matchingUser = users.FirstOrDefault(u => u.Id == threadMessage.User);
-            if (matchingUser != null)
-            {
-                var promptee = matchingUser is { Is_Bot: true } ? "assistant": "user";
-                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Name}: ")}{threadMessage.Text}";
-                prompts.Add(new ChatPrompt(promptee, promptText));
-            }
-            else
-            {
-                _logger.LogWarning($"No match for {threadMessage.User}");
-                prompts.Add(new ChatPrompt("user", $"smarting: {threadMessage.Text}"));
-            }
-        }
-        
-        prompts.Add(new ChatPrompt("user", $"{userName} : '{appMention.Text}'"));
-        Console.WriteLine("***");
-        Console.WriteLine(JsonConvert.SerializeObject(prompts.ToArray()[1..]));
-        Console.WriteLine("***");
+        var info = "\n" + string.Join("\n", strings);
+        _logger.LogInformation(info);
         var ctoken = new CancellationTokenSource(20000);
         try
         {
@@ -233,6 +118,118 @@ Your replies never begin with the text smartbot or oldbot or your own name.
                 Text = "Oops, dette tok for lang tid for OpenAI. Prøv igjen senere",
             });
         }
+    }
+
+    private async Task<List<ChatPrompt>> GeneratePrompts(AppMentionEvent appMention)
+    {
+        var users = await FetchUserFromSlackOrCache();
+        var media = (await _sanity.GetMoviesAndSeries()).Take(10);
+
+        var userName = users.First(u => u.Id == @appMention.User).Name;
+
+
+        string smdbSetup = "";
+        if (media.Any())
+        {
+            var mediaEntries = string.Join("\n", media.Select(m =>
+            {
+                return
+                    $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService?.Name} | {m.StreamUrl} | {Quotes(m)} |";
+
+                string SmdbUrl(MovieOrSeries m)
+                {
+                    return m.SanityType switch
+                    {
+                        "movie" or "series" => $"https://smdb.app/{m.SanityType}/{m.Slug.Current}",
+                        _ => "https://smdb.app"
+                    };
+                }
+
+                string Quotes(MovieOrSeries m)
+                {
+                    if (m.Quotes.Any())
+                        return string.Join("\n", m.Quotes.Select(c => $" {c.Author.Nickname}: '{c.Text}'"));
+                    return "";
+                }
+            }));
+            smdbSetup =
+                $"""
+
+When recommending movies or tv series, try to use SMDB as a source. You may use other sources if not found in SMDB. 
+
+SMDB contents:  
+
+| Title | Series or Movie | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | User reviews |
+| ---   | ---             | ---         | ---     | ---     | ---  | ---              | ---       | ---          |
+{mediaEntries}
+
+""";
+        }
+        else
+        {
+            _logger.LogInformation("No media");
+        }
+
+
+        var userList = string.Join("\n", users.Select(
+            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
+
+        var setup =
+            $"""
+You are a Slackbot named @smartbot in the Slack workspace "Smarteboka. In addition to answering questions, your capabilities include:
+
+- Answer when @smartbot is mentioned in a slack message
+- Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
+
+The context menu are:
+- "tldr": summerizes a slack thread
+- "kritisk blikk": provides a snappy reply
+- "orakel": recommendations or answers questions
+
+{smdbSetup}
+
+Each user in the Slack workspace is called a 'smarting'. The full list of smartinger are:
+
+| userId | real name | username | bot or human |
+| --- | --- | --- | --- |
+{userList}
+
+Your replies always answer humans back in norwegian.
+Your replies never provide the userId in replies.
+If adressing a user, always adress them on format:  @username
+""";
+
+
+        var prompts = new List<ChatPrompt>();
+        prompts.Add(new ChatPrompt("system", setup));
+        var replies = Array.Empty<Message>();
+        if (appMention.Thread_Ts is { })
+        {
+            var repliesResponse = await _slackClient.ConversationsReplies(@appMention.Channel, @appMention.Thread_Ts);
+            replies = repliesResponse.Messages;
+        }
+
+        foreach (var threadMessage in replies)
+        {
+            var matchingUser = users.FirstOrDefault(u => u.Id == threadMessage.User);
+            if (matchingUser != null)
+            {
+                var promptee = matchingUser is { Is_Bot: true } ? "assistant" : "user";
+                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Name}: ")}{threadMessage.Text}";
+                prompts.Add(new ChatPrompt(promptee, promptText));
+            }
+            else
+            {
+                prompts.Add(new ChatPrompt("assistant", $"{threadMessage.Text}"));
+            }
+        }
+
+        if (appMention.Thread_Ts is not { })
+        {
+            prompts.Add(new ChatPrompt("user", $"{userName} : '{appMention.Text}'"));
+        }
+
+        return prompts;
     }
 
     private async Task ForwardToGpt(MessageActionInteraction @event)
