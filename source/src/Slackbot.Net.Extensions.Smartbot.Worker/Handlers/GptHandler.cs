@@ -172,7 +172,7 @@ SMDB contents:
 
 
         var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Profile.Display_Name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
+            u => $"| <@{u.Id}> | {u.Name} | {u.Profile.Display_Name} | {(u.Is_Bot ? "bot" : "human")} |"));
 
         var setup =
             $"""
@@ -215,7 +215,7 @@ If adressing a user, always adress them on format:  @username
             if (matchingUser != null)
             {
                 var promptee = matchingUser is { Is_Bot: true } ? "assistant" : "user";
-                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Name}: ")}{threadMessage.Text}";
+                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Profile.Display_Name}: ")}{threadMessage.Text}";
                 prompts.Add(new ChatPrompt(promptee, promptText));
             }
             else
