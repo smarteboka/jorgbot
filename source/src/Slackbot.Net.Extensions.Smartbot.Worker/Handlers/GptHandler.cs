@@ -172,7 +172,7 @@ SMDB contents:
 
 
         var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Real_name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
+            u => $"| <@{u.Id}> | {u.Profile.Display_Name} | {u.Name} | {(u.Is_Bot ? "bot" : "human")} |"));
 
         var setup =
             $"""
