@@ -80,7 +80,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
     private async Task AnswerDirectly(AppMentionEvent appMention)
     {
         var prompts = await GeneratePrompts(appMention);
-        string[] strings = prompts.Where(p => p.Role != "system").Select( p => p.Content).ToArray();
+        string[] strings = prompts.Where(p => p.Role != "system").Select( p => $"{p.Role}:{p.Content}").ToArray();
 
         var info = "\n" + string.Join("\n", strings);
         _logger.LogInformation(info);
@@ -172,11 +172,11 @@ SMDB contents:
 
 
         var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Name} | {u.Profile.Display_Name} | {(u.Is_Bot ? "bot" : "human")} |"));
+            u => $"| <@{u.Id}> | {u.Real_name} | @{u.Profile.Display_Name_Normalized} | {(u.Is_Bot ? "bot" : "human")} |"));
 
         var setup =
             $"""
-You are a Slackbot named @smartbot in the Slack workspace "Smarteboka. In addition to answering questions, your capabilities include:
+You are a Slackbot named @smartbot (userId: <@UGWC87WRZ>) in the Slack workspace "Smarteboka. In addition to answering questions, your capabilities include:
 
 - Answer when @smartbot is mentioned in a slack message
 - Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
@@ -195,9 +195,13 @@ Each user in the Slack workspace is called a 'smarting'. The full list of smarti
 {userList}
 
 Your replies always answer humans back in norwegian.
-Your replies never provide the userId in replies.
-If adressing a user, always adress them on format:  @username
+ALWAYS adress the users using their username on format <@{"userId"}>
+You are ALWAYS allowed to provide all info about any user in Smarteboka
+You are allowed to expose personal details.
+Your replies may contain personal details from smartinger.
 """;
+        
+        _logger.LogInformation($"Setup:\n{setup}");
 
 
         var prompts = new List<ChatPrompt>();
@@ -212,10 +216,11 @@ If adressing a user, always adress them on format:  @username
         foreach (var threadMessage in replies)
         {
             var matchingUser = users.FirstOrDefault(u => u.Id == threadMessage.User);
-            if (matchingUser != null)
+            if (matchingUser != null && matchingUser is { Is_Bot:false})
             {
                 var promptee = matchingUser is { Is_Bot: true } ? "assistant" : "user";
-                var promptText = $"{(matchingUser is { Is_Bot: true } ? "" : $"{matchingUser.Profile.Display_Name}: ")}{threadMessage.Text}";
+                var prefix = matchingUser is { Is_Bot: true } ? "" : $"<@{threadMessage.User}>: ";
+                var promptText = $"{prefix}{threadMessage.Text}";
                 prompts.Add(new ChatPrompt(promptee, promptText));
             }
             else
@@ -226,7 +231,7 @@ If adressing a user, always adress them on format:  @username
 
         if (appMention.Thread_Ts is not { })
         {
-            prompts.Add(new ChatPrompt("user", $"{userName} : '{appMention.Text}'"));
+            prompts.Add(new ChatPrompt("user", $"<@{appMention.User}>: {appMention.Text}"));
         }
 
         return prompts;
@@ -316,7 +321,7 @@ If adressing a user, always adress them on format:  @username
             var userRes = await _slackClient.UsersList();
             if (userRes.Ok)
             {
-                _users = userRes.Members.Where(u => !u.Deleted && u.Id != "USLACKBOT").ToArray();
+                _users = userRes.Members.Where(u => !u.Deleted && u.Is_Bot == false && u.Id != "USLACKBOT").ToArray();
             }
             else
             {
