@@ -84,7 +84,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
         var info = "\n" + string.Join("\n", strings);
         _logger.LogInformation(info);
-        var ctoken = new CancellationTokenSource(20000);
+        var ctoken = new CancellationTokenSource(30000);
         try
         {
             var res = await _client.ChatEndpoint.GetCompletionAsync(new ChatRequest(prompts),
