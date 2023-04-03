@@ -6,16 +6,16 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
+using OpenAI.Images;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
+using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Smartbot.Utilities.Handlers.Sanity;
-using JsonSerializer = RestSharp.Serialization.Json.JsonSerializer;
 using Message = Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse.Message;
 using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
 
@@ -49,7 +49,15 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         {
             try
             {
-                await ForwardToGpt(@event);
+                if (@event.Callback_Id == "gpt_image")
+                {
+                    await CreateImage(@event);
+                }
+                else
+                {
+                    await ForwardToGpt(@event);
+                }
+                
             }
             catch (Exception e)
             {
@@ -243,8 +251,7 @@ Your replies may contain personal details from smartinger.
         {
             "gpt_critico" => await ElCritico(@event.Message.Text, @event.Message.User),
             "gpt_tldr" => await ThreadTLDR(@event.Channel.Id, @event.Message_Ts),
-            "gpt_oracle" => await AnswerForwardedQuestion(@event.Message.Text, @event.Message.User,
-                @event.User.Username),
+            "gpt_oracle" => await AnswerForwardedQuestion(@event.Message.Text, @event.Message.User,@event.User.Username),
             _ => null
         };
 
@@ -408,5 +415,24 @@ Your replies may contain personal details from smartinger.
 
         var p2 = new ChatPrompt("user", full);
         return new[] { p1, p2 };
+    }
+
+    private async Task CreateImage(MessageActionInteraction message)
+    {
+        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Medium);
+        await _slackClient.ChatPostMessage(new ChatPostMessageRequest
+        {
+            Channel = message.Channel.Id,
+            thread_ts = message.Message_Ts,
+            Blocks = new[]
+            {
+                new ImageBlock
+                {
+                    title = new Text { text = $"{message.User.Username} ba om en visualisering av '{message.Message.Text}'",  },
+                    alt_text = @message.Message.Text,
+                    image_url = image.FirstOrDefault()
+                }
+            }
+        });
     }
 }
