@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,9 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Authentication;
 using Slackbot.Net.Endpoints.Hosting;
+using Slackbot.Net.Endpoints.Models.Events;
 using Smartbot;
+using Smartbot.Utilities.Handlers;
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 var port = environment == "Production" ? Environment.GetEnvironmentVariable("PORT") : "1337";
@@ -36,6 +41,13 @@ app.MapGet("/", async c =>
 });
 
 app.Map("/events", a => a.UseSlackbot(false));
+
+app.Map("/prompts", async (IEnumerable<INoOpAppMentions> handlers) =>
+{
+    var handler = (GptHandler)handlers.First(h => h is GptHandler);
+    var prompts = await handler.GeneratePrompts(new AppMentionEvent());
+    return string.Join("\n\n\n", prompts.Select(p => $"{p.Role}\n {p.Content}"));
+});
 
 await app.RunAsync();
 

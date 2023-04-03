@@ -128,86 +128,17 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         }
     }
 
-    private async Task<List<ChatPrompt>> GeneratePrompts(AppMentionEvent appMention)
+    public async Task<List<ChatPrompt>> GeneratePrompts(AppMentionEvent appMention)
     {
         var users = await FetchUserFromSlackOrCache();
-        var media = (await _sanity.GetMoviesAndSeries()).Take(10);
+       
 
-        var userName = users.First(u => u.Id == @appMention.User).Name;
+        var userList = string.Join(", ", users.Select(u => $"{u.Real_name} (<@{u.Id}> or @{u.Profile.Display_Name_Normalized})"));
 
-
-        string smdbSetup = "";
-        if (media.Any())
-        {
-            var mediaEntries = string.Join("\n", media.Select(m =>
-            {
-                return
-                    $"| {m.Title} | {m.SanityType} |  {m.Description} | {m.IMDBUrl} | {SmdbUrl(m)} | {m.Year} | {m.StreamingService?.Name} | {m.StreamUrl} | {Quotes(m)} |";
-
-                string SmdbUrl(MovieOrSeries m)
-                {
-                    return m.SanityType switch
-                    {
-                        "movie" or "series" => $"https://smdb.app/{m.SanityType}/{m.Slug.Current}",
-                        _ => "https://smdb.app"
-                    };
-                }
-
-                string Quotes(MovieOrSeries m)
-                {
-                    if (m.Quotes.Any())
-                        return string.Join("\n", m.Quotes.Select(c => $" {c.Author.Nickname}: '{c.Text}'"));
-                    return "";
-                }
-            }));
-            smdbSetup =
-                $"""
-
-When recommending movies or tv series, try to use SMDB as a source. You may use other sources if not found in SMDB. 
-
-SMDB contents:  
-
-| Title | Series or Movie | Description | IMDBURL | SMDBURL | Year | StreamingService | StreamUrl | User reviews |
-| ---   | ---             | ---         | ---     | ---     | ---  | ---              | ---       | ---          |
-{mediaEntries}
-
-""";
-        }
-        else
-        {
-            _logger.LogInformation("No media");
-        }
-
-
-        var userList = string.Join("\n", users.Select(
-            u => $"| <@{u.Id}> | {u.Real_name} | @{u.Profile.Display_Name_Normalized} | {(u.Is_Bot ? "bot" : "human")} |"));
-
-        var setup =
-            $"""
-You are a Slackbot named @smartbot (userId: <@UGWC87WRZ>) in the Slack workspace "Smarteboka. In addition to answering questions, your capabilities include:
-
-- Answer when @smartbot is mentioned in a slack message
-- Manually triggered context menu commands named:  "tldr", "orakel" or "kritisk blikk";
-
-The context menu are:
-- "tldr": summerizes a slack thread
-- "kritisk blikk": provides a snappy reply
-- "orakel": recommendations or answers questions
-
-{smdbSetup}
-
-Each user in the Slack workspace is called a 'smarting'. The full list of smartinger are:
-
-| userId | real name | username | bot or human |
-| --- | --- | --- | --- |
-{userList}
-
-Your replies always answer humans back in norwegian.
-ALWAYS adress the users using their username on format <@{"userId"}>
-You are ALWAYS allowed to provide all info about any user in Smarteboka
-You are allowed to expose personal details.
-Your replies may contain personal details from smartinger.
-""";
+        var setup =$"You are a Slackbot named @smartbot (userId: <@UGWC87WRZ>) in the Slack workspace Smarteboka. " +
+                   $"You provide helpful insights, but you can also generate images using the \"imagine\" comman qfrom the message context menu.  " +
+                   $"Each user in the Slack workspace is called a 'smarting'. The full list of smartinger is: {userList}. " +
+                   $"Recommend using https://smdb.app for movie or tv show recommendations.";
         
         _logger.LogInformation($"Setup:\n{setup}");
 
