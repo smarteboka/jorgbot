@@ -429,7 +429,7 @@ Your replies may contain personal details from smartinger.
                 new ImageBlock
                 {
                     title = new Text { text = $"{message.User.Username} ba om en visualisering av '{message.Message.Text}'",  },
-                    alt_text = @message.Message.Text,
+                    alt_text = @message.Message.Text.Length > 50 ? @message.Message.Text.Substring(0, 50) + "…" : @message.Message.Text,
                     image_url = image.FirstOrDefault()
                 }
             }
