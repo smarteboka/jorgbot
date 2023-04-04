@@ -13,6 +13,8 @@ using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Authentication;
 using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.Endpoints.Models.Events;
+using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
+
 using Smartbot;
 using Smartbot.Utilities.Handlers;
 
@@ -47,6 +49,21 @@ app.Map("/prompts", async (IEnumerable<INoOpAppMentions> handlers) =>
     var handler = (GptHandler)handlers.First(h => h is GptHandler);
     var prompts = await handler.GeneratePrompts(new AppMentionEvent());
     return string.Join("\n\n\n", prompts.Select(p => $"{p.Role}\n {p.Content}"));
+});
+
+app.Map("/image", async (IEnumerable<INoOpAppMentions> handlers) =>
+{
+    var handler = (GptHandler)handlers.First(h => h is GptHandler);
+    await handler.CreateImage(new MessageActionInteraction
+    {
+        Message = new Message
+        {
+            Text = "a monkey driving a car",
+           
+        },
+        User = new User { Name = "smarting"},
+        Channel = new Channel { Id = "CTECR3J6M" }
+    });
 });
 
 await app.RunAsync();

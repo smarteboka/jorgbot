@@ -15,6 +15,8 @@ using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
+using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
+
 using Smartbot.Utilities.Handlers.Sanity;
 using Message = Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse.Message;
 using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
@@ -348,22 +350,25 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         return new[] { p1, p2 };
     }
 
-    private async Task CreateImage(MessageActionInteraction message)
+    public async Task CreateImage(MessageActionInteraction message)
     {
-        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Medium);
-        await _slackClient.ChatPostMessage(new ChatPostMessageRequest
+        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Small, responseFormat:"b64_json");
+        var bytes = Convert.FromBase64String(image.First());
+        await _slackClient.FilesUpload(new FileUploadMultiPartRequest
         {
-            Channel = message.Channel.Id,
-            thread_ts = message.Message_Ts,
-            Blocks = new[]
-            {
-                new ImageBlock
-                {
-                    title = new Text { text = $"{message.User.Username} ba om en visualisering av '{message.Message.Text}'",  },
-                    alt_text = @message.Message.Text.Length > 50 ? @message.Message.Text.Substring(0, 50) + "…" : @message.Message.Text,
-                    image_url = image.FirstOrDefault()
-                }
-            }
+            Channels = message.Channel.Id,
+            Thread_Ts = message.Message_Ts,
+            Title = $"{message.User.Username} ba om en visualisering av '{Short()}'",
+            File = bytes,
+            Filename = "smartbot-imagined.png",
+            Filetype = "png"
         });
+
+        string Short()
+        {
+            return message.Message.Text.Length > 50
+                ? message.Message.Text.Substring(0, 50) + "…"
+                : @message.Message.Text;
+        }
     }
 }
