@@ -357,7 +357,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         await _slackClient.FilesUpload(new FileUploadMultiPartRequest
         {
             Channels = message.Channel.Id,
-            Thread_Ts = message.Message_Ts,
+            Thread_Ts = message.Message.Thread_Ts,
             Title = $"{message.User.Username} ba om en visualisering av '{Short()}'",
             File = bytes,
             Filename = "smartbot-imagined.png",
