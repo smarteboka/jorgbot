@@ -354,7 +354,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
     public async Task CreateImage(MessageActionInteraction message)
     {
-        string image = null;
+        string image;
         try
         {
             var images = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size: ImageSize.Medium,
@@ -363,23 +363,19 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         }
         catch (HttpRequestException hre) when (hre.StatusCode == HttpStatusCode.BadRequest)
         {
+            string text = $"💀Beklager, {message.User.Username}. Dette kunne jeg ikke lage et bilde av…";
             if (hre.Message.Contains("safety system"))
             {
-                var filePath = Path.Combine(_hostEnv.ContentRootPath, "./Assets/err.png");
-                var errFile = File.ReadAllBytes(filePath);
-                var base64 = Convert.ToBase64String(errFile);
-                image = base64;
+                text += "PROMPT VIOLATES OPENAI SAFETY SYSTEM!";
             }
-            else
+
+            await _slackClient.ChatPostMessage(new ChatPostMessageRequest
             {
-                _slackClient.ChatPostMessage(new ChatPostMessageRequest
-                {
-                    Channel = message.Channel.Id, 
-                    Text = $"💀Beklager, {message.User.Username}. Dette kunne jeg ikke lage et bilde av…", 
-                    thread_ts = message.Message.Thread_Ts
-                });
-            }
-            
+                Channel = message.Channel.Id, 
+                Text = text, 
+                thread_ts = message.Message.Thread_Ts
+            });
+            throw;
         }
         
         var bytes = Convert.FromBase64String(image);
