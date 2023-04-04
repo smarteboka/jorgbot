@@ -58,7 +58,7 @@ app.Map("/image", async (IEnumerable<INoOpAppMentions> handlers) =>
     {
         Message = new Message
         {
-            Text = "a monkey driving a car",
+            Text = "vakker natur da",
            
         },
         User = new User { Username = "smarting"},

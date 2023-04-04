@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenAI;
 using OpenAI.Chat;
@@ -12,12 +16,10 @@ using OpenAI.Images;
 using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
-using Slackbot.Net.Models.BlockKit;
 using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 
-using Smartbot.Utilities.Handlers.Sanity;
 using Message = Slackbot.Net.SlackClients.Http.Models.Responses.ConversationsRepliesResponse.Message;
 using User = Slackbot.Net.SlackClients.Http.Models.Responses.UsersList.User;
 
@@ -29,18 +31,18 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
     private readonly HttpClient _httpClient;
     private readonly ILogger<GptHandler> _logger;
     private readonly ISlackClient _slackClient;
+    private readonly IWebHostEnvironment _hostEnv;
     private User[] _users;
-    private readonly SanityHelper _sanity;
 
-    public GptHandler(ISlackClient slackClient, IHttpClientFactory factory, ILogger<GptHandler> logger)
+    public GptHandler(ISlackClient slackClient, IHttpClientFactory factory, IWebHostEnvironment hostEnv,  ILogger<GptHandler> logger)
     {
         _slackClient = slackClient;
+        _hostEnv = hostEnv;
         _logger = logger;
         var key = Environment.GetEnvironmentVariable("SMARTBOT_OPENAI_KEY");
         _client = new OpenAIClient(key);
         _httpClient = new HttpClient();
         _users = Array.Empty<User>();
-        _sanity = new SanityHelper(factory);
     }
 
     public async Task<EventHandledResponse> Handle(MessageActionInteraction @event)
@@ -352,8 +354,35 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
     public async Task CreateImage(MessageActionInteraction message)
     {
-        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Medium, responseFormat:"b64_json");
-        var bytes = Convert.FromBase64String(image.First());
+        string image = null;
+        try
+        {
+            var images = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size: ImageSize.Medium,
+                responseFormat: "b64_json");
+            image = images.First();
+        }
+        catch (HttpRequestException hre) when (hre.StatusCode == HttpStatusCode.BadRequest)
+        {
+            if (hre.Message.Contains("safety system"))
+            {
+                var filePath = Path.Combine(_hostEnv.ContentRootPath, "Assets/err.png");
+                var errFile = File.ReadAllBytes(filePath);
+                var base64 = Convert.ToBase64String(errFile);
+                image = base64;
+            }
+            else
+            {
+                _slackClient.ChatPostMessage(new ChatPostMessageRequest
+                {
+                    Channel = message.Channel.Id, 
+                    Text = $"💀Beklager, {message.User.Username}. Dette kunne jeg ikke lage et bilde av…", 
+                    thread_ts = message.Message.Thread_Ts
+                });
+            }
+            
+        }
+        
+        var bytes = Convert.FromBase64String(image);
         await _slackClient.FilesUpload(new FileUploadMultiPartRequest
         {
             Channels = message.Channel.Id,
