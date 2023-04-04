@@ -352,7 +352,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
 
     public async Task CreateImage(MessageActionInteraction message)
     {
-        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Small, responseFormat:"b64_json");
+        var image = await _client.ImagesEndPoint.GenerateImageAsync(message.Message.Text, size:ImageSize.Medium, responseFormat:"b64_json");
         var bytes = Convert.FromBase64String(image.First());
         await _slackClient.FilesUpload(new FileUploadMultiPartRequest
         {
