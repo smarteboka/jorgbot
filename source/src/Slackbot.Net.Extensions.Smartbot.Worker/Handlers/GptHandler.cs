@@ -365,7 +365,7 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
         {
             if (hre.Message.Contains("safety system"))
             {
-                var filePath = Path.Combine(_hostEnv.ContentRootPath, "Assets/err.png");
+                var filePath = Path.Combine(_hostEnv.ContentRootPath, "./Assets/err.png");
                 var errFile = File.ReadAllBytes(filePath);
                 var base64 = Convert.ToBase64String(errFile);
                 image = base64;
