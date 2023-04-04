@@ -61,7 +61,7 @@ app.Map("/image", async (IEnumerable<INoOpAppMentions> handlers) =>
             Text = "a monkey driving a car",
            
         },
-        User = new User { Name = "smarting"},
+        User = new User { Username = "smarting"},
         Channel = new Channel { Id = "CTECR3J6M" }
     });
 });
