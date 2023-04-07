@@ -29,7 +29,12 @@ builder.Services.AddSmartbot(builder.Configuration);
 builder.Logging
         .AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Information)
         .AddFilter("Slackbot.Net.Endpoints.Middlewares", LogLevel.Trace)
-        .AddSimpleConsole(c => c.ColorBehavior = LoggerColorBehavior.Disabled)
+        .AddFilter("Slackbot.Net.SlackClients.Http", LogLevel.Trace)
+        .AddSimpleConsole(c =>
+        {
+            c.ColorBehavior = LoggerColorBehavior.Disabled;
+            c.SingleLine = true;
+        })
         .AddDebug();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
@@ -59,9 +64,14 @@ app.Map("/image", async (IEnumerable<INoOpAppMentions> handlers) =>
         Message = new Message
         {
             Text = "vakker natur da",
+            Thread_Ts = "1680869291.799979"
            
         },
-        User = new User { Username = "smarting"},
+        User = new User
+        {
+            Id = "U0EBWMGG4",
+            Username = "smarting"
+        },
         Channel = new Channel { Id = "CTECR3J6M" }
     });
 });

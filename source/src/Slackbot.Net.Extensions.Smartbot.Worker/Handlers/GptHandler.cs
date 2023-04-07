@@ -17,6 +17,7 @@ using Slackbot.Net.Endpoints.Abstractions;
 using Slackbot.Net.Endpoints.Models.Events;
 using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Slackbot.Net.SlackClients.Http;
+using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 
@@ -369,8 +370,9 @@ public class GptHandler : IHandleMessageActions, INoOpAppMentions
                 text += "PROMPT VIOLATES OPENAI SAFETY SYSTEM!";
             }
 
-            await _slackClient.ChatPostMessage(new ChatPostMessageRequest
+            await _slackClient.ChatPostEphemeralMessage(new ChatPostEphemeralMessageRequest
             {
+                User = message.User.Id,
                 Channel = message.Channel.Id, 
                 Text = text, 
                 thread_ts = message.Message.Thread_Ts
