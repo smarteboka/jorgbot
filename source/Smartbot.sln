@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{FEBE6CF1
 ProjectSection(SolutionItems) = preProject
 	Directory.Build.targets = Directory.Build.targets
 	Smartbot.Dockerfile = Smartbot.Dockerfile
+	fly.toml = fly.toml
 EndProjectSection
 EndProject
 Global
