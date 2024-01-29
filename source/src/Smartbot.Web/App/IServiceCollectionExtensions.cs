@@ -18,7 +18,6 @@ public static class IServiceCollectionExtensions
         builder.AddSingleton<SlackChannels>();
         builder.AddSingleton<Smartinger>();
         builder.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>("Slackbot_SlackApiKey_BotUser"));
-        builder.AddSlackbotOauthClient(c => c.OauthToken = configuration.GetValue<string>("lackbot_SlackApiKey_SlackApp"));
 
         builder
             .AddRecurrer<HappyBirthday>()
