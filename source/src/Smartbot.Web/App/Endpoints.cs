@@ -1,7 +1,3 @@
-using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Hosting;
-using Slackbot.Net.Endpoints.Models.Events;
-using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
 using Smartbot.Web.App.ChatGpt;
 
 namespace Smartbot.Web.App;
@@ -15,8 +11,6 @@ public static class Endpoints
             c.Response.StatusCode = 200;
             await c.Response.WriteAsync(IndexHtml.Html());
         });
-
-        app.Map("/events", a => a.UseSlackbot(false));
 
         app.Map("/prompts", async (IEnumerable<INoOpAppMentions> handlers) =>
         {

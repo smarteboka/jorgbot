@@ -4,12 +4,7 @@ using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Images;
 
-using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Models.Events;
-using Slackbot.Net.Endpoints.Models.Interactive.MessageActions;
-using Slackbot.Net.SlackClients.Http;
 using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostEphemeral;
-using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
 using Slackbot.Net.SlackClients.Http.Models.Requests.FileUpload;
 
 using Smartbot.Web.App.Utils;

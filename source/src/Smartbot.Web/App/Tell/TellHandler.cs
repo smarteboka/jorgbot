@@ -1,8 +1,3 @@
-using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Models.Events;
-using Slackbot.Net.SlackClients.Http;
-using Slackbot.Net.SlackClients.Http.Models.Requests.ChatPostMessage;
-
 namespace Smartbot.Web.App.Tell;
 
 public class TellHandler : IHandleAppMentions

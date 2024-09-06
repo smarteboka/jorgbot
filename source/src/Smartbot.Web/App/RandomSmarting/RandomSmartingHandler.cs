@@ -1,7 +1,3 @@
-using Slackbot.Net.Endpoints.Abstractions;
-using Slackbot.Net.Endpoints.Models.Events;
-using Slackbot.Net.SlackClients.Http;
-
 namespace Smartbot.Web.App.RandomSmarting;
 
 public class RandomSmartingHandler : IHandleAppMentions

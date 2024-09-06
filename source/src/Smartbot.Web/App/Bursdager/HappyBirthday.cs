@@ -1,7 +1,3 @@
-using CronBackgroundServices;
-
-using Slackbot.Net.SlackClients.Http;
-
 using Smartbot.Web.App.Utils;
 
 namespace Smartbot.Web.App.Bursdager;

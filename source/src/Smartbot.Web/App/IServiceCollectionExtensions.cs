@@ -1,5 +1,6 @@
-using CronBackgroundServices;
+using Microsoft.AspNetCore.Authentication;
 
+using Slackbot.Net.Endpoints.Authentication;
 using Slackbot.Net.Endpoints.Hosting;
 using Slackbot.Net.SlackClients.Http.Extensions;
 
@@ -15,6 +16,7 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddSmartbot(this IServiceCollection builder, IConfiguration configuration)
     {
+        builder.AddAuthentication().AddSlackbotEvents(c => { c.SigningSecret = "123"; });
         builder.AddSingleton<SlackChannels>();
         builder.AddSingleton<Smartinger>();
         builder.AddSlackHttpClient(c => c.BotToken = configuration.GetValue<string>("Slackbot_SlackApiKey_BotUser"));
@@ -30,5 +32,38 @@ public static class IServiceCollectionExtensions
             .AddNoOpAppMentionHandler<GptHandler>()
             .AddMessageActionsHandler<GptHandler>();
         return builder;
+    }
+
+    public static void MapSmartbot(this WebApplication app)
+    {
+        app.Map("/events", a => a.UseSlackbot(false));
+    }
+}
+
+public class Yolo : IAuthenticationRequestHandler
+{
+    public Task<bool> HandleRequestAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task InitializeAsync(AuthenticationScheme scheme, HttpContext context)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<AuthenticateResult> AuthenticateAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ChallengeAsync(AuthenticationProperties properties)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ForbidAsync(AuthenticationProperties properties)
+    {
+        throw new NotImplementedException();
     }
 }
