@@ -8,6 +8,6 @@ public class Crons
 
 
     // storsdag stuff:
-    public const string LastThursdayOfMonthCron = "0 0 8 * * THUL";
+    public const string LastWednesdayOfMonthCron = "0 0 8 * * WEDL";
     public const string ThirdSaturdayOfMonth = "0 0 10 * * 6#3";
 }

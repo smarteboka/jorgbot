@@ -19,5 +19,5 @@ public class StorsdagMention : IRecurringAction
         await _client.ChatPostMessage(_channels.SmartebokaChannel, "Storsdag!");
     }
 
-    public string Cron => Crons.LastThursdayOfMonthCron;
+    public string Cron => Crons.LastWednesdayOfMonthCron;
 }
